@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EHS Capitals Calculator</title>
+<meta name="description" content="Compare a traditional and a human-capital-inclusive accounting of the same EHS investment. All arithmetic runs in your browser.">
+<style>
+/* ---------------------------------------------------------------------------
+   Tokens. Light palette on :root; dark redefines the same names only.
+   Three theme states: explicit light, explicit dark, and system default.
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+ --bg:        #f6f7f9;
+ --surface:   #ffffff;
+ --surface-2: #f0f2f5;
+ --border:    #d8dce3;
+ --border-2:  #e6e9ee;
+ --text:      #14181f;
+ --text-dim:  #5a6472;
+ --text-faint:#858e9c;
+ --accent:    #1b5e9c;
+ --accent-dim:#2d7ec4;
+ --good:      #1d6f4a;
+ --good-bg:   #1d6f4a;
+ --bad:       #a3341f;
+ --bad-bg:    #a3341f;
+ --warn:      #8a5a00;
+ --shadow:    0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.10);
+ --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+ --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+ --bg:        #0f1216;
+ --surface:   #171b21;
+ --surface-2: #1e232b;
+ --border:    #2c333d;
+ --border-2:  #242a33;
+ --text:      #e6e9ee;
+ --text-dim:  #9aa4b2;
+ --text-faint:#6e7885;
+ --accent:    #64a8e8;
+ --accent-dim:#4a8fd0;
+ --good:      #5cc38d;
+ --good-bg:   #2f9e69;
+ --bad:       #f0806a;
+ --bad-bg:    #c4563a;
+ --warn:      #d9a441;
+ --shadow:    0 1px 2px rgba(0,0,0,.30), 0 1px 3px rgba(0,0,0,.36);
+  }
+}
+:root[data-theme="dark"] {
+ --bg:        #0f1216;
+ --surface:   #171b21;
+ --surface-2: #1e232b;
+ --border:    #2c333d;
+ --border-2:  #242a33;
+ --text:      #e6e9ee;
+ --text-dim:  #9aa4b2;
+ --text-faint:#6e7885;
+ --accent:    #64a8e8;
+ --accent-dim:#4a8fd0;
+ --good:      #5cc38d;
+ --good-bg:   #2f9e69;
+ --bad:       #f0806a;
+ --bad-bg:    #c4563a;
+ --warn:      #d9a441;
+ --shadow:    0 1px 2px rgba(0,0,0,.30), 0 1px 3px rgba(0,0,0,.36);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 var(--sans);
+  padding: 0 0 4rem;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 1rem; }
+
+/* --- header --- */
+header { border-bottom: 1px solid var(--border); background: var(--surface); }
+.head-inner {
+  max-width: 1180px; margin: 0 auto; padding: 1.4rem 1rem 1.2rem;
+  display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap;
+}
+h1 { font-size: 1.3rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
+.sub { color: var(--text-dim); margin: 0; max-width: 62ch; font-size: .93rem; }
+.head-actions { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
+
+/* --- generic --- */
+h2 {
+  font-size: .78rem; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--text-faint); margin: 2rem 0 .7rem; font-weight: 600;
+}
+h3 { font-size: .95rem; margin: 0 0 .5rem; font-weight: 600; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.1rem; box-shadow: var(--shadow);
+}
+.muted { color: var(--text-dim); }
+.small { font-size: .84rem; }
+.tiny  { font-size: .78rem; }
+.num { font-variant-numeric: tabular-nums; font-family: var(--mono); }
+
+/* --- controls --- */
+.layout { display: grid; grid-template-columns: minmax(0,340px) minmax(0,1fr); gap: 1.1rem; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+.field { margin-bottom: .8rem; }
+.field label { display: block; font-size: .82rem; color: var(--text-dim); margin-bottom: .22rem; }
+input[type="number"], input[type="text"] {
+  width: 100%; padding: .42rem .55rem; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface-2);
+  color: var(--text); font: 14px var(--mono);
+}
+input:focus-visible, button:focus-visible, select:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 1px;
+}
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.range-row { display: flex; align-items: center; gap: .6rem; }
+.range-row input[type="number"] { width: 88px; flex: none; }
+
+button {
+  font: inherit; font-size: .86rem; padding: .42rem .75rem; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); }
+button.primary {
+  background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600;
+}
+button.primary:hover { background: var(--accent-dim); border-color: var(--accent-dim); }
+button.ghost { padding: .2rem .45rem; font-size: .78rem; color: var(--text-dim); }
+
+.example-box {
+  border: 1px dashed var(--accent); border-radius: 8px; padding: .7rem .8rem;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  margin-bottom: 1rem;
+}
+@supports not (background: color-mix(in srgb, red 5%, transparent)) {
+  .example-box { background: var(--surface-2); }
+}
+
+/* --- cost rows --- */
+.group { margin-bottom: 1rem; }
+.group-head { display: flex; align-items: baseline; gap: .5rem; margin-bottom: .4rem; }
+.group-head h3 { margin: 0; }
+.cost-row { display: grid; grid-template-columns: 1fr 104px 26px; gap: .35rem; margin-bottom: .3rem; }
+.cost-row input[type="text"] { font-family: var(--sans); font-size: 13px; }
+.subtotal {
+  display: flex; justify-content: space-between; font-size: .82rem;
+  color: var(--text-dim); border-top: 1px solid var(--border-2);
+  margin-top: .45rem; padding-top: .35rem;
+}
+
+/* --- results --- */
+.results { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+@media (max-width: 620px) { .results { grid-template-columns: 1fr; } }
+.res-card { position: relative; overflow: hidden; }
+.res-card::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--text-faint);
+}
+.res-card.trad::before { background: var(--text-faint); }
+.res-card.human::before { background: var(--accent); }
+.res-title { font-size: .82rem; font-weight: 600; color: var(--text-dim); margin: 0 0 .1rem; }
+.headline { font-size: 1.85rem; font-weight: 650; letter-spacing: -.02em; margin: .1rem 0 0; }
+.headline .unit { font-size: .9rem; font-weight: 500; color: var(--text-dim); margin-left: .18rem; }
+.verdict { display: inline-block; font-size: .74rem; font-weight: 600; padding: .12rem .45rem; border-radius: 4px; margin-top: .4rem; }
+.verdict.pass { color: #fff; background: var(--good-bg); }
+.verdict.fail { color: #fff; background: var(--bad-bg); }
+dl.stats { margin: .8rem 0 0; display: grid; grid-template-columns: 1fr auto; gap: .18rem .6rem; font-size: .85rem; }
+dl.stats dt { color: var(--text-dim); }
+dl.stats dd { margin: 0; text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.delta {
+  margin-top: .9rem; padding: .7rem .85rem; border-radius: 8px;
+  background: var(--surface-2); border: 1px solid var(--border-2); font-size: .88rem;
+}
+
+/* --- tabs --- */
+.tabs { display: flex; gap: .3rem; border-bottom: 1px solid var(--border); margin-bottom: .9rem; flex-wrap: wrap; }
+.tab {
+  border: none; background: none; border-bottom: 2px solid transparent;
+  border-radius: 0; padding: .45rem .6rem; color: var(--text-dim); font-size: .86rem;
+}
+.tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+.tab:hover { border-color: transparent; border-bottom-color: var(--border); color: var(--text); }
+.tab[aria-selected="true"]:hover { border-bottom-color: var(--accent); }
+
+/* --- tornado --- */
+.tor-row { display: grid; grid-template-columns: minmax(120px, 190px) 1fr 96px; gap: .5rem; align-items: center; margin-bottom: .26rem; font-size: .82rem; }
+.tor-label { color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tor-track { position: relative; height: 17px; background: var(--surface-2); border-radius: 3px; border: 1px solid var(--border-2); }
+.tor-bar { position: absolute; top: 2px; bottom: 2px; background: var(--accent); border-radius: 2px; min-width: 2px; opacity: .85; }
+.tor-base { position: absolute; top: -2px; bottom: -2px; width: 1px; background: var(--text-faint); }
+.tor-val { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--text-dim); }
+.axis { display: flex; justify-content: space-between; font-size: .72rem; color: var(--text-faint); font-family: var(--mono); margin-top: .3rem; }
+
+/* --- grid --- */
+.grid-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.grid { border-collapse: collapse; font-size: .78rem; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+table.grid th, table.grid td { padding: .3rem .45rem; text-align: right; white-space: nowrap; border: 1px solid var(--border-2); }
+table.grid th { color: var(--text-dim); font-weight: 600; background: var(--surface-2); position: sticky; left: 0; }
+table.grid thead th { position: static; }
+table.grid td { color: var(--text); }
+.legend { display: flex; gap: 1rem; align-items: center; margin-top: .55rem; font-size: .78rem; color: var(--text-dim); flex-wrap: wrap; }
+.swatch { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: .3rem; vertical-align: -1px; }
+
+/* --- notes --- */
+details.notes { margin-top: 1rem; }
+details.notes summary { cursor: pointer; font-size: .86rem; color: var(--text-dim); padding: .3rem 0; }
+details.notes[open] summary { margin-bottom: .5rem; }
+.notes ul { margin: .4rem 0; padding-left: 1.1rem; }
+.notes li { margin-bottom: .4rem; font-size: .87rem; color: var(--text-dim); }
+footer { margin-top: 2.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-size: .82rem; color: var(--text-faint); }
+a { color: var(--accent); }
+code { font-family: var(--mono); font-size: .92em; background: var(--surface-2); padding: .08em .3em; border-radius: 3px; }
+.warnbar {
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-left: 3px solid var(--warn); border-radius: 6px;
+  padding: .6rem .8rem; font-size: .85rem; color: var(--text-dim); margin: 1rem 0 0;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div>
+      <h1>EHS Capitals Calculator</h1>
+      <p class="sub">
+        Two accountings of the same safety investment: one that counts only
+        directly booked costs, and one that also counts the human-capital costs
+        an incident causes but rarely gets charged for. Everything runs in your
+        browser; nothing is uploaded.
+      </p>
+    </div>
+    <div class="head-actions">
+      <select id="theme" aria-label="Colour theme">
+        <option value="auto">Auto</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="layout">
+
+    <!-- ================= INPUTS ================= -->
+    <div>
+      <div class="example-box">
+        <button class="primary" id="load-example" type="button" style="width:100%">
+          Load the published worked example
+        </button>
+        <p class="tiny muted" style="margin:.55rem 0 0">
+          Fills every field with the loading-station figures published in
+          <a href="https://leadingehs.com/2025/05/27/you-cant-manage-what-you-dont-value-reimagining-capital-in-organizations/"
+             target="_blank" rel="noopener">Brandon (2025)</a>.
+          Reproduces $55,000 / $118,000 annual cost, 3.41 / 1.59 year payback,
+          147% / 315% five-year ROI.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Investment</h3>
+        <div class="field">
+          <label for="capex">Capital cost of the control ($)</label>
+          <input type="number" id="capex" min="1" step="1000" value="150000">
+        </div>
+        <div class="field">
+          <label for="rr-range">Assumed risk reduction (%) &mdash; your assumption</label>
+          <div class="range-row">
+            <input type="range" id="rr-range" min="0" max="100" step="1" value="80"
+                   aria-label="Assumed risk reduction percentage">
+            <input type="number" id="rr" min="0" max="100" step="1" value="80">
+          </div>
+        </div>
+        <div class="field">
+          <label for="horizon">ROI horizon (years)</label>
+          <input type="number" id="horizon" min="1" max="50" step="1" value="5">
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="hurdle">Payback hurdle (years) &mdash; your decision rule</label>
+          <input type="number" id="hurdle" min="0.1" step="0.5" value="3">
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:.9rem">
+        <div class="group">
+          <div class="group-head">
+            <h3>Directly booked costs</h3>
+            <span class="tiny muted">both accountings</span>
+          </div>
+          <div id="booked-rows"></div>
+          <button class="ghost" type="button" data-add="booked">+ add line</button>
+          <div class="subtotal"><span>Subtotal</span><span class="num" id="booked-total">$0</span></div>
+        </div>
+
+        <div class="group" style="margin-bottom:0">
+          <div class="group-head">
+            <h3>Human-capital costs</h3>
+            <span class="tiny muted">second accounting only</span>
+          </div>
+          <div id="human-rows"></div>
+          <button class="ghost" type="button" data-add="human">+ add line</button>
+          <div class="subtotal"><span>Subtotal</span><span class="num" id="human-total">$0</span></div>
+        </div>
+      </div>
+
+      <p class="tiny muted" style="margin-top:.7rem">
+        Annual figures. Enter the cost of incidents you expect in a typical year
+        without the control &mdash; not the cost of one incident.
+      </p>
+    </div>
+
+    <!-- ================= OUTPUT ================= -->
+    <div>
+      <h2>Side by side</h2>
+      <div class="results">
+        <div class="card res-card trad">
+          <p class="res-title">Traditional accounting</p>
+          <p class="headline"><span id="t-payback">&mdash;</span><span class="unit">yr payback</span></p>
+          <div><span class="verdict" id="t-verdict">&mdash;</span></div>
+          <dl class="stats">
+            <dt>Annual incident cost</dt><dd id="t-cost">&mdash;</dd>
+            <dt>Annual saving</dt><dd id="t-benefit">&mdash;</dd>
+            <dt>Residual cost</dt><dd id="t-residual">&mdash;</dd>
+            <dt><span id="t-h-label">5</span>-yr ROI (cumulative)</dt><dd id="t-roi">&mdash;</dd>
+            <dt><span id="t-h-label2">5</span>-yr net ROI</dt><dd id="t-net">&mdash;</dd>
+          </dl>
+        </div>
+        <div class="card res-card human">
+          <p class="res-title">Human-capital-inclusive</p>
+          <p class="headline"><span id="h-payback">&mdash;</span><span class="unit">yr payback</span></p>
+          <div><span class="verdict" id="h-verdict">&mdash;</span></div>
+          <dl class="stats">
+            <dt>Annual incident cost</dt><dd id="h-cost">&mdash;</dd>
+            <dt>Annual saving</dt><dd id="h-benefit">&mdash;</dd>
+            <dt>Residual cost</dt><dd id="h-residual">&mdash;</dd>
+            <dt><span id="h-h-label">5</span>-yr ROI (cumulative)</dt><dd id="h-roi">&mdash;</dd>
+            <dt><span id="h-h-label2">5</span>-yr net ROI</dt><dd id="h-net">&mdash;</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="delta" id="delta">&mdash;</div>
+
+      <h2>Sensitivity</h2>
+      <div class="card">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true"  data-panel="p-tornado">What moves the answer</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="p-grid">Risk reduction &times; capex</button>
+          <button class="tab" role="tab" aria-selected="false" data-panel="p-break">Breakeven points</button>
+        </div>
+
+        <!-- tornado -->
+        <div id="p-tornado" role="tabpanel">
+          <div class="field" style="max-width:340px">
+            <label for="spread">Vary each input by &plusmn;<span id="spread-label">30</span>%</label>
+            <input type="range" id="spread" min="5" max="75" step="5" value="30">
+          </div>
+          <p class="small muted" id="tor-lead" style="margin:.2rem 0 .8rem"></p>
+          <div id="tornado"></div>
+          <div class="axis"><span id="ax-lo"></span><span id="ax-hi"></span></div>
+          <p class="tiny muted" style="margin-top:.7rem">
+            Each bar spans the payback you get when that one input is moved to
+            each end of its range while every other input is held at its current
+            value. The vertical line is the current answer. One-at-a-time
+            analysis ignores inputs moving together, so it understates joint
+            risk.
+          </p>
+        </div>
+
+        <!-- grid -->
+        <div id="p-grid" role="tabpanel" hidden>
+          <p class="small muted" style="margin:.1rem 0 .7rem">
+            Payback in years under the human-capital accounting. Shaded cells
+            clear your <span id="grid-hurdle">3</span>-year hurdle.
+          </p>
+          <div class="grid-scroll"><table class="grid" id="grid"></table></div>
+          <div class="legend">
+            <span><span class="swatch" style="background:var(--good-bg)"></span>meets hurdle</span>
+            <span><span class="swatch" style="background:var(--bad-bg)"></span>misses hurdle</span>
+            <span class="tiny">Rows: risk reduction. Columns: capital cost.</span>
+          </div>
+        </div>
+
+        <!-- breakeven -->
+        <div id="p-break" role="tabpanel" hidden>
+          <p class="small muted" style="margin:.1rem 0 .8rem">
+            How far one input can move on its own before the verdict against
+            your <span id="brk-hurdle">3</span>-year hurdle changes. Everything
+            else stays where you set it.
+          </p>
+          <div id="breakeven"></div>
+        </div>
+      </div>
+
+      <div class="warnbar">
+        <strong>Risk reduction is an input, not an output.</strong> This page
+        does not know how effective your control will be. It takes the number
+        you type and does arithmetic with it. The tornado and breakeven views
+        exist to show you how much of the answer rests on that one assumption.
+      </div>
+
+      <details class="notes">
+        <summary>Method, and what this does not do</summary>
+        <div class="notes">
+          <ul>
+            <li><strong>The arithmetic.</strong>
+              <code>annual&nbsp;saving = annual&nbsp;incident&nbsp;cost &times; risk&nbsp;reduction</code>;
+              <code>payback = capex &divide; annual&nbsp;saving</code>;
+              <code>ROI = (annual&nbsp;saving &times; horizon) &divide; capex</code>.
+              That is the whole model.</li>
+            <li><strong>ROI here is cumulative benefit over investment, not net return.</strong>
+              A 147% ROI means benefits reached 1.47&times; the capital cost, not
+              that you cleared 147% profit. Net ROI is shown alongside it and is
+              always exactly 100 points lower.</li>
+            <li><strong>Nothing is discounted.</strong> A dollar saved in year 5
+              counts the same as one saved in year 1. At any realistic cost of
+              capital this flatters long horizons, and the effect grows with the
+              horizon you choose.</li>
+            <li><strong>Benefits are assumed flat and permanent.</strong> One
+              risk reduction, one annual cost, unchanged for the whole horizon.
+              No degradation, no maintenance cost, no residual value.</li>
+            <li><strong>The human-capital lines are estimates.</strong> Lost
+              work time, retraining, productivity and morale are real costs, but
+              they are modelled, not invoiced. Their size is a judgement, and the
+              second accounting inherits every bit of that uncertainty.</li>
+            <li><strong>Counting more cost can never weaken the case.</strong>
+              Because every added line is non-negative, the human-capital
+              accounting always shows payback at least as fast. That is a
+              property of the model's structure, not evidence found in data.
+              Treat it as a reason for scepticism, not confirmation.</li>
+          </ul>
+        </div>
+      </details>
+
+      <footer>
+        Worked example from Brandon, C. (27 May 2025),
+        &ldquo;You Can&rsquo;t Manage What You Don&rsquo;t Value: Reimagining
+        Capital in Organizations&rdquo;,
+        <a href="https://leadingehs.com/2025/05/27/you-cant-manage-what-you-dont-value-reimagining-capital-in-organizations/"
+           target="_blank" rel="noopener">LeadingEHS.com</a>.
+        The Python implementation, its test suite, and the Monte Carlo and
+        tornado modules are in the repository. MIT licensed.
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ===========================================================================
+   The model. These four lines mirror src/capitals.py exactly; if you change
+   one, change the other and re-run the Python tests.
+   =========================================================================== */
+
+/**
+ * Evaluate one cost accounting against a capital investment.
+ * @param {number} annualCost - total annual incident cost counted.
+ * @param {number} capex - up-front capital cost, must be > 0.
+ * @param {number} riskReduction - proportion in [0, 1].
+ * @param {number} horizonYears - evaluation period.
+ * @returns {{annualCost:number, annualBenefit:number, residual:number,
+ *            payback:number|null, roi:number|null, netRoi:number|null}}
+ */
+function evaluate(annualCost, capex, riskReduction, horizonYears) {
+  const annualBenefit = annualCost * riskReduction;
+  const residual = annualCost - annualBenefit;
+  if (!(capex > 0) || annualBenefit <= 0) {
+    return { annualCost, annualBenefit, residual, payback: null, roi: null, netRoi: null };
+  }
+  const totalBenefit = annualBenefit * horizonYears;
+  return {
+    annualCost,
+    annualBenefit,
+    residual,
+    payback: capex / annualBenefit,
+    roi: totalBenefit / capex,
+    netRoi: (totalBenefit - capex) / capex
+  };
+}
+
+/* ===========================================================================
+   Published worked example (transcribed from the source article's table).
+   =========================================================================== */
+const EXAMPLE = {
+  capex: 150000,
+  riskReductionPct: 80,
+  horizon: 5,
+  hurdle: 3,
+  booked: [
+    ["Equipment downtime", 30000],
+    ["Material loss / spills", 10000],
+    ["Injury costs", 15000]
+  ],
+  human: [
+    ["Lost work time", 20000],
+    ["Retraining due to turnover", 8000],
+    ["Productivity loss", 25000],
+    ["Morale / team performance", 10000]
+  ]
+};
+
+/* ===========================================================================
+   Formatting
+   =========================================================================== */
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+const pct   = n => (n * 100).toFixed(0) + "%";
+const yrs   = n => (n === null || !isFinite(n)) ? "never" : n.toFixed(2);
+
+/* ===========================================================================
+   Cost row management
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+
+/**
+ * Append an editable cost line to one of the two groups.
+ * @param {"booked"|"human"} group
+ * @param {string} name
+ * @param {number} value
+ */
+function addRow(group, name, value) {
+  const host = $(group === "booked" ? "booked-rows" : "human-rows");
+  const row = document.createElement("div");
+  row.className = "cost-row";
+
+  const label = document.createElement("input");
+  label.type = "text";
+  label.value = name;
+  label.setAttribute("aria-label", "Cost line name");
+
+  const amount = document.createElement("input");
+  amount.type = "number";
+  amount.min = "0";
+  amount.step = "500";
+  amount.value = String(value);
+  amount.className = "amount";
+  amount.setAttribute("aria-label", "Annual cost for " + name);
+
+  const del = document.createElement("button");
+  del.type = "button";
+  del.className = "ghost";
+  del.textContent = "×";
+  del.title = "Remove this line";
+  del.setAttribute("aria-label", "Remove " + name);
+  del.addEventListener("click", () => { row.remove(); render(); });
+
+  row.append(label, amount, del);
+  host.appendChild(row);
+}
+
+/**
+ * Sum the amounts in one group, ignoring blank and negative entries.
+ * @param {"booked"|"human"} group
+ * @returns {number}
+ */
+function groupTotal(group) {
+  const host = $(group === "booked" ? "booked-rows" : "human-rows");
+  let total = 0;
+  host.querySelectorAll("input.amount").forEach(input => {
+    const v = parseFloat(input.value);
+    if (isFinite(v) && v > 0) total += v;
+  });
+  return total;
+}
+
+/** Replace all rows with the published worked example. */
+function loadExample() {
+  $("booked-rows").innerHTML = "";
+  $("human-rows").innerHTML = "";
+  EXAMPLE.booked.forEach(([n, v]) => addRow("booked", n, v));
+  EXAMPLE.human.forEach(([n, v]) => addRow("human", n, v));
+  $("capex").value = EXAMPLE.capex;
+  $("rr").value = EXAMPLE.riskReductionPct;
+  $("rr-range").value = EXAMPLE.riskReductionPct;
+  $("horizon").value = EXAMPLE.horizon;
+  $("hurdle").value = EXAMPLE.hurdle;
+  render();
+}
+
+/* ===========================================================================
+   Reading inputs
+   =========================================================================== */
+function readInputs() {
+  const capex = Math.max(1, parseFloat($("capex").value) || 0);
+  const rrPct = Math.min(100, Math.max(0, parseFloat($("rr").value) || 0));
+  const horizon = Math.max(1, Math.round(parseFloat($("horizon").value) || 1));
+  const hurdle = Math.max(0.1, parseFloat($("hurdle").value) || 0.1);
+  const booked = groupTotal("booked");
+  const human = groupTotal("human");
+  return { capex, rr: rrPct / 100, horizon, hurdle, booked, human };
+}
+
+/* ===========================================================================
+   Rendering: results cards
+   =========================================================================== */
+function renderCards(inp) {
+  const t = evaluate(inp.booked, inp.capex, inp.rr, inp.horizon);
+  const h = evaluate(inp.booked + inp.human, inp.capex, inp.rr, inp.horizon);
+
+  [["t", t], ["h", h]].forEach(([k, r]) => {
+    $(k + "-payback").textContent = yrs(r.payback);
+    $(k + "-cost").textContent = money(r.annualCost);
+    $(k + "-benefit").textContent = money(r.annualBenefit);
+    $(k + "-residual").textContent = money(r.residual);
+    $(k + "-roi").textContent = r.roi === null ? "n/a" : pct(r.roi);
+    $(k + "-net").textContent = r.netRoi === null ? "n/a" : pct(r.netRoi);
+    $(k + "-h-label").textContent = String(inp.horizon);
+    $(k + "-h-label2").textContent = String(inp.horizon);
+
+    const badge = $(k + "-verdict");
+    const passes = r.payback !== null && r.payback <= inp.hurdle;
+    badge.textContent = passes
+      ? "meets " + inp.hurdle + "-yr hurdle"
+      : "misses " + inp.hurdle + "-yr hurdle";
+    badge.className = "verdict " + (passes ? "pass" : "fail");
+  });
+
+  const box = $("delta");
+  if (t.payback === null && h.payback === null) {
+    box.textContent = "With no risk reduction assumed, neither accounting ever pays back.";
+    return { t, h };
+  }
+  const extra = h.annualCost - t.annualCost;
+  const tPass = t.payback !== null && t.payback <= inp.hurdle;
+  const hPass = h.payback !== null && h.payback <= inp.hurdle;
+  let verdict;
+  if (tPass === hPass) {
+    verdict = "Both accountings reach the same verdict against your "
+            + inp.hurdle + "-year hurdle, so the choice of accounting does not "
+            + "decide this investment.";
+  } else if (hPass) {
+    verdict = "The two accountings disagree: counting human-capital cost is "
+            + "what carries this investment past your " + inp.hurdle
+            + "-year hurdle. The case rests on the "
+            + money(extra) + "/yr you cannot invoice.";
+  } else {
+    verdict = "The traditional accounting clears the hurdle and the broader one "
+            + "does not, which normally means an input needs checking.";
+  }
+  box.textContent = "Counting human-capital cost adds " + money(extra)
+    + "/yr of avoided loss and shortens payback from " + yrs(t.payback)
+    + " to " + yrs(h.payback) + " years. " + verdict;
+  return { t, h };
+}
+
+/* ===========================================================================
+   Rendering: tornado
+   =========================================================================== */
+const BIG = 1e9; /* stands in for "never pays back" on the axis */
+
+/**
+ * Build the list of one-at-a-time perturbations for the human-capital model.
+ * @param {object} inp
+ * @param {number} spread - relative half-width, e.g. 0.30
+ */
+function tornadoBars(inp, spread) {
+  const rows = [];
+  const booked = [], human = [];
+  $("booked-rows").querySelectorAll(".cost-row").forEach(r => {
+    booked.push([r.children[0].value || "(unnamed)", parseFloat(r.children[1].value) || 0]);
+  });
+  $("human-rows").querySelectorAll(".cost-row").forEach(r => {
+    human.push([r.children[0].value || "(unnamed)", parseFloat(r.children[1].value) || 0]);
+  });
+  const totalCost = inp.booked + inp.human;
+
+  const payback = (cost, capex, rr) => {
+    const r = evaluate(cost, capex, rr, inp.horizon);
+    return r.payback === null ? Infinity : r.payback;
+  };
+
+  rows.push({
+    label: "Risk reduction",
+    lo: payback(totalCost, inp.capex, Math.max(0, inp.rr * (1 - spread))),
+    hi: payback(totalCost, inp.capex, Math.min(1, inp.rr * (1 + spread)))
+  });
+  rows.push({
+    label: "Capital cost",
+    lo: payback(totalCost, Math.max(1, inp.capex * (1 - spread)), inp.rr),
+    hi: payback(totalCost, inp.capex * (1 + spread), inp.rr)
+  });
+  booked.concat(human).forEach(([name, value]) => {
+    rows.push({
+      label: name,
+      lo: payback(totalCost - value * spread, inp.capex, inp.rr),
+      hi: payback(totalCost + value * spread, inp.capex, inp.rr)
+    });
+  });
+
+  rows.forEach(r => {
+    const a = isFinite(r.lo) ? r.lo : BIG;
+    const b = isFinite(r.hi) ? r.hi : BIG;
+    r.min = Math.min(a, b);
+    r.max = Math.max(a, b);
+    r.swing = r.max - r.min;
+    r.never = !isFinite(r.lo) || !isFinite(r.hi);
+  });
+  rows.sort((x, y) => y.swing - x.swing);
+  return rows;
+}
+
+function renderTornado(inp) {
+  const spread = parseFloat($("spread").value) / 100;
+  $("spread-label").textContent = String(Math.round(spread * 100));
+
+  const base = evaluate(inp.booked + inp.human, inp.capex, inp.rr, inp.horizon);
+  const basePayback = base.payback === null ? BIG : base.payback;
+  const rows = tornadoBars(inp, spread);
+  const host = $("tornado");
+  host.innerHTML = "";
+
+  if (!rows.length) { host.textContent = "Add a cost line to see sensitivity."; return; }
+
+  let lo = Math.min(basePayback, ...rows.map(r => r.min));
+  let hi = Math.max(basePayback, ...rows.map(r => Math.min(r.max, BIG)));
+  const finiteHi = rows.some(r => r.never) ? Math.min(hi, basePayback * 6 + 10) : hi;
+  hi = finiteHi;
+  if (!(hi > lo)) { hi = lo + 1; }
+  const pad = (hi - lo) * 0.06;
+  lo = Math.max(0, lo - pad);
+  hi = hi + pad;
+  const scale = v => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
+
+  const top = rows[0];
+  $("tor-lead").textContent = top
+    ? "Moved ±" + Math.round(spread * 100) + "%, " + top.label.toLowerCase()
+      + " changes payback more than any other input"
+      + (top.never ? " (one end never pays back)."
+                   : " - by " + top.swing.toFixed(2) + " years.")
+    : "";
+
+  rows.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "tor-row";
+
+    const label = document.createElement("div");
+    label.className = "tor-label";
+    label.textContent = r.label;
+    label.title = r.label;
+
+    const track = document.createElement("div");
+    track.className = "tor-track";
+    const bar = document.createElement("div");
+    bar.className = "tor-bar";
+    const left = scale(r.min), right = scale(Math.min(r.max, hi));
+    bar.style.left = left + "%";
+    bar.style.width = Math.max(0.6, right - left) + "%";
+    const marker = document.createElement("div");
+    marker.className = "tor-base";
+    marker.style.left = scale(basePayback) + "%";
+    track.append(bar, marker);
+
+    const val = document.createElement("div");
+    val.className = "tor-val";
+    val.textContent = r.never ? "never" : r.swing.toFixed(2) + " yr";
+
+    row.append(label, track, val);
+    host.appendChild(row);
+  });
+
+  $("ax-lo").textContent = lo.toFixed(1) + " yr";
+  $("ax-hi").textContent = hi.toFixed(1) + " yr" + (rows.some(r => r.never) ? "+" : "");
+}
+
+/* ===========================================================================
+   Rendering: two-way grid
+   =========================================================================== */
+function renderGrid(inp) {
+  $("grid-hurdle").textContent = String(inp.hurdle);
+  const totalCost = inp.booked + inp.human;
+  const rrs = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+  const mults = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];
+
+  const table = $("grid");
+  table.innerHTML = "";
+
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  const corner = document.createElement("th");
+  corner.textContent = "risk \\ capex";
+  hr.appendChild(corner);
+  mults.forEach(m => {
+    const th = document.createElement("th");
+    th.textContent = money(inp.capex * m);
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  rrs.forEach(rr => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.textContent = pct(rr);
+    tr.appendChild(th);
+    mults.forEach(m => {
+      const td = document.createElement("td");
+      const r = evaluate(totalCost, inp.capex * m, rr, inp.horizon);
+      if (r.payback === null) {
+        td.textContent = "never";
+        td.style.color = "var(--text-faint)";
+      } else {
+        td.textContent = r.payback.toFixed(2);
+        const passes = r.payback <= inp.hurdle;
+        /* Intensity by distance from the hurdle, capped so nothing goes opaque. */
+        const ratio = passes
+          ? Math.min(1, (inp.hurdle - r.payback) / inp.hurdle)
+          : Math.min(1, (r.payback - inp.hurdle) / (inp.hurdle * 2));
+        const alpha = 0.10 + 0.42 * ratio;
+        td.style.background = passes
+          ? "color-mix(in srgb, var(--good-bg) " + Math.round(alpha * 100) + "%, transparent)"
+          : "color-mix(in srgb, var(--bad-bg) "  + Math.round(alpha * 100) + "%, transparent)";
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+}
+
+/* ===========================================================================
+   Rendering: breakeven points (closed form -- no search needed)
+   =========================================================================== */
+function renderBreakeven(inp) {
+  $("brk-hurdle").textContent = String(inp.hurdle);
+  const host = $("breakeven");
+  host.innerHTML = "";
+  const totalCost = inp.booked + inp.human;
+
+  const rows = [];
+
+  /* capex that exactly hits the hurdle: capex = hurdle * annualBenefit */
+  const benefit = totalCost * inp.rr;
+  if (benefit > 0) {
+    const capexAt = inp.hurdle * benefit;
+    rows.push([
+      "Capital cost",
+      money(inp.capex),
+      money(capexAt),
+      capexAt >= inp.capex
+        ? "Capex can rise " + pct(capexAt / inp.capex - 1) + " before the hurdle fails."
+        : "Capex must fall " + pct(1 - capexAt / inp.capex) + " to meet the hurdle."
+    ]);
+  }
+
+  /* risk reduction that exactly hits the hurdle: rr = capex / (hurdle * cost) */
+  if (totalCost > 0) {
+    const rrAt = inp.capex / (inp.hurdle * totalCost);
+    rows.push([
+      "Risk reduction",
+      pct(inp.rr),
+      rrAt > 1 ? "unreachable" : pct(rrAt),
+      rrAt > 1
+        ? "Even eliminating every incident would not meet the hurdle at this capex."
+        : (rrAt <= inp.rr
+            ? "Effectiveness can fall to " + pct(rrAt) + " before the hurdle fails."
+            : "Effectiveness must reach " + pct(rrAt) + " to meet the hurdle.")
+    ]);
+  }
+
+  /* annual cost that exactly hits the hurdle: cost = capex / (hurdle * rr) */
+  if (inp.rr > 0) {
+    const costAt = inp.capex / (inp.hurdle * inp.rr);
+    rows.push([
+      "Total annual incident cost",
+      money(totalCost),
+      money(costAt),
+      costAt <= totalCost
+        ? "Costs can be overstated by " + pct(1 - costAt / Math.max(totalCost, 1))
+          + " and the hurdle still holds."
+        : "Costs would need to be " + pct(costAt / Math.max(totalCost, 1) - 1)
+          + " higher to meet the hurdle."
+    ]);
+  }
+
+  const table = document.createElement("table");
+  table.className = "grid";
+  table.style.width = "100%";
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  ["Input", "Now", "Breakeven", "Reading"].forEach((h, i) => {
+    const th = document.createElement("th");
+    th.textContent = h;
+    if (i === 3) th.style.textAlign = "left";
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  rows.forEach(cells => {
+    const tr = document.createElement("tr");
+    cells.forEach((c, i) => {
+      const td = document.createElement("td");
+      td.textContent = c;
+      if (i === 0 || i === 3) {
+        td.style.textAlign = "left";
+        td.style.whiteSpace = "normal";
+      }
+      if (i === 3) td.style.color = "var(--text-dim)";
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  if (!rows.length) {
+    host.innerHTML = '<p class="small muted">Enter a cost and a risk reduction above zero.</p>';
+    return;
+  }
+  host.appendChild(table);
+}
+
+/* ===========================================================================
+   Orchestration
+   =========================================================================== */
+function render() {
+  const inp = readInputs();
+  $("booked-total").textContent = money(inp.booked);
+  $("human-total").textContent = money(inp.human);
+  renderCards(inp);
+  renderTornado(inp);
+  renderGrid(inp);
+  renderBreakeven(inp);
+}
+
+/* --- events --- */
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.id === "rr-range") $("rr").value = t.value;
+  if (t.id === "rr") $("rr-range").value = t.value;
+  render();
+});
+
+document.querySelectorAll("[data-add]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    addRow(btn.getAttribute("data-add"), "New cost line", 0);
+    render();
+  });
+});
+
+$("load-example").addEventListener("click", loadExample);
+
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      $(t.getAttribute("data-panel")).hidden = !on;
+    });
+  });
+});
+
+/* --- theme --- */
+const themeSelect = $("theme");
+function applyTheme(value) {
+  if (value === "auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", value);
+  try { localStorage.setItem("ehs-capitals-theme", value); } catch (e) { /* private mode */ }
+}
+try {
+  const saved = localStorage.getItem("ehs-capitals-theme");
+  if (saved) { themeSelect.value = saved; applyTheme(saved); }
+} catch (e) { /* storage unavailable */ }
+themeSelect.addEventListener("change", () => applyTheme(themeSelect.value));
+
+/* --- start on the published example --- */
+loadExample();
+</script>
+</body>
+</html>

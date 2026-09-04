@@ -1,0 +1,89 @@
+{
+  "_comment": [
+    "Cross-implementation parity fixture.",
+    "",
+    "docs/index.html re-implements the model in JavaScript so the page can run",
+    "with no build step and no server. Two implementations of the same formula",
+    "can silently drift apart, so these cases pin them together.",
+    "",
+    "The 'expected' values below are asserted against the Python implementation",
+    "by tests/test_capitals.py::TestJavaScriptParity.",
+    "",
+    "Verification status. On 3 September 2026 every case in this file was fed",
+    "to the evaluate() function in docs/index.html running in a real browser,",
+    "and all six reproduced these values bit-exactly (Object.is on payback, roi,",
+    "netRoi and residual; nulls matched as nulls). Python reproduces them to",
+    "full double precision too.",
+    "",
+    "Note on what this can and cannot establish: IEEE-754 doubles make these",
+    "operations identical in both languages, so the stored values alone cannot",
+    "prove which implementation emitted them first. What is verified, and what",
+    "matters, is that both implementations agree exactly today.",
+    "",
+    "If you change the arithmetic in either implementation, regenerate this file",
+    "from the JavaScript and re-run the Python tests. If the two disagree, one of",
+    "them is wrong."
+  ],
+  "cases": [
+    {
+      "name": "published worked example, traditional accounting",
+      "annual_cost": 55000, "capex": 150000, "risk_reduction": 0.8, "horizon_years": 5,
+      "expected": {
+        "payback_years": 3.409090909090909,
+        "roi": 1.4666666666666666,
+        "net_roi": 0.4666666666666667,
+        "residual_cost": 11000
+      }
+    },
+    {
+      "name": "published worked example, human-capital accounting",
+      "annual_cost": 118000, "capex": 150000, "risk_reduction": 0.8, "horizon_years": 5,
+      "expected": {
+        "payback_years": 1.5889830508474576,
+        "roi": 3.1466666666666665,
+        "net_roi": 2.1466666666666665,
+        "residual_cost": 23600
+      }
+    },
+    {
+      "name": "negative net return over the horizon",
+      "annual_cost": 70000, "capex": 200000, "risk_reduction": 0.5, "horizon_years": 5,
+      "expected": {
+        "payback_years": 5.714285714285714,
+        "roi": 0.875,
+        "net_roi": -0.125,
+        "residual_cost": 35000
+      }
+    },
+    {
+      "name": "payback exactly at a whole number of years",
+      "annual_cost": 40000, "capex": 200000, "risk_reduction": 0.5, "horizon_years": 7,
+      "expected": {
+        "payback_years": 10.0,
+        "roi": 0.7,
+        "net_roi": -0.3,
+        "residual_cost": 20000
+      }
+    },
+    {
+      "name": "awkward decimals, to catch rounding divergence",
+      "annual_cost": 12345, "capex": 99999, "risk_reduction": 0.37, "horizon_years": 3,
+      "expected": {
+        "payback_years": 21.89287708121244,
+        "roi": 0.1370308703087031,
+        "net_roi": -0.8629691296912969,
+        "residual_cost": 7777.35
+      }
+    },
+    {
+      "name": "zero risk reduction never pays back",
+      "annual_cost": 55000, "capex": 150000, "risk_reduction": 0.0, "horizon_years": 5,
+      "expected": {
+        "payback_years": null,
+        "roi": null,
+        "net_roi": null,
+        "residual_cost": 55000
+      }
+    }
+  ]
+}
