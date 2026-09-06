@@ -69,20 +69,45 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 /* long unbreakable strings (file paths, URLs, identifiers) must wrap, not overflow */
 code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
 
-/* ============ topbar ============ */
-.topbar{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:2px solid var(--rule)}
-.topbar-inner{max-width:var(--maxw);margin:0 auto;padding:13px 30px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.8125rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+/* ============ banner (shared across the research estate) ============ */
+.banner{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:2px solid var(--rule)}
+.banner-inner{max-width:var(--maxw);margin:0 auto;padding:10px 30px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.8125rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);text-decoration:none;flex:none;padding:6px 0}
 .brand-mark{width:14px;height:14px;background:var(--accent);flex:none}
-.topnav{display:flex;align-items:center;gap:2px}
-.topnav a{text-decoration:none;padding:7px 11px;font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);transition:color .15s,background .15s}
-.topnav a:hover{color:var(--ink);background:var(--surface-2)}
-.toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;background:var(--paper);border:2px solid var(--rule);border-radius:0;color:var(--ink);cursor:pointer}
+.bnav{display:flex;align-items:center;flex-wrap:wrap;gap:0 2px;min-width:0}
+.bnav a{white-space:nowrap;text-decoration:none;padding:7px 10px;font-family:var(--font-mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;transition:color .15s,background .15s,border-color .15s}
+.bnav a:hover{color:var(--ink);background:var(--surface-2)}
+.bnav a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent)}
+.bnav a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.bnav .nav-external{color:var(--accent)}
+.bnav .nav-external::after{content:'\2197';margin-left:3px;font-size:.85em;opacity:.75}
+.bnav .nav-external:hover{background:var(--accent-wash);color:var(--accent-2)}
+.bsep{width:2px;align-self:stretch;background:var(--rule-soft);flex:none;min-height:24px}
+.bnav-estate{flex:none}
+.bnav-projects{display:flex;align-items:center;flex-wrap:wrap;gap:0 2px;padding-left:8px;border-left:2px solid var(--rule-soft);margin-left:4px}
+.bnav-tag{font-family:var(--font-mono);font-size:.5625rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:0 8px 0 2px;white-space:nowrap}
+.bnav-sections{flex:1 1 auto;justify-content:flex-end}
+.toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;margin-left:auto;background:var(--paper);border:2px solid var(--rule);border-radius:0;color:var(--ink);cursor:pointer}
 .toggle:hover{background:var(--surface-2)}
 .icon-moon{display:none}
 :root[data-theme="dark"] .icon-sun{display:none}
 :root[data-theme="dark"] .icon-moon{display:block}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .icon-sun{display:none}:root:not([data-theme="light"]) .icon-moon{display:block}}
+@media(max-width:1100px){
+  .bnav-sections{flex-basis:100%;justify-content:flex-start;border-top:1px solid var(--rule-soft);padding-top:4px}
+}
+@media(max-width:760px){
+  .banner-inner{padding:8px 20px;gap:4px 10px}
+  .bsep{display:none}
+  .brand{order:1;flex:1 1 auto}
+  .toggle{order:2;width:32px;height:32px}
+  .bnav-estate{order:3}
+  .bnav-sections{order:4;border-top:0;padding-top:0}
+  .bnav-estate{flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;border-top:1px solid var(--rule-soft);padding-top:4px}
+  .bnav-estate::-webkit-scrollbar{display:none}
+  .bnav-projects{flex:none;flex-wrap:nowrap}
+  .bnav a{padding:6px 9px}
+}
 
 /* ============ hero ============ */
 .hero{position:relative;padding:74px 0 56px;border-bottom:2px solid var(--rule);background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px}
@@ -184,30 +209,11 @@ code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
 
 /* ============ page chrome ============ */
 body{overflow-x:hidden}
-.topnav a.is-active{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
-@media(max-width:900px){
-  .topbar-inner{flex-wrap:wrap;padding:11px 30px 0}
-  .topnav{order:3;width:100%;margin:0 -30px;padding:0 30px 4px;overflow-x:auto;overscroll-behavior-x:contain;border-top:1px solid var(--rule-soft);scrollbar-width:none}
-  .topnav::-webkit-scrollbar{display:none}
-  .topnav a{white-space:nowrap;flex:none}
-}
-.xbar{background:var(--surface-2);border-top:2px solid var(--rule)}
-.xbar-inner{max-width:var(--maxw);margin:0 auto;padding:0 30px;display:flex;align-items:stretch;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
-.xbar-inner::-webkit-scrollbar{display:none}
-.xbar-tag{flex:none;display:inline-flex;align-items:center;padding:8px 14px 8px 0;font-family:var(--font-mono);font-size:.5625rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.xbar a{flex:none;display:inline-flex;align-items:center;gap:8px;padding:8px 13px;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-left:1px solid var(--rule-soft);white-space:nowrap;transition:color .15s,background .15s}
-.xbar a:last-child{border-right:1px solid var(--rule-soft)}
-.xbar a:hover{color:var(--ink);background:var(--surface)}
-.xbar a[aria-current="page"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
-.xbar a[aria-current="page"] .dot{background:var(--accent-ink)}
-.dot{width:6px;height:6px;flex:none;background:var(--rule-soft)}
-.topbar{border-bottom:0}
-.hero{border-top:2px solid var(--rule)}
 .hero h1{max-width:16ch;overflow-wrap:break-word;hyphens:auto}
 .hero-role{font-size:1.08rem;max-width:64ch}
 
 /* ============ sections ============ */
-.section{padding:56px 0;border-bottom:2px solid var(--rule);scroll-margin-top:112px}
+.section{padding:56px 0;border-bottom:2px solid var(--rule);scroll-margin-top:140px}
 .section:nth-of-type(even){background:var(--surface-2)}
 .sec-lede{max-width:68ch;margin:0 0 30px;padding-left:18px;border-left:2px solid var(--accent);font-size:1.02rem;line-height:1.6;color:var(--ink-2)}
 .sec-lede strong{color:var(--ink);font-weight:700}
@@ -261,6 +267,32 @@ button.ghost:hover{border-color:var(--accent);color:var(--accent);background:tra
 
 .example-box{border:2px solid var(--accent);background:var(--accent-wash);padding:16px 16px 14px;margin-bottom:18px}
 .example-box p{margin:10px 0 0}
+.presets{display:grid;grid-template-columns:1fr;gap:6px}
+.preset{width:100%;text-align:left;display:flex;flex-direction:column;gap:3px;padding:10px 12px}
+.preset .preset-t{font-weight:700}
+.preset .preset-s{font-family:var(--font-sans);font-size:.75rem;font-weight:400;text-transform:none;letter-spacing:0;color:inherit;opacity:.85}
+.preset[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.preset[aria-pressed="true"] .preset-s{opacity:.9}
+
+/* one-line verdict + live payback bar */
+.verdict-line{margin:0 0 16px;font-size:1.05rem;line-height:1.5;color:var(--ink);font-weight:600;padding-left:14px;border-left:3px solid var(--accent)}
+.verdict-line .num{color:var(--accent);font-weight:700}
+.pb{border:2px solid var(--rule);border-top:0;background:var(--surface);padding:16px 20px 14px}
+.pb-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:10px}
+.pb-row{display:grid;grid-template-columns:150px minmax(0,1fr) 72px;gap:0 12px;align-items:center;margin-bottom:8px}
+.pb-row:last-of-type{margin-bottom:0}
+.pb-k{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.pb-track{position:relative;height:18px;background:var(--surface-2);border:1px solid var(--rule-soft);min-width:0}
+.pb-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--rule-soft);transition:width .35s ease}
+.pb-row.human .pb-fill{background:var(--accent)}
+.pb-row.trad .pb-fill{background:var(--ink-2)}
+.pb-fill.never{background:repeating-linear-gradient(45deg,var(--bad-bg) 0 6px,transparent 6px 12px)}
+.pb-hurdle{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--warn);transition:left .35s ease}
+.pb-v{font-family:var(--font-mono);font-size:.8125rem;font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.pb-legend{margin:10px 0 0;font-size:.75rem;color:var(--muted)}
+.pb-legend .sw{display:inline-block;width:10px;height:2px;background:var(--warn);vertical-align:middle;margin-right:5px}
+@media (prefers-reduced-motion:reduce){.pb-fill,.pb-hurdle{transition:none}}
+@media(max-width:520px){.pb-row{grid-template-columns:1fr 60px}.pb-k{grid-column:1 / -1}}
 
 /* ============ cost rows ============ */
 .cost-row{display:grid;grid-template-columns:minmax(0,1fr) 96px 28px;gap:5px;margin-bottom:5px}
@@ -369,21 +401,31 @@ a{color:var(--accent)}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="topbar">
-  <div class="topbar-inner">
+<header class="banner">
+  <div class="banner-inner">
     <a class="brand" href="#top"><span class="brand-mark"></span> ehs-capitals-calculator</a>
-    <nav class="topnav" aria-label="Sections on this page"><a href="#calculator">Calculator</a><a href="#sensitivity">Sensitivity</a><a href="#method">Method</a></nav>
+    <span class="bsep" aria-hidden="true"></span>
+    <nav class="bnav bnav-estate" aria-label="Research estate">
+      <a class="nav-external" href="https://priyatham9.github.io/">Priyatham Chimmani</a>
+      <a href="https://priyatham9.github.io/grounded/">Grounded</a>
+      <a href="https://priyatham9.github.io/grounded/paper.html">Paper</a>
+      <div class="bnav-projects" role="group" aria-label="Projects">
+        <span class="bnav-tag">Projects</span>
+        <a href="https://priyatham9.github.io/ehs-osha-analysis/">OSHA analysis</a>
+        <a href="https://priyatham9.github.io/ehs-ai-grounding-eval/">Grounding eval</a>
+        <a href="https://priyatham9.github.io/ehs-human-factors-ontology/">Ontology</a>
+        <a href="https://priyatham9.github.io/ehs-risk-sem/">Risk SEM</a>
+        <a href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page">Cost-benefit calculator</a>
+        <a href="https://priyatham9.github.io/ehs-benchmarks/">Benchmarks</a>
+      </div>
+    </nav>
+    <span class="bsep" aria-hidden="true"></span>
+    <nav class="bnav bnav-sections topnav" aria-label="Sections on this page"><a href="#calculator">Calculator</a><a href="#sensitivity">Sensitivity</a><a href="#method">Method</a></nav>
     <button class="toggle" id="themeToggle" aria-label="Toggle colour scheme">
       <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
       <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
     </button>
   </div>
-  <nav class="xbar" aria-label="Research portfolio">
-    <div class="xbar-inner">
-      <span class="xbar-tag">Portfolio</span>
-      <a href="https://github.com/priyatham9/ehs-osha-analysis"><span class="dot"></span>OSHA data quality</a><a href="https://github.com/priyatham9/ehs-ai-grounding-eval"><span class="dot"></span>Grounding benchmark</a><a href="https://github.com/priyatham9/ehs-human-factors-ontology"><span class="dot"></span>Human factors ontology</a><a href="https://github.com/priyatham9/ehs-risk-sem"><span class="dot"></span>Risk SEM</a><a href="https://github.com/priyatham9/ehs-capitals-calculator" aria-current="page"><span class="dot"></span>Capitals calculator</a><a href="https://github.com/priyatham9/ehs-benchmarks"><span class="dot"></span>EHS benchmarks</a><a href="https://priyatham9.github.io/grounded/"><span class="dot"></span>Hub</a>
-    </div>
-  </nav>
 </header>
 
 <section class="hero" id="top">
@@ -417,15 +459,27 @@ a{color:var(--accent)}
       <!-- ================= INPUTS ================= -->
       <div class="pane-in">
         <div class="example-box">
-          <button class="primary" id="load-example" type="button" style="width:100%">
-            Load the published worked example
-          </button>
+          <span class="label" style="display:block;margin-bottom:8px">Start from a preset</span>
+          <div class="presets" role="group" aria-label="Input presets">
+            <button class="primary preset" type="button" data-preset="published" aria-pressed="true">
+              <span class="preset-t">Published worked example</span>
+              <span class="preset-s">Loading-station figures from Brandon (2025). Reproduces 3.41 / 1.59 year payback.</span>
+            </button>
+            <button class="preset" type="button" data-preset="small" aria-pressed="false">
+              <span class="preset-t">Illustrative: small site, cheap control</span>
+              <span class="preset-s">Made-up inputs to explore the arithmetic. Not a finding.</span>
+            </button>
+            <button class="preset" type="button" data-preset="large" aria-pressed="false">
+              <span class="preset-t">Illustrative: large site, costly control</span>
+              <span class="preset-s">Made-up inputs to explore the arithmetic. Not a finding.</span>
+            </button>
+          </div>
           <p class="tiny">
-            Fills every field with the loading-station figures published in
+            Only the first preset is published data:
             <a class="prose-link" href="https://leadingehs.com/2025/05/27/you-cant-manage-what-you-dont-value-reimagining-capital-in-organizations/"
-               target="_blank" rel="noopener">Brandon (2025)</a>.
-            Reproduces $55,000 / $118,000 annual cost, 3.41 / 1.59 year payback,
-            147% / 315% five-year ROI.
+               target="_blank" rel="noopener">Brandon (2025)</a>,
+            $55,000 / $118,000 annual cost, 147% / 315% five-year ROI.
+            The other two are illustrative inputs chosen to show the model behaving differently; edit any field and the page recomputes.
           </p>
         </div>
 
@@ -482,6 +536,7 @@ a{color:var(--accent)}
       <!-- ================= OUTPUT ================= -->
       <div class="pane-out">
         <h2 class="sub-h">Side by side</h2>
+        <p class="verdict-line" id="verdict-line" aria-live="polite">-</p>
         <div class="results">
           <div class="res-card trad">
             <p class="res-title">Traditional accounting</p>
@@ -509,6 +564,12 @@ a{color:var(--accent)}
           </div>
         </div>
 
+        <div class="pb" aria-label="Payback compared with your hurdle">
+          <div class="pb-head"><span class="label">Payback vs hurdle</span><span class="tiny" id="pb-scale"></span></div>
+          <div class="pb-row trad"><span class="pb-k">Traditional</span><div class="pb-track"><div class="pb-fill" id="pb-t"></div><div class="pb-hurdle" id="pb-hurdle-t" aria-hidden="true"></div></div><span class="pb-v" id="pb-t-v">-</span></div>
+          <div class="pb-row human"><span class="pb-k">Human-capital-inclusive</span><div class="pb-track"><div class="pb-fill" id="pb-h"></div><div class="pb-hurdle" id="pb-hurdle-h" aria-hidden="true"></div></div><span class="pb-v" id="pb-h-v">-</span></div>
+          <p class="pb-legend"><span class="sw" aria-hidden="true"></span>Orange line is your <span id="pb-hurdle-label">3</span>-year hurdle. Shorter bar is better; a hatched bar never pays back.</p>
+        </div>
         <div class="delta" id="delta">-</div>
 
         <div class="warnbar">
@@ -638,8 +699,6 @@ a{color:var(--accent)}
     </p>
     <div class="footer-links">
       <a href="https://github.com/priyatham9/ehs-capitals-calculator">Repository</a>
-      <a href="https://priyatham9.github.io/grounded/">Research hub</a>
-      <a href="https://priyatham9.github.io">Personal site</a>
     </div>
   </div>
 </footer>
@@ -740,7 +799,7 @@ function addRow(group, name, value) {
   del.textContent = "×";
   del.title = "Remove this line";
   del.setAttribute("aria-label", "Remove " + name);
-  del.addEventListener("click", () => { row.remove(); render(); });
+  del.addEventListener("click", () => { row.remove(); clearPresetState(); render(); });
 
   row.append(label, amount, del);
   host.appendChild(row);
@@ -761,18 +820,73 @@ function groupTotal(group) {
   return total;
 }
 
-/** Replace all rows with the published worked example. */
-function loadExample() {
+/* ===========================================================================
+   Presets. Only "published" is sourced data. The other two are illustrative
+   inputs invented for this page so a reader can watch the arithmetic move;
+   they are not observations from any site and must not be quoted as such.
+   =========================================================================== */
+const PRESETS = {
+  published: EXAMPLE,
+  small: {
+    capex: 40000,
+    riskReductionPct: 60,
+    horizon: 5,
+    hurdle: 3,
+    booked: [
+      ["Equipment downtime", 6000],
+      ["Material loss / spills", 2000],
+      ["Injury costs", 4000]
+    ],
+    human: [
+      ["Lost work time", 5000],
+      ["Retraining due to turnover", 3000],
+      ["Productivity loss", 6000],
+      ["Morale / team performance", 2000]
+    ]
+  },
+  large: {
+    capex: 600000,
+    riskReductionPct: 70,
+    horizon: 5,
+    hurdle: 3,
+    booked: [
+      ["Equipment downtime", 90000],
+      ["Material loss / spills", 25000],
+      ["Injury costs", 45000]
+    ],
+    human: [
+      ["Lost work time", 60000],
+      ["Retraining due to turnover", 30000],
+      ["Productivity loss", 80000],
+      ["Morale / team performance", 25000]
+    ]
+  }
+};
+
+/** Replace all inputs with one preset. */
+function loadPreset(key) {
+  const P = PRESETS[key] || EXAMPLE;
   $("booked-rows").innerHTML = "";
   $("human-rows").innerHTML = "";
-  EXAMPLE.booked.forEach(([n, v]) => addRow("booked", n, v));
-  EXAMPLE.human.forEach(([n, v]) => addRow("human", n, v));
-  $("capex").value = EXAMPLE.capex;
-  $("rr").value = EXAMPLE.riskReductionPct;
-  $("rr-range").value = EXAMPLE.riskReductionPct;
-  $("horizon").value = EXAMPLE.horizon;
-  $("hurdle").value = EXAMPLE.hurdle;
+  P.booked.forEach(([n, v]) => addRow("booked", n, v));
+  P.human.forEach(([n, v]) => addRow("human", n, v));
+  $("capex").value = P.capex;
+  $("rr").value = P.riskReductionPct;
+  $("rr-range").value = P.riskReductionPct;
+  $("horizon").value = P.horizon;
+  $("hurdle").value = P.hurdle;
+  document.querySelectorAll(".preset").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-preset") === key));
+  });
   render();
+}
+
+/** Replace all rows with the published worked example. */
+function loadExample() { loadPreset("published"); }
+
+/** Once the reader edits anything, no preset is "pressed" any more. */
+function clearPresetState() {
+  document.querySelectorAll(".preset").forEach(b => b.setAttribute("aria-pressed", "false"));
 }
 
 /* ===========================================================================
@@ -813,6 +927,9 @@ function renderCards(inp) {
     badge.className = "verdict " + (passes ? "pass" : "fail");
   });
 
+  renderVerdictLine(t, h, inp);
+  renderPaybackBar(t, h, inp);
+
   const box = $("delta");
   if (t.payback === null && h.payback === null) {
     box.textContent = "With no risk reduction assumed, neither accounting ever pays back.";
@@ -839,6 +956,60 @@ function renderCards(inp) {
     + "/yr of avoided loss and shortens payback from " + yrs(t.payback)
     + " to " + yrs(h.payback) + " years. " + verdict;
   return { t, h };
+}
+
+/* ===========================================================================
+   Rendering: one-line verdict and live payback bar
+   =========================================================================== */
+const yr1 = n => (n === null || !isFinite(n)) ? "never" : n.toFixed(1);
+
+function renderVerdictLine(t, h, inp) {
+  const el = $("verdict-line");
+  el.innerHTML = "";
+  const add = (txt, cls) => {
+    const sp = document.createElement("span");
+    if (cls) sp.className = cls;
+    sp.textContent = txt;
+    el.appendChild(sp);
+  };
+  if (t.payback === null && h.payback === null) {
+    add("With no risk reduction assumed, neither accounting ever pays back.");
+    return;
+  }
+  if (inp.human <= 0) {
+    add("No human-capital lines entered, so both accountings give the same ");
+    add(yr1(t.payback) + "-year", "num");
+    add(" payback.");
+    return;
+  }
+  add("Counting human capital moves payback from ");
+  add(yr1(t.payback) + " to " + yr1(h.payback) + " years", "num");
+  const tPass = t.payback !== null && t.payback <= inp.hurdle;
+  const hPass = h.payback !== null && h.payback <= inp.hurdle;
+  if (tPass === hPass) {
+    add(hPass ? ", and both clear your " + inp.hurdle + "-year hurdle."
+              : ", and neither clears your " + inp.hurdle + "-year hurdle.");
+  } else if (hPass) {
+    add(", which is what carries it past your " + inp.hurdle + "-year hurdle.");
+  } else {
+    add(", yet only the narrower accounting clears the hurdle. Check the inputs.");
+  }
+}
+
+function renderPaybackBar(t, h, inp) {
+  const vals = [t.payback, h.payback].filter(v => v !== null && isFinite(v));
+  const scale = Math.max(inp.hurdle * 1.5, ...vals, 1) * 1.05;
+  const pctOf = v => Math.min(100, (v / scale) * 100);
+  [["t", t], ["h", h]].forEach(([k, r]) => {
+    const fill = $("pb-" + k);
+    const never = r.payback === null || !isFinite(r.payback);
+    fill.classList.toggle("never", never);
+    fill.style.width = never ? "100%" : pctOf(r.payback).toFixed(2) + "%";
+    $("pb-" + k + "-v").textContent = never ? "never" : yrs(r.payback) + " yr";
+    $("pb-hurdle-" + k).style.left = pctOf(inp.hurdle).toFixed(2) + "%";
+  });
+  $("pb-hurdle-label").textContent = String(inp.hurdle);
+  $("pb-scale").textContent = "0 to " + scale.toFixed(1) + " years";
 }
 
 /* ===========================================================================
@@ -1127,17 +1298,21 @@ document.addEventListener("input", e => {
   const t = e.target;
   if (t.id === "rr-range") $("rr").value = t.value;
   if (t.id === "rr") $("rr-range").value = t.value;
+  if (t.id !== "spread") clearPresetState();
   render();
 });
 
 document.querySelectorAll("[data-add]").forEach(btn => {
   btn.addEventListener("click", () => {
     addRow(btn.getAttribute("data-add"), "New cost line", 0);
+    clearPresetState();
     render();
   });
 });
 
-$("load-example").addEventListener("click", loadExample);
+document.querySelectorAll(".preset").forEach(btn => {
+  btn.addEventListener("click", () => loadPreset(btn.getAttribute("data-preset")));
+});
 
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
@@ -1165,7 +1340,7 @@ document.querySelectorAll(".tab").forEach(tab => {
 
 /* --- topbar: mark the section currently in view --- */
 (function () {
-  var links = Array.prototype.slice.call(document.querySelectorAll('.topnav a[href^="#"]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('.bnav-sections a[href^="#"]'));
   if (!links.length || !('IntersectionObserver' in window)) return;
   var map = {}, ratio = {};
   links.forEach(function (a) {
@@ -1183,7 +1358,7 @@ document.querySelectorAll(".tab").forEach(tab => {
   var obs = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { ratio[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
     paint();
-  }, { rootMargin: '-116px 0px -50% 0px', threshold: [0, 0.05, 0.2, 0.5, 0.9] });
+  }, { rootMargin: '-140px 0px -50% 0px', threshold: [0, 0.05, 0.2, 0.5, 0.9] });
   ids.forEach(function (id) { obs.observe(document.getElementById(id)); });
 })();
 
