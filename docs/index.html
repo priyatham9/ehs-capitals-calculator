@@ -89,6 +89,7 @@ code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
 .bnav-sections{flex:1 1 auto;justify-content:flex-end}
 .toggle{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;margin-left:auto;background:var(--paper);border:2px solid var(--rule);border-radius:0;color:var(--ink);cursor:pointer}
 .toggle:hover{background:var(--surface-2)}
+.toggle svg{width:15px;height:15px;flex:none}
 .icon-moon{display:none}
 :root[data-theme="dark"] .icon-sun{display:none}
 :root[data-theme="dark"] .icon-moon{display:block}
@@ -108,6 +109,40 @@ code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
   .bnav-projects{flex:none;flex-wrap:nowrap}
   .bnav a{padding:6px 9px}
 }
+
+.estate{display:flex;gap:0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid var(--rule);background:var(--surface-2)}
+.estate a{padding:6px 14px;text-decoration:none;color:var(--muted)}
+.estate a[aria-current="true"]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.estate-sep{width:2px;background:var(--rule-soft)}
+
+/* ============ chart ============ */
+.chart{margin:18px 0 0;border:2px solid var(--rule);background:var(--surface);padding:16px 18px 12px}
+.chart-take{margin:0 0 10px;font-size:.95rem;font-weight:600;color:var(--ink);line-height:1.45}
+.chart-take .num{color:var(--accent);font-weight:700}
+.chart-src{margin:8px 0 0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.chart svg{display:block;width:100%;height:auto;font-family:var(--font-mono);overflow:visible}
+.chart .ax{stroke:var(--rule-soft);stroke-width:1}
+.chart .ax-main{stroke:var(--rule);stroke-width:2}
+.chart .tick{fill:var(--muted);font-size:10px}
+.chart .ln-t{fill:none;stroke:var(--ink-2);stroke-width:2.5}
+.chart .ln-h{fill:none;stroke:var(--accent);stroke-width:2.5}
+.chart .ln-cap{stroke:var(--warn);stroke-width:2;stroke-dasharray:6 5}
+.chart .pt{fill:var(--surface);stroke-width:2;cursor:pointer}
+.chart .pt.t{stroke:var(--ink-2)}
+.chart .pt.h{stroke:var(--accent)}
+.chart .pt:hover,.chart .pt:focus{stroke-width:4;outline:none}
+.chart .pt:focus-visible{stroke:var(--accent-2)}
+.chart .cross{fill:var(--warn);stroke:var(--paper);stroke-width:2}
+.chart .cross-lbl{fill:var(--warn);font-size:10px;font-weight:700}
+.chart .lg{fill:var(--ink-2);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.chart-tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-family:var(--font-mono);font-size:.6875rem;padding:6px 9px;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));opacity:0;transition:opacity .12s}
+.chart-tip.on{opacity:1}
+.chart-wrap{position:relative}
+details.why{margin-top:14px;border:2px solid var(--rule-soft);background:var(--surface)}
+details.why summary{cursor:pointer;padding:10px 14px;font-family:var(--font-mono);font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+details.why summary:hover{color:var(--accent)}
+details.why .why-body{padding:0 14px 12px;font-size:.875rem;line-height:1.6;color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){.chart-tip{transition:none}}
 
 /* ============ hero ============ */
 .hero{position:relative;padding:74px 0 56px;border-bottom:2px solid var(--rule);background-image:radial-gradient(var(--grid-dot) 1px,transparent 1px);background-size:22px 22px}
@@ -427,13 +462,14 @@ a{color:var(--accent)}
     </button>
   </div>
 </header>
+<div class="estate" aria-label="Site switcher"><a href="https://priyatham9.github.io/" data-site="personal">Priyatham Chimmani</a><span class="estate-sep"></span><a href="https://priyatham9.github.io/grounded/" data-site="research" aria-current="true">Grounded research</a></div>
 
 <section class="hero" id="top">
   <div class="wrap">
     <div class="hero-eyebrow"><span class="pulse"></span><span class="label">Decision tool - arithmetic only, nothing uploaded</span></div>
     <h1 class="display">Two ways to count the cost of the same control</h1>
-    <p class="hero-role">One counts only directly booked costs. The other also counts the human-capital costs an incident causes but rarely gets charged for. Enter your own figures and see where, and whether, the two verdicts diverge.</p>
-    <p class="hero-lede">Every calculation runs in your browser. Nothing is sent anywhere, nothing is stored beyond your theme choice.</p>
+    <p class="hero-role">Booked costs only, or booked plus human-capital costs. Move the sliders and watch where the two verdicts diverge.</p>
+    <p class="hero-lede">Runs in your browser. Nothing is sent or stored beyond your theme choice.</p>
     <div class="hero-links">
       <a class="btn btn-primary" href="https://github.com/priyatham9/ehs-capitals-calculator">Repository</a>
       <a class="btn" href="#calculator">Open the calculator</a>
@@ -453,7 +489,7 @@ a{color:var(--accent)}
 <section class="section" id="calculator">
   <div class="wrap">
     <div class="rail-head"><span class="rail-num">01</span><h2 class="display">The calculator</h2></div>
-    <p class="sec-lede">Fill in the annual cost of the incidents you expect in a typical year <strong>without</strong> the control, not the cost of a single incident. The left column is your input; the right column is the arithmetic.</p>
+    <p class="sec-lede">Enter <strong>annual</strong> incident cost in a typical year without the control. Left is input, right is arithmetic.</p>
 
     <div class="layout">
       <!-- ================= INPUTS ================= -->
@@ -474,20 +510,23 @@ a{color:var(--accent)}
               <span class="preset-s">Made-up inputs to explore the arithmetic. Not a finding.</span>
             </button>
           </div>
-          <p class="tiny">
-            Only the first preset is published data:
+          <details class="why" style="margin-top:12px">
+            <summary>About the presets</summary>
+            <div class="why-body">Only the first is published data:
             <a class="prose-link" href="https://leadingehs.com/2025/05/27/you-cant-manage-what-you-dont-value-reimagining-capital-in-organizations/"
                target="_blank" rel="noopener">Brandon (2025)</a>,
-            $55,000 / $118,000 annual cost, 147% / 315% five-year ROI.
-            The other two are illustrative inputs chosen to show the model behaving differently; edit any field and the page recomputes.
-          </p>
+            $55,000 / $118,000 annual cost, 147% / 315% five-year ROI. The other two are made-up inputs. Edit any field and the page recomputes.</div>
+          </details>
         </div>
 
         <div class="block">
           <div class="block-head"><h3>Investment</h3></div>
           <div class="field">
             <label for="capex">Capital cost of the control ($)</label>
-            <input type="number" id="capex" min="1" step="1000" value="150000">
+            <div class="range-row">
+              <input type="range" id="capex-range" min="10000" max="1000000" step="5000" value="150000" aria-label="Capital cost slider">
+              <input type="number" id="capex" min="1" step="1000" value="150000">
+            </div>
           </div>
           <div class="field">
             <label for="rr-range">Assumed risk reduction (%) - your assumption</label>
@@ -499,11 +538,17 @@ a{color:var(--accent)}
           </div>
           <div class="field">
             <label for="horizon">ROI horizon (years)</label>
-            <input type="number" id="horizon" min="1" max="50" step="1" value="5">
+            <div class="range-row">
+              <input type="range" id="horizon-range" min="1" max="20" step="1" value="5" aria-label="ROI horizon slider">
+              <input type="number" id="horizon" min="1" max="50" step="1" value="5">
+            </div>
           </div>
           <div class="field">
             <label for="hurdle">Payback hurdle (years) - your decision rule</label>
-            <input type="number" id="hurdle" min="0.1" step="0.5" value="3">
+            <div class="range-row">
+              <input type="range" id="hurdle-range" min="0.5" max="10" step="0.5" value="3" aria-label="Payback hurdle slider">
+              <input type="number" id="hurdle" min="0.1" step="0.5" value="3">
+            </div>
           </div>
         </div>
 
@@ -527,10 +572,6 @@ a{color:var(--accent)}
           <div class="subtotal"><span>Subtotal</span><span class="num" id="human-total">$0</span></div>
         </div>
 
-        <p class="tiny" style="margin:14px 0 0">
-          All figures are annual. Enter the cost of incidents you expect in a
-          typical year without the control, not the cost of one incident.
-        </p>
       </div>
 
       <!-- ================= OUTPUT ================= -->
@@ -564,20 +605,26 @@ a{color:var(--accent)}
           </div>
         </div>
 
+        <div class="chart" id="chart">
+          <p class="chart-take" id="chart-take">-</p>
+          <div class="chart-wrap" id="chart-wrap"><div class="chart-tip" id="chart-tip" role="status" aria-live="polite"></div></div>
+          <p class="chart-src">Source: your inputs above, evaluated with the four-line model in src/capitals.py. Not discounted.</p>
+        </div>
+
         <div class="pb" aria-label="Payback compared with your hurdle">
           <div class="pb-head"><span class="label">Payback vs hurdle</span><span class="tiny" id="pb-scale"></span></div>
           <div class="pb-row trad"><span class="pb-k">Traditional</span><div class="pb-track"><div class="pb-fill" id="pb-t"></div><div class="pb-hurdle" id="pb-hurdle-t" aria-hidden="true"></div></div><span class="pb-v" id="pb-t-v">-</span></div>
           <div class="pb-row human"><span class="pb-k">Human-capital-inclusive</span><div class="pb-track"><div class="pb-fill" id="pb-h"></div><div class="pb-hurdle" id="pb-hurdle-h" aria-hidden="true"></div></div><span class="pb-v" id="pb-h-v">-</span></div>
           <p class="pb-legend"><span class="sw" aria-hidden="true"></span>Orange line is your <span id="pb-hurdle-label">3</span>-year hurdle. Shorter bar is better; a hatched bar never pays back.</p>
         </div>
-        <div class="delta" id="delta">-</div>
+        <details class="why">
+          <summary>Why the two verdicts differ</summary>
+          <div class="why-body" id="delta">-</div>
+        </details>
 
         <div class="warnbar">
           <strong>Risk reduction is an input, not an output</strong>
-          This page does not know how effective your control will be. It takes
-          the number you type and does arithmetic with it. The sensitivity views
-          below exist to show you how much of the answer rests on that one
-          assumption.
+          The page does arithmetic on the number you type. Section 02 shows how much rests on it.
         </div>
       </div>
     </div>
@@ -587,7 +634,7 @@ a{color:var(--accent)}
 <section class="section" id="sensitivity">
   <div class="wrap">
     <div class="rail-head"><span class="rail-num">02</span><h2 class="display">How much the answer moves</h2></div>
-    <p class="sec-lede">Three views of the same arithmetic under different inputs. None of them adds information the model does not already have; they only expose how far the verdict travels when one number changes.</p>
+    <p class="sec-lede">Three views of the same arithmetic. Each shows how far the verdict travels when one number changes.</p>
 
     <div class="panel">
       <div class="tabs" role="tablist">
@@ -606,13 +653,10 @@ a{color:var(--accent)}
           <p class="small muted" id="tor-lead" style="margin:14px 0 16px"></p>
           <div id="tornado"></div>
           <div class="axis"><span id="ax-lo"></span><span id="ax-hi"></span></div>
-          <p class="tiny" style="margin-top:16px;max-width:76ch">
-            Each bar spans the payback you get when that one input is moved to
-            each end of its range while every other input is held at its current
-            value. The vertical line is the current answer. One-at-a-time
-            analysis ignores inputs moving together, so it understates joint
-            risk.
-          </p>
+          <details class="why">
+            <summary>How to read the bars</summary>
+            <div class="why-body">Each bar spans the payback when that one input moves to each end of its range, everything else held. The vertical line is the current answer. One-at-a-time analysis understates joint risk.</div>
+          </details>
         </div>
 
         <!-- grid -->
@@ -632,9 +676,7 @@ a{color:var(--accent)}
         <!-- breakeven -->
         <div id="p-break" role="tabpanel" hidden>
           <p class="small muted" style="margin:0 0 16px;max-width:76ch">
-            How far one input can move on its own before the verdict against
-            your <span id="brk-hurdle">3</span>-year hurdle changes. Everything
-            else stays where you set it.
+            How far one input can move alone before the verdict against your <span id="brk-hurdle">3</span>-year hurdle flips.
           </p>
           <div id="breakeven"></div>
         </div>
@@ -646,9 +688,9 @@ a{color:var(--accent)}
 <section class="section" id="method">
   <div class="wrap">
     <div class="rail-head"><span class="rail-num">03</span><h2 class="display">Method, and what this does not do</h2></div>
-    <p class="sec-lede">The model is four lines of arithmetic. Everything that makes it feel like an appraisal - discounting, degradation, maintenance, residual value - is <strong>absent</strong>, and the limits below are the honest reading of that.</p>
+    <p class="sec-lede">Four lines of arithmetic. No discounting, degradation, maintenance or residual value: <strong>absent</strong>, not hidden.</p>
 
-    <details class="notes" open>
+    <details class="notes">
       <summary>The arithmetic and its limits</summary>
       <div class="notes-body">
         <ul>
@@ -657,26 +699,13 @@ a{color:var(--accent)}
             <code>payback = capex &divide; annual&nbsp;saving</code>;
             <code>ROI = (annual&nbsp;saving &times; horizon) &divide; capex</code>.
             That is the whole model.</li>
-          <li><strong>ROI here is cumulative benefit over investment, not net return.</strong>
-            A 147% ROI means benefits reached 1.47&times; the capital cost, not
-            that you cleared 147% profit. Net ROI is shown alongside it and is
-            always exactly 100 points lower.</li>
-          <li><strong>Nothing is discounted.</strong> A dollar saved in year 5
-            counts the same as one saved in year 1. At any realistic cost of
-            capital this flatters long horizons, and the effect grows with the
-            horizon you choose.</li>
-          <li><strong>Benefits are assumed flat and permanent.</strong> One
-            risk reduction, one annual cost, unchanged for the whole horizon.
-            No degradation, no maintenance cost, no residual value.</li>
-          <li><strong>The human-capital lines are estimates.</strong> Lost
-            work time, retraining, productivity and morale are real costs, but
-            they are modelled, not invoiced. Their size is a judgement, and the
-            second accounting inherits every bit of that uncertainty.</li>
+          <li><strong>ROI is cumulative benefit over investment, not net return.</strong>
+            147% means benefits reached 1.47&times; capex. Net ROI is always exactly 100 points lower.</li>
+          <li><strong>Nothing is discounted.</strong> A year-5 dollar counts like a year-1 dollar, which flatters long horizons.</li>
+          <li><strong>Benefits are flat and permanent.</strong> No degradation, maintenance or residual value.</li>
+          <li><strong>Human-capital lines are estimates,</strong> modelled, not invoiced. The second accounting inherits that uncertainty.</li>
           <li><strong>Counting more cost can never weaken the case.</strong>
-            Because every added line is non-negative, the human-capital
-            accounting always shows payback at least as fast. That is a
-            property of the model's structure, not evidence found in data.
-            Treat it as a reason for scepticism, not confirmation.</li>
+            Every added line is non-negative, so the broader accounting always pays back at least as fast. That is structure, not evidence. Treat it as a reason for scepticism.</li>
         </ul>
       </div>
     </details>
@@ -694,8 +723,7 @@ a{color:var(--accent)}
       Capital in Organizations&rdquo;,
       <a class="prose-link" href="https://leadingehs.com/2025/05/27/you-cant-manage-what-you-dont-value-reimagining-capital-in-organizations/"
          target="_blank" rel="noopener">LeadingEHS.com</a>.
-      The Python implementation, its test suite, and the Monte Carlo and
-      tornado modules are in the repository. MIT licensed.
+      Python model, tests, Monte Carlo and tornado modules are in the repository. MIT licensed.
     </p>
     <div class="footer-links">
       <a href="https://github.com/priyatham9/ehs-capitals-calculator">Repository</a>
@@ -875,6 +903,7 @@ function loadPreset(key) {
   $("rr-range").value = P.riskReductionPct;
   $("horizon").value = P.horizon;
   $("hurdle").value = P.hurdle;
+  ["capex","horizon","hurdle"].forEach(id => { $(id + "-range").value = $(id).value; });
   document.querySelectorAll(".preset").forEach(b => {
     b.setAttribute("aria-pressed", String(b.getAttribute("data-preset") === key));
   });
@@ -928,6 +957,7 @@ function renderCards(inp) {
   });
 
   renderVerdictLine(t, h, inp);
+  renderChart(t, h, inp);
   renderPaybackBar(t, h, inp);
 
   const box = $("delta");
@@ -1010,6 +1040,101 @@ function renderPaybackBar(t, h, inp) {
   });
   $("pb-hurdle-label").textContent = String(inp.hurdle);
   $("pb-scale").textContent = "0 to " + scale.toFixed(1) + " years";
+}
+
+
+/* ===========================================================================
+   Rendering: cumulative benefit vs capex, inline SVG, no library
+   =========================================================================== */
+const SVGNS = "http://www.w3.org/2000/svg";
+function svgEl(tag, attrs, text) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+const kfmt = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : "$" + Math.round(n / 1000) + "k";
+
+function renderChart(t, h, inp) {
+  const wrap = $("chart-wrap");
+  const tip = $("chart-tip");
+  wrap.querySelectorAll("svg").forEach(x => x.remove());
+  const W = 640, H = 300, L = 58, R = 16, T = 18, B = 40;
+  const N = inp.horizon;
+  const maxY = Math.max(inp.capex, h.annualBenefit * N, t.annualBenefit * N, 1) * 1.08;
+  const x = yr => L + (yr / N) * (W - L - R);
+  const y = v => T + (H - T - B) * (1 - v / maxY);
+  const svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, role: "img",
+    "aria-label": "Cumulative benefit over " + N + " years against capital cost, both accountings" });
+
+  /* gridlines and axes */
+  for (let i = 0; i <= 4; i++) {
+    const v = (maxY / 4) * i;
+    svg.appendChild(svgEl("line", { class: "ax", x1: L, x2: W - R, y1: y(v), y2: y(v) }));
+    svg.appendChild(svgEl("text", { class: "tick", x: L - 8, y: y(v) + 3, "text-anchor": "end" }, kfmt(v)));
+  }
+  svg.appendChild(svgEl("line", { class: "ax-main", x1: L, x2: W - R, y1: y(0), y2: y(0) }));
+  svg.appendChild(svgEl("line", { class: "ax-main", x1: L, x2: L, y1: T, y2: y(0) }));
+  const step = N > 12 ? Math.ceil(N / 8) : 1;
+  for (let yr = 0; yr <= N; yr += step) {
+    svg.appendChild(svgEl("text", { class: "tick", x: x(yr), y: y(0) + 16, "text-anchor": "middle" }, "yr " + yr));
+  }
+
+  /* capex line */
+  svg.appendChild(svgEl("line", { class: "ln-cap", x1: L, x2: W - R, y1: y(inp.capex), y2: y(inp.capex) }));
+  svg.appendChild(svgEl("text", { class: "lg", x: W - R, y: y(inp.capex) - 6, "text-anchor": "end" }, "capex " + kfmt(inp.capex)));
+
+  /* series */
+  const series = [["t", t, "Traditional"], ["h", h, "Human-capital"]];
+  series.forEach(([k, r, name]) => {
+    const pts = [];
+    for (let yr = 0; yr <= N; yr++) pts.push([x(yr), y(r.annualBenefit * yr), yr, r.annualBenefit * yr]);
+    svg.appendChild(svgEl("path", { class: "ln-" + k, d: pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") }));
+    pts.forEach(p => {
+      const c = svgEl("circle", { class: "pt " + k, cx: p[0], cy: p[1], r: 4.5, tabindex: "0", role: "button",
+        "aria-label": name + ", year " + p[2] + ": " + money(p[3]) + " cumulative benefit" });
+      c.appendChild(svgEl("title", {}, name + " yr " + p[2] + ": " + money(p[3])));
+      const show = () => {
+        tip.textContent = name + " yr " + p[2] + ": " + money(p[3]);
+        tip.style.left = (p[0] / W * 100) + "%";
+        tip.style.top = (p[1] / H * 100) + "%";
+        tip.classList.add("on");
+      };
+      const hide = () => tip.classList.remove("on");
+      c.addEventListener("mouseenter", show); c.addEventListener("focus", show);
+      c.addEventListener("mouseleave", hide); c.addEventListener("blur", hide);
+      svg.appendChild(c);
+    });
+    /* payback crossing */
+    if (r.payback !== null && isFinite(r.payback) && r.payback <= N) {
+      const cx = x(r.payback), cy = y(inp.capex);
+      svg.appendChild(svgEl("line", { class: "ax", x1: cx, x2: cx, y1: cy, y2: y(0), "stroke-dasharray": "3 3" }));
+      svg.appendChild(svgEl("circle", { class: "cross", cx, cy, r: 6 }));
+      svg.appendChild(svgEl("text", { class: "cross-lbl", x: cx + (k === "t" ? 8 : -8), y: cy + (k === "t" ? 18 : -10),
+        "text-anchor": k === "t" ? "start" : "end" }, yr1(r.payback) + " yr"));
+    }
+  });
+
+  /* legend */
+  const lg = svgEl("g", { transform: "translate(" + (L + 6) + "," + (T + 4) + ")" });
+  lg.appendChild(svgEl("line", { class: "ln-t", x1: 0, x2: 18, y1: 4, y2: 4 }));
+  lg.appendChild(svgEl("text", { class: "lg", x: 24, y: 8 }, "Traditional"));
+  lg.appendChild(svgEl("line", { class: "ln-h", x1: 120, x2: 138, y1: 4, y2: 4 }));
+  lg.appendChild(svgEl("text", { class: "lg", x: 144, y: 8 }, "Human-capital"));
+  svg.appendChild(lg);
+  wrap.appendChild(svg);
+
+  /* takeaway line */
+  const take = $("chart-take"); take.innerHTML = "";
+  const add = (txt, cls) => { const sp = document.createElement("span"); if (cls) sp.className = cls; sp.textContent = txt; take.appendChild(sp); };
+  if (h.payback === null) { add("Cumulative benefit never reaches capex at 0% risk reduction."); return; }
+  if (h.payback > N) {
+    add("Neither line crosses capex within "); add(N + " years", "num"); add(". Payback sits beyond the horizon.");
+  } else if (t.payback !== null && t.payback <= N) {
+    add("Both lines cross capex inside the horizon: "); add(yr1(t.payback) + " yr", "num"); add(" traditional, "); add(yr1(h.payback) + " yr", "num"); add(" with human capital.");
+  } else {
+    add("Only the human-capital line crosses capex inside the horizon, at "); add(yr1(h.payback) + " yr", "num"); add(".");
+  }
 }
 
 /* ===========================================================================
@@ -1296,8 +1421,8 @@ function render() {
 /* --- events --- */
 document.addEventListener("input", e => {
   const t = e.target;
-  if (t.id === "rr-range") $("rr").value = t.value;
-  if (t.id === "rr") $("rr-range").value = t.value;
+  if (t.id && t.id.endsWith("-range")) $(t.id.slice(0, -6)).value = t.value;
+  else if (t.id && $(t.id + "-range")) $(t.id + "-range").value = t.value;
   if (t.id !== "spread") clearPresetState();
   render();
 });
