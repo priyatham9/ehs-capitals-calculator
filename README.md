@@ -1,5 +1,7 @@
 # ehs-capitals-calculator
 
+[![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml)
+
 A cost-benefit calculator for EHS capital investment that computes the same
 investment two ways: counting only directly booked costs, and additionally
 counting human-capital costs that an incident causes but that rarely get
