@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://priyatham9.github.io/ehs-capitals-calculator/sitemap.xml
