@@ -6,6 +6,30 @@ on:
 permissions:
   contents: read
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Install ruff
+        run: pip install ruff
+      - name: Run lint
+        run: ruff check .
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install coverage numpy pandas
+      - name: Run tests with coverage
+        run: PYTHONPATH=src coverage run -m unittest discover -s tests
+      - name: Generate coverage report
+        run: coverage report -m >> $GITHUB_STEP_SUMMARY
   test:
     runs-on: ubuntu-latest
     strategy:

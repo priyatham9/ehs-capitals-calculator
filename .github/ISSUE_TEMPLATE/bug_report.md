@@ -1,23 +1,47 @@
 ---
 name: Bug report
-about: Something produces the wrong result or does not run
+about: Report a calculation error or unexpected behavior
+title: ''
 labels: bug
+assignees: ''
+
 ---
 
-## What happened
+## Description
+Brief description of the issue.
 
-Describe the unexpected behaviour or error, including any error message.
+## Inputs
+Please provide the exact inputs that trigger the bug:
+- Capex: 
+- Annual cost(s): 
+- Risk reduction: 
+- Horizon (years): 
+- Human capital costs (if any): 
+- Other parameters: 
 
-## What you expected
+## Python Output
+Run the Python CLI with your inputs and paste the output:
 
-Describe what should have happened instead.
+```
+$ python3 src/cli.py [command] [parameters]
+[output here]
+```
 
-## How to reproduce
+## JavaScript Output
+If using the web calculator, paste the result shown in the browser:
 
-Give the exact command and steps to trigger the issue. Include which subcommand you used (example, compare, tornado, montecarlo).
+```
+[result here]
+```
 
-## Environment
+## Browser
+If relevant to the issue:
+- Browser: 
+- OS: 
+- Version: 
 
-- Python version:
-- Operating system:
-- Does numpy v2.0+ work? (Y/N)
+## Expected vs Actual
+What did you expect? What did you get instead?
+
+## Additional Context
+Any other details that might help debug this.

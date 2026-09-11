@@ -318,6 +318,8 @@ output of the latter.
 
 MIT. See [LICENSE](LICENSE).
 
+Security concerns can be reported in [SECURITY.md](SECURITY.md).
+
 The worked example is attributed to its author and linked above; the arithmetic
 implementing it is original to this repository.
 
