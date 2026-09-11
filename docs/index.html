@@ -427,21 +427,33 @@ dl.stats dd{margin:0;padding:6px 0;text-align:right;font-family:var(--font-mono)
 .tab[aria-selected="true"]{color:var(--ink);background:var(--surface);box-shadow:inset 0 -3px 0 var(--accent)}
 .panel-body{padding:22px 20px}
 
-/* ============ tornado ============ */
-.tor-row{display:grid;grid-template-columns:minmax(96px,170px) minmax(0,1fr) 82px;gap:10px;align-items:center;margin-bottom:5px;font-size:.8125rem}
-.tor-label{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tor-track{position:relative;height:18px;background:var(--surface-2);border:1px solid var(--rule-soft)}
-.tor-bar{position:absolute;top:2px;bottom:2px;background:var(--accent);min-width:2px}
-.tor-base{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
-.tor-val{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;color:var(--muted);font-size:.75rem}
+/* ============ tornado & monte carlo (svg charts) ============ */
+.chart-subtitle{font-size:.9rem;line-height:1.5;color:var(--ink-2);margin:0 0 14px;max-width:70ch}
+.chart-subtitle .num{font-family:var(--font-mono);color:var(--ink);font-variant-numeric:tabular-nums}
+svg.chart{display:block;width:100%;height:auto;font-family:var(--font-mono)}
+svg.chart .axis-title{font-size:9px;letter-spacing:.06em;text-transform:uppercase;fill:var(--muted)}
+svg.chart .axis-tick{font-size:12px;fill:var(--muted)}
+svg.chart .grid-line{stroke:var(--rule-soft);stroke-width:1}
+svg.chart .baseline{stroke:var(--ink);stroke-width:2;stroke-dasharray:2,3}
+svg.chart .tor-bar-lo{fill:var(--bad-bg)}
+svg.chart .tor-bar-hi{fill:var(--good-bg)}
+svg.chart .tor-label{font-size:11px;fill:var(--ink-2);font-family:var(--sans)}
+svg.chart .tor-val{font-size:11px;fill:var(--ink);font-variant-numeric:tabular-nums}
+svg.chart .mc-bar{fill:var(--surface-2);stroke:var(--rule-soft);stroke-width:1}
+svg.chart .mc-bar-pay{fill:var(--accent);stroke:var(--accent-dim);stroke-width:1}
+svg.chart .mc-pay-label{font-size:12px;fill:var(--accent-dim);font-weight:700}
+.chart-legend{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-top:10px;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.chart-legend .swatch{display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:-1px}
 .axis{display:flex;justify-content:space-between;gap:12px;margin-top:8px;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.08em;color:var(--muted)}
-/* narrow screens: the track needs the full row, otherwise the bars collapse to a sliver */
-@media(max-width:620px){
-  .tor-row{grid-template-columns:minmax(0,1fr) 68px;gap:3px 8px;margin-bottom:12px}
-  .tor-label{grid-column:1;white-space:normal;overflow:visible;font-size:.75rem}
-  .tor-val{grid-column:2;grid-row:1}
-  .tor-track{grid-column:1 / -1;grid-row:2}
-}
+details.data-table{margin-top:12px;border:2px solid var(--rule-soft);background:var(--surface)}
+details.data-table summary{cursor:pointer;padding:10px 14px;font-family:var(--font-mono);font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+details.data-table summary:hover{color:var(--accent)}
+details.data-table .dt-scroll{overflow-x:auto;padding:0 14px 12px}
+table.dt{border-collapse:separate;border-spacing:0;font-family:var(--font-mono);font-size:.75rem;font-variant-numeric:tabular-nums;width:100%}
+table.dt th,table.dt td{padding:6px 10px;text-align:right;white-space:nowrap;box-shadow:inset -1px -1px 0 var(--rule-soft)}
+table.dt th{background:var(--surface-2);color:var(--muted);font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+table.dt th:first-child,table.dt td:first-child{text-align:left}
+table.dt td{color:var(--ink)}
 
 /* ============ grid ============ */
 /* the breakeven table is built by script straight into #breakeven, so it needs the
@@ -774,6 +786,7 @@ html{scroll-padding-top:110px}
         <button class="tab" role="tab" aria-selected="true"  data-panel="p-tornado">What moves the answer</button>
         <button class="tab" role="tab" aria-selected="false" data-panel="p-grid">Risk reduction &times; capex</button>
         <button class="tab" role="tab" aria-selected="false" data-panel="p-break">Breakeven points</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="p-mc">Monte Carlo</button>
       </div>
 
       <div class="panel-body">
@@ -783,13 +796,33 @@ html{scroll-padding-top:110px}
             <label for="spread">Vary each input by &plusmn;<span id="spread-label">30</span>%</label>
             <input type="range" id="spread" min="5" max="75" step="5" value="30">
           </div>
-          <p class="small muted" id="tor-lead" style="margin:14px 0 16px"></p>
+          <p class="chart-subtitle" id="tor-lead"></p>
           <div id="tornado"></div>
-          <div class="axis"><span id="ax-lo"></span><span id="ax-hi"></span></div>
+          <div class="chart-legend">
+            <span><span class="swatch" style="background:var(--good-bg)"></span>shorter payback (better)</span>
+            <span><span class="swatch" style="background:var(--bad-bg)"></span>longer payback (worse)</span>
+            <span>Dashed line: current answer.</span>
+          </div>
           <details class="why">
             <summary>How to read the bars</summary>
-            <div class="why-body">Each bar spans the payback when that one input moves to each end of its range, everything else held. The vertical line is the current answer. One-at-a-time analysis understates joint risk.</div>
+            <div class="why-body">Each bar spans the payback when that one input moves to each end of its range, everything else held. The dashed line is the current answer. One-at-a-time analysis understates joint risk.</div>
           </details>
+          <details class="data-table" id="tor-table"></details>
+        </div>
+
+        <!-- monte carlo -->
+        <div id="p-mc" role="tabpanel" hidden>
+          <p class="chart-subtitle" id="mc-lead"></p>
+          <div id="mc"></div>
+          <div class="chart-legend">
+            <span><span class="swatch" style="background:var(--accent)"></span>pays back inside the hurdle</span>
+            <span><span class="swatch" style="background:var(--surface-2)"></span>pays back later, or never</span>
+          </div>
+          <details class="why">
+            <summary>How this was simulated</summary>
+            <div class="why-body">Each of the same one-at-a-time ranges used in the tornado (risk reduction, capital cost, every cost line) is drawn independently and uniformly across its &plusmn;spread window, then run through the same <code>evaluate()</code> arithmetic as the rest of this page. The bars are the resulting distribution of payback years; the shaded bars are the draws that clear your hurdle. Seeded, so reloading reproduces the same run.</div>
+          </details>
+          <details class="data-table" id="mc-table"></details>
         </div>
 
         <!-- grid -->
@@ -1343,13 +1376,41 @@ function tornadoBars(inp, spread) {
   return rows;
 }
 
+/**
+ * Build a <details class="data-table"> element from column headers and rows
+ * (rows already formatted as display strings) - shared by the tornado and
+ * Monte Carlo charts so the SVG and the underlying arrays never drift apart.
+ */
+function buildDataTable(host, summaryText, cols, rows) {
+  host.innerHTML = "";
+  const summary = document.createElement("summary");
+  summary.textContent = summaryText;
+  const scroll = document.createElement("div");
+  scroll.className = "dt-scroll";
+  const table = document.createElement("table");
+  table.className = "dt";
+  const thead = document.createElement("thead");
+  const htr = document.createElement("tr");
+  cols.forEach(c => { const th = document.createElement("th"); th.textContent = c; htr.appendChild(th); });
+  thead.appendChild(htr);
+  const tbody = document.createElement("tbody");
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    r.forEach(v => { const td = document.createElement("td"); td.textContent = v; tr.appendChild(td); });
+    tbody.appendChild(tr);
+  });
+  table.append(thead, tbody);
+  scroll.appendChild(table);
+  host.append(summary, scroll);
+}
+
 function renderTornado(inp) {
   const spread = parseFloat($("spread").value) / 100;
   $("spread-label").textContent = String(Math.round(spread * 100));
 
   const base = evaluate(inp.booked + inp.human, inp.capex, inp.rr, inp.horizon);
   const basePayback = base.payback === null ? BIG : base.payback;
-  const rows = tornadoBars(inp, spread);
+  const rows = tornadoBars(inp, spread); // already sorted by swing, descending
   const host = $("tornado");
   host.innerHTML = "";
 
@@ -1363,47 +1424,209 @@ function renderTornado(inp) {
   const pad = (hi - lo) * 0.06;
   lo = Math.max(0, lo - pad);
   hi = hi + pad;
-  const scale = v => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
 
   const top = rows[0];
-  $("tor-lead").textContent = top
-    ? "Moved ±" + Math.round(spread * 100) + "%, " + top.label.toLowerCase()
-      + " changes payback more than any other input"
+  const leadText = top
+    ? "Moved ±" + Math.round(spread * 100) + "% each, " + top.label.toLowerCase()
+      + " swings payback more than any other input"
       + (top.never ? " (one end never pays back)."
-                   : " - by " + top.swing.toFixed(2) + " years.")
+                   : " – by " + top.swing.toFixed(2) + " years, sorted by swing below.")
     : "";
+  $("tor-lead").textContent = leadText;
 
-  rows.forEach(r => {
-    const row = document.createElement("div");
-    row.className = "tor-row";
+  /* ---- svg geometry ---- */
+  const W = 640, L = 152, R = 60, T = 10, B = 34;
+  const rowH = 30, gap = 6;
+  const H = T + B + rows.length * (rowH + gap) - gap;
+  const x = v => L + (Math.min(v, hi) - lo) / (hi - lo) * (W - L - R);
+  const y = i => T + i * (rowH + gap);
 
-    const label = document.createElement("div");
-    label.className = "tor-label";
-    label.textContent = r.label;
-    label.title = r.label;
-
-    const track = document.createElement("div");
-    track.className = "tor-track";
-    const bar = document.createElement("div");
-    bar.className = "tor-bar";
-    const left = scale(r.min), right = scale(Math.min(r.max, hi));
-    bar.style.left = left + "%";
-    bar.style.width = Math.max(0.6, right - left) + "%";
-    const marker = document.createElement("div");
-    marker.className = "tor-base";
-    marker.style.left = scale(basePayback) + "%";
-    track.append(bar, marker);
-
-    const val = document.createElement("div");
-    val.className = "tor-val";
-    val.textContent = r.never ? "never" : r.swing.toFixed(2) + " yr";
-
-    row.append(label, track, val);
-    host.appendChild(row);
+  const svg = svgEl("svg", {
+    class: "chart", viewBox: "0 0 " + W + " " + (H + 22), role: "img",
+    "aria-label": "Tornado chart of payback sensitivity. " + (leadText || "No cost lines to vary.")
   });
 
-  $("ax-lo").textContent = lo.toFixed(1) + " yr";
-  $("ax-hi").textContent = hi.toFixed(1) + " yr" + (rows.some(r => r.never) ? "+" : "");
+  /* gridlines at 4 ticks across the axis range */
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = lo + (hi - lo) * (i / ticks);
+    svg.appendChild(svgEl("line", { class: "grid-line", x1: x(v), x2: x(v), y1: T, y2: T + H - B + 4 }));
+  }
+
+  /* baseline (current answer) */
+  const bx = x(basePayback);
+  svg.appendChild(svgEl("line", { class: "baseline", x1: bx, x2: bx, y1: T - 2, y2: T + H - B + 6 }));
+
+  rows.forEach((r, i) => {
+    const rowY = y(i);
+    svg.appendChild(svgEl("text", {
+      class: "tor-label", x: L - 10, y: rowY + rowH / 2 + 4, "text-anchor": "end"
+    }, r.label.length > 20 ? r.label.slice(0, 19) + "…" : r.label));
+
+    const barTop = rowY + 4, barH = rowH - 8;
+    const capMin = Math.min(r.min, hi), capMax = Math.min(r.max, hi);
+    /* split the bar at the baseline: shorter-than-base = good, longer = bad */
+    const segLo = Math.min(capMin, basePayback), segHi = Math.max(capMin, basePayback);
+    if (capMin < basePayback) {
+      svg.appendChild(svgEl("rect", { class: "tor-bar-hi", x: x(capMin), y: barTop, width: Math.max(0.5, x(Math.min(capMax, basePayback)) - x(capMin)), height: barH, rx: 2 }));
+    }
+    if (capMax > basePayback) {
+      const startV = Math.max(capMin, basePayback);
+      svg.appendChild(svgEl("rect", { class: "tor-bar-lo", x: x(startV), y: barTop, width: Math.max(0.5, x(capMax) - x(startV)), height: barH, rx: 2 }));
+    }
+    if (capMax === capMin) {
+      svg.appendChild(svgEl("rect", { class: capMin <= basePayback ? "tor-bar-hi" : "tor-bar-lo", x: x(capMin) - 1, y: barTop, width: 2, height: barH }));
+    }
+
+    /* direct value labels at each bar end */
+    const valText = r.never ? "never" : r.swing.toFixed(2) + " yr swing";
+    svg.appendChild(svgEl("text", {
+      class: "tor-val", x: x(capMax) + 8, y: rowY + rowH / 2 + 4, "text-anchor": "start"
+    }, valText));
+  });
+
+  /* axis ticks and titles */
+  const axisY = T + H - B + 18;
+  for (let i = 0; i <= ticks; i++) {
+    const v = lo + (hi - lo) * (i / ticks);
+    svg.appendChild(svgEl("text", { class: "axis-tick", x: x(v), y: axisY, "text-anchor": "middle" }, v.toFixed(1)));
+  }
+  svg.appendChild(svgEl("text", { class: "axis-title", x: L, y: H + 20 }, "PAYBACK, YEARS (X-AXIS)  ·  INPUT VARIED (Y-AXIS)"));
+
+  host.appendChild(svg);
+
+  buildDataTable($("tor-table"), "Tornado data (" + rows.length + " inputs)",
+    ["Input", "Low end (yr)", "High end (yr)", "Swing (yr)"],
+    rows.map(r => [r.label, r.never && !isFinite(r.lo) ? "never" : r.min.toFixed(2),
+                   r.never && !isFinite(r.hi) ? "never" : r.max.toFixed(2),
+                   r.never ? "never" : r.swing.toFixed(2)]));
+}
+
+/* ===========================================================================
+   Rendering: Monte Carlo histogram
+   Draws every input independently and uniformly across the same ±spread
+   window the tornado uses, runs each draw through evaluate() (no other
+   arithmetic), and bins the resulting paybacks. Seeded so a reload reproduces
+   the same run.
+   =========================================================================== */
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const MC_SEED = 1904; // 29 CFR 1904, matches the Python module's DEFAULT_SEED
+const MC_SAMPLES = 2000;
+
+function monteCarloDraws(inp, spread) {
+  const rand = mulberry32(MC_SEED);
+  const booked = [], human = [];
+  $("booked-rows").querySelectorAll(".cost-row").forEach(r => {
+    booked.push(parseFloat(r.children[1].value) || 0);
+  });
+  $("human-rows").querySelectorAll(".cost-row").forEach(r => {
+    human.push(parseFloat(r.children[1].value) || 0);
+  });
+  const lines = booked.concat(human);
+  const paybacks = [];
+  for (let i = 0; i < MC_SAMPLES; i++) {
+    const u = () => 1 - 2 * rand(); // uniform in [-1, 1]
+    const rr = Math.min(1, Math.max(0, inp.rr * (1 + u() * spread)));
+    const capex = Math.max(1, inp.capex * (1 + u() * spread));
+    const totalCost = lines.reduce((s, v) => s + Math.max(0, v * (1 + u() * spread)), 0);
+    const r = evaluate(totalCost, capex, rr, inp.horizon);
+    paybacks.push(r.payback === null ? Infinity : r.payback);
+  }
+  return paybacks;
+}
+
+function renderMonteCarlo(inp) {
+  const spread = parseFloat($("spread").value) / 100;
+  const draws = monteCarloDraws(inp, spread);
+  const host = $("mc");
+  host.innerHTML = "";
+
+  const finite = draws.filter(v => isFinite(v));
+  const never = draws.length - finite.length;
+  const withinHurdle = draws.filter(v => v <= inp.hurdle).length;
+  const probPayback = (withinHurdle / draws.length) * 100;
+
+  $("mc-lead").innerHTML = MC_SAMPLES.toLocaleString() + " draws across the same &plusmn;"
+    + Math.round(spread * 100) + "% ranges as the tornado: "
+    + "<span class=\"num\">P(payback) = " + probPayback.toFixed(1) + "%</span> clear the "
+    + inp.hurdle + "-year hurdle"
+    + (never ? "; " + (never / draws.length * 100).toFixed(1) + "% never pay back." : ".");
+
+  if (!finite.length) { host.textContent = "No draw paid back inside the horizon."; return; }
+
+  /* bin the finite draws into a histogram */
+  const maxV = Math.max(...finite, inp.hurdle) * 1.05;
+  const BINS = 20;
+  const binW = maxV / BINS;
+  const counts = new Array(BINS).fill(0);
+  finite.forEach(v => { counts[Math.min(BINS - 1, Math.floor(v / binW))]++; });
+  const maxCount = Math.max(...counts, 1);
+
+  const W = 640, L = 46, R = 16, T = 10, B = 40;
+  const H = 220;
+  const barGap = 1;
+  const barW = (W - L - R) / BINS;
+  const x = i => L + i * barW;
+  const y = c => T + (H - T - B) * (1 - c / maxCount);
+
+  const svg = svgEl("svg", {
+    class: "chart", viewBox: "0 0 " + W + " " + (H + 6), role: "img",
+    "aria-label": "Monte Carlo histogram of simulated payback years over " + MC_SAMPLES.toLocaleString()
+      + " draws. P(payback) = " + probPayback.toFixed(1) + "% clear the " + inp.hurdle + "-year hurdle"
+      + (never ? "; " + (never / draws.length * 100).toFixed(1) + "% never pay back." : ".")
+  });
+
+  /* gridlines */
+  for (let i = 0; i <= 4; i++) {
+    const c = maxCount * i / 4;
+    svg.appendChild(svgEl("line", { class: "grid-line", x1: L, x2: W - R, y1: y(c), y2: y(c) }));
+  }
+
+  counts.forEach((c, i) => {
+    const binLo = i * binW, binHi = binLo + binW;
+    const inPay = binLo < inp.hurdle;
+    const bar = svgEl("rect", {
+      class: inPay ? "mc-bar-pay" : "mc-bar",
+      x: x(i) + barGap / 2, y: y(c), width: Math.max(0.5, barW - barGap), height: Math.max(0, T + (H - T - B) - y(c))
+    });
+    bar.appendChild(svgEl("title", {}, binLo.toFixed(2) + "–" + binHi.toFixed(2) + " yr: " + c + " draws"));
+    svg.appendChild(bar);
+  });
+
+  /* hurdle line and shaded-region label */
+  const hx = Math.min(x(BINS), L + (inp.hurdle / maxV) * (W - L - R));
+  svg.appendChild(svgEl("line", { class: "baseline", x1: hx, x2: hx, y1: T - 2, y2: T + (H - T - B) + 4 }));
+  svg.appendChild(svgEl("text", {
+    class: "mc-pay-label", x: Math.max(L + 4, hx - 6), y: T + 12, "text-anchor": "end"
+  }, "P(payback) = " + probPayback.toFixed(1) + "%"));
+
+  /* axis ticks and titles */
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = maxV * i / ticks;
+    svg.appendChild(svgEl("text", { class: "axis-tick", x: L + (v / maxV) * (W - L - R), y: H - B + 16, "text-anchor": "middle" }, v.toFixed(1)));
+  }
+  for (let i = 0; i <= 4; i++) {
+    const c = Math.round(maxCount * i / 4);
+    svg.appendChild(svgEl("text", { class: "axis-tick", x: L - 6, y: y(c) + 4, "text-anchor": "end" }, String(c)));
+  }
+  svg.appendChild(svgEl("text", { class: "axis-title", x: L, y: H }, "PAYBACK, YEARS"));
+  svg.appendChild(svgEl("text", { class: "axis-title", x: L, y: T + 8 }, "DRAWS"));
+
+  host.appendChild(svg);
+
+  buildDataTable($("mc-table"), "Monte Carlo data (" + MC_SAMPLES.toLocaleString() + " draws, " + BINS + " bins)",
+    ["Bin (yr)", "Draws", "Clears hurdle"],
+    counts.map((c, i) => [(i * binW).toFixed(2) + "–" + ((i + 1) * binW).toFixed(2),
+                           String(c), i * binW < inp.hurdle ? "yes" : "no"]));
 }
 
 /* ===========================================================================
@@ -1564,6 +1787,7 @@ function render() {
   $("human-total").textContent = money(inp.human);
   const { t, h } = renderCards(inp);
   renderTornado(inp);
+  renderMonteCarlo(inp);
   renderGrid(inp);
   renderBreakeven(inp);
   renderStory(inp, t, h);
