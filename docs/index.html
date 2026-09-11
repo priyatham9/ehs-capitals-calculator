@@ -87,7 +87,8 @@ code,.mono,.src,.f-src,.backlink{overflow-wrap:anywhere}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.8125rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);text-decoration:none;flex:none;padding:6px 0}
 .brand-mark{width:14px;height:14px;background:var(--accent);flex:none}
 .bnav{display:flex;align-items:center;flex-wrap:wrap;gap:0 2px;min-width:0}
-.bnav a{white-space:nowrap;text-decoration:none;padding:7px 10px;font-family:var(--font-mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;transition:color .15s,background .15s,border-color .15s}
+.bnav a{white-space:nowrap;text-decoration:none;padding:7px 10px;font-family:var(--font-mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--ink-2);border-bottom:3px solid transparent;transition:color .15s,background .15s,border-color .15s}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .bnav a{color:var(--muted)}}
 .bnav a:hover{color:var(--ink);background:var(--surface-2)}
 .bnav a[aria-current="page"]{color:var(--accent);border-bottom-color:var(--accent)}
 .bnav a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
