@@ -1,4 +1,5 @@
-[tool.ruff]
-select = ["E9", "F"]
 line-length = 100
 exclude = ["docs"]
+
+[lint]
+select = ["E9", "F"]
