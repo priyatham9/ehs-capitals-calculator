@@ -2,10 +2,7 @@
 
 [![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml)
 
-A cost-benefit calculator for EHS capital investment that computes the same
-investment two ways: counting only directly booked costs, and additionally
-counting human-capital costs that an incident causes but that rarely get
-charged against it.
+A cost-benefit calculator for EHS capital investment. It computes the same investment two ways: traditional accounting yields 147% cumulative ROI in the loading-station example, while human-capital accounting yields 315%. This is an accounting-scope argument, not a discovery; the calculator cannot tell whether the human-capital numbers entered are right.
 
 The model is arithmetic, not statistics. It is small enough to read in full,
 and this README states plainly what it assumes and where it breaks.
@@ -13,7 +10,7 @@ and this README states plainly what it assumes and where it breaks.
 - Python library, CLI, tornado sensitivity, and Monte Carlo modules
 - A single-file browser calculator at `docs/index.html` (no build step, no
   network, no dependencies)
-- 166 tests, including a fixture pinning the JavaScript and Python
+- 174 tests, including a fixture pinning the JavaScript and Python
   implementations to the same numbers
 
 ## What problem this addresses
