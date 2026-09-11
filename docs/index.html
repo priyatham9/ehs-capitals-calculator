@@ -820,7 +820,7 @@ html{scroll-padding-top:110px}
           </div>
           <details class="why">
             <summary>How this was simulated</summary>
-            <div class="why-body">Each of the same one-at-a-time ranges used in the tornado (risk reduction, capital cost, every cost line) is drawn independently and uniformly across its &plusmn;spread window, then run through the same <code>evaluate()</code> arithmetic as the rest of this page. The bars are the resulting distribution of payback years; the shaded bars are the draws that clear your hurdle. Seeded, so reloading reproduces the same run.</div>
+            <div class="why-body">Each of the same one-at-a-time ranges used in the tornado (risk reduction, capital cost, every cost line) is drawn independently and uniformly across its &plusmn;spread window, then run through the same <code>evaluate()</code> arithmetic as the rest of this page. The bars are the resulting distribution of payback years; the shaded bars are the draws that clear your hurdle. Seeded, so reloading reproduces the same run. This browser version uses uniform draws only; the Python module in the repository (src/montecarlo.py) supports triangular, PERT, normal and bounded beta inputs and is the reference implementation.</div>
           </details>
           <details class="data-table" id="mc-table"></details>
         </div>
