@@ -1,8 +1,13 @@
 # ehs-capitals-calculator
 
 [![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml)
+[![site](https://img.shields.io/badge/site-live-blue)](https://priyatham9.github.io/ehs-capitals-calculator/)
 
-A cost-benefit calculator for EHS capital investment. It computes the same investment two ways: traditional accounting yields 147% cumulative ROI in the loading-station example, while human-capital accounting yields 315%. This is an accounting-scope argument, not a discovery; the calculator cannot tell whether the human-capital numbers entered are right.
+Part of the Grounded research programme: https://priyatham9.github.io/grounded/
+
+A cost-benefit calculator for EHS capital investment. It computes the same investment two ways: traditional accounting yields 147% cumulative ROI in the loading-station example, while human-capital accounting yields 315%.
+
+This is an accounting-scope argument, not a discovery; the calculator cannot tell whether the human-capital numbers entered are right.
 
 The model is arithmetic, not statistics. It is small enough to read in full,
 and this README states plainly what it assumes and where it breaks.
@@ -12,6 +17,12 @@ and this README states plainly what it assumes and where it breaks.
   network, no dependencies)
 - 174 tests, including a fixture pinning the JavaScript and Python
   implementations to the same numbers
+
+## At a glance
+
+- Tests: 174, including a JS/Python parity fixture ([![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml))
+- Quickstart: `python3 -m unittest discover -s tests -v` (after cloning; Python 3.9+, numpy only needed for the Monte Carlo module)
+- Licence: MIT (see [LICENSE](LICENSE))
 
 ## What problem this addresses
 
