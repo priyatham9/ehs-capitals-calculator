@@ -497,10 +497,12 @@ body{padding-bottom:78px}
 /* ---------- charts ---------- */
 .st-chart{display:block;width:100%;overflow:visible;font-family:var(--font-sans)}
 .st-chart.st-in-stage{height:min(66vh,720px);max-height:66vh}
-.st-chart text{font-family:var(--font-mono);font-size:14px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.st-chart text{font-family:var(--font-mono);fill:var(--muted);font-variant-numeric:tabular-nums}
+.st-chart text:not([font-size]){font-size:14px}
 .st-chart .st-axis-line{stroke:var(--rule-soft);stroke-width:1.5}
 .st-chart .st-grid{stroke:var(--rule-soft);stroke-width:1;stroke-dasharray:2 4}
-.st-chart .st-label-direct{fill:var(--ink);font-weight:700;font-size:14px}
+.st-chart .st-label-direct{fill:var(--ink);font-weight:700}
+.st-chart .st-label-direct:not([font-size]){font-size:14px}
 .st-chart .st-caption{fill:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .st-chart .st-series-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .st-chart .st-gap{fill:var(--accent);opacity:.14}
@@ -664,6 +666,16 @@ body.st-story .st-scene .st-stage{top:0!important}
 @media(min-width:801px){body.st-story .st-scene .st-stage{height:calc(100vh - var(--st-way-h,60px))!important;height:calc(100svh - var(--st-way-h,60px))!important}}
 .st-presenting .st-findings{display:none}
 html{scroll-padding-top:16px}
+/* v1.2.1: closing Next cards carry no orb */
+.nextcard-orb,.nc-orb,.sy-nextorb,.nextcard .st-orb-wrap,[class*="next"] > canvas.st-orb{display:none!important}
+.nextcard,.sy-next{grid-template-columns:1fr!important}
+/* v1.2.2: companion orb sits top-right, small, never over a figure title; tall figures shrink to fit the stage */
+.st-companion{left:auto!important;right:0!important;top:0!important;align-items:flex-end!important;--st-comp:72px}
+@media(min-width:801px){
+  body.st-story .st-stage{justify-content:center;overflow:visible}
+  body.st-story .st-stage-inner svg,body.st-story .st-stage-inner canvas:not(.st-orb){max-height:calc(100vh - var(--st-way-h,60px) - 230px);max-height:calc(100svh - var(--st-way-h,60px) - 230px);width:auto;max-width:100%;margin-inline:auto}
+  body.st-story .st-stage-inner svg.st-chart{width:100%}
+}
 /*STORY_CSS_END*/
 </style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
@@ -1198,7 +1210,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     var d = opts.damping == null ? 2 * Math.sqrt(k) : opts.damping; // critical
     var prec = opts.precision == null ? 0.0008 : opts.precision;
     var x = from, v = opts.velocity || 0, target = to, stopped = false, un = null;
-    if (reduced() && !opts.force) {
+    if ((reduced() || document.hidden) && !opts.force) {
       cb(to, true);
       return { stop: function () { }, set: function (t) { cb(t, true); }, setTarget: function (t) { cb(t, true); }, get value() { return target; } };
     }
@@ -1238,7 +1250,8 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     opts = opts || {};
     var dur = (opts.duration == null ? 700 : opts.duration);
     var ease = typeof opts.ease === "function" ? opts.ease : (EASE[opts.ease] || EASE.out);
-    if (reduced() && !opts.force) { cb(to, true); if (opts.onDone) opts.onDone(); return { stop: function () { } }; }
+    // hidden tabs get no animation frames: land on the final state so nothing is left half drawn
+    if ((reduced() || document.hidden) && !opts.force) { cb(to, true); if (opts.onDone) opts.onDone(); return { stop: function () { } }; }
     var t0 = 0, un, stopped = false;
     un = tick(function (dt, now) {
       if (stopped) return false;
