@@ -125,15 +125,45 @@ details.why .why-body{padding:0 14px 12px;font-size:.875rem;line-height:1.6;colo
 .btn:hover{background:var(--surface-2)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn-primary:hover{background:var(--accent-2);color:var(--accent-ink)}
-.hero-orb-wrap{position:relative;width:clamp(240px,26vw,380px);aspect-ratio:1;margin:0 0 24px}
-@media(max-width:700px){.hero-orb-wrap{width:min(56vw,220px)}}
 /* the fixed wayfinder bar must not sit on top of the calculator controls */
 body.st-has-way{padding-bottom:84px}
-.hero-orb-wrap.no-orb{display:none}
-/* project pages carry no hero orb; the orb belongs to the stories and the hub */
-.hero .hero-orb-wrap{display:none!important}
 
-.hero-orb{display:block;width:100%;height:100%}
+/* ---- hero: what the tool does, beside the one result it demonstrates ---- */
+.hero{padding:64px 0 60px}
+.hero > .wrap,#calculator > .wrap,#sensitivity > .wrap{max-width:1320px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);gap:clamp(32px,4vw,64px);align-items:start}
+.hero h1{font-size:clamp(1.7rem,2.9vw,2.9rem);max-width:20ch;line-height:1.04;overflow-wrap:break-word}
+@media(max-width:940px){.hero h1{font-size:clamp(1.7rem,6.6vw,2.6rem)}}
+.hero-role{margin-top:22px;font-size:1.0625rem;max-width:56ch}
+.hero-lede{margin-top:16px}
+.hero-links{margin-top:32px}
+.hero-demo{border:2px solid var(--rule);background:var(--surface);padding:24px 26px 22px}
+.hero-demo > .label{display:block;color:var(--accent)}
+.hero-demo-nums{display:flex;align-items:flex-start;gap:16px;margin-top:18px;flex-wrap:wrap}
+.hero-demo-n{display:block;min-width:0}
+.hero-demo-n b{display:block;font-family:var(--font-mono);font-size:clamp(2.4rem,3.4vw,3.2rem);font-weight:700;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.hero-demo-n.accent b{color:var(--accent)}
+.hero-demo-n small{display:block;margin-top:9px;font-family:var(--font-mono);font-size:.625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);line-height:1.6}
+.hero-demo-arrow{align-self:center;font-family:var(--font-mono);font-size:1.5rem;color:var(--muted);line-height:1}
+.hero-demo-note{margin:20px 0 0;font-size:.9375rem;line-height:1.6;color:var(--ink-2)}
+.hero-demo-src{margin:14px 0 0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:34px}.hero h1{max-width:20ch}}
+@media(max-width:620px){.hero{padding:44px 0 48px}.hero-demo{padding:20px 20px 18px}.hero-demo-nums{flex-direction:column;gap:0}.hero-demo-arrow{display:none}.hero-demo-n.accent{margin-top:16px;padding-top:16px;border-top:2px solid var(--rule-soft)}.doors{margin-top:34px}}
+
+/* ---- three doors ---- */
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:2px solid var(--rule);background:var(--surface);margin-top:44px}
+.door{display:flex;flex-direction:column;gap:9px;padding:24px 24px 26px;border-left:2px solid var(--rule-soft);text-decoration:none;color:var(--ink);transition:background .15s}
+.door:first-child{border-left:0}
+.door:hover{background:var(--surface-2)}
+.door-k{font-family:var(--font-mono);font-size:.625rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.door-here .door-k{color:var(--muted)}
+.door-t{font-size:1.15rem;font-weight:700;line-height:1.2}
+.door-s{font-size:.875rem;line-height:1.6;color:var(--ink-2);flex:1}
+.door-go{font-size:.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);align-self:flex-start;border-bottom:2px solid var(--accent);padding-bottom:3px}
+.door-here{background:var(--accent-wash)}
+.door-here .door-go{color:var(--ink);border-bottom-color:var(--rule)}
+@media(max-width:860px){.doors{grid-template-columns:1fr}.door{border-left:0;border-top:2px solid var(--rule-soft)}.door:first-child{border-top:0}}
+.status{margin-top:34px}
 .btn-story{gap:11px}
 .btn-story .btn-arrow{font-family:var(--font-mono);font-weight:700}
 
@@ -232,9 +262,9 @@ body{overflow-x:hidden}
 .sec-lede strong{color:var(--ink);font-weight:700}
 
 /* ============ layout ============ */
-.layout{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:0;border:2px solid var(--rule);background:var(--surface)}
-.pane-in{padding:26px 24px;border-right:2px solid var(--rule-soft);min-width:0}
-.pane-out{padding:26px 24px;min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:0;border:2px solid var(--rule);background:var(--surface)}
+.pane-in{padding:30px 28px;border-right:2px solid var(--rule-soft);min-width:0}
+.pane-out{padding:30px 30px;min-width:0}
 @media(max-width:900px){
   .layout{grid-template-columns:1fr}
   .pane-in{border-right:0;border-bottom:2px solid var(--rule-soft)}
@@ -265,7 +295,7 @@ input[type="number"],input[type="text"]{
 input[type="number"]:hover,input[type="text"]:hover{border-color:var(--muted)}
 input[type="range"]{width:100%;accent-color:var(--accent)}
 .range-row{display:flex;align-items:center;gap:10px}
-.range-row input[type="number"]{width:84px;flex:none}
+.range-row input[type="number"]{width:110px;flex:none}
 
 button{
   font-family:var(--font-mono);font-size:.6875rem;font-weight:600;letter-spacing:.08em;
@@ -308,7 +338,7 @@ button.ghost:hover{border-color:var(--accent);color:var(--accent);background:tra
 @media(max-width:520px){.pb-row{grid-template-columns:1fr 60px}.pb-k{grid-column:1 / -1}}
 
 /* ============ cost rows ============ */
-.cost-row{display:grid;grid-template-columns:minmax(0,1fr) 96px 28px;gap:5px;margin-bottom:5px}
+.cost-row{display:grid;grid-template-columns:minmax(0,1fr) 110px 28px;gap:6px;margin-bottom:6px}
 /* below the tablet break the name needs the full row or it truncates to nothing */
 @media(max-width:440px){
   .cost-row{grid-template-columns:minmax(0,1fr) 28px;gap:5px 5px;margin-bottom:11px}
@@ -659,7 +689,8 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 /* ---------- charts ---------- */
 .st-chart{display:block;width:100%;overflow:visible;font-family:var(--font-sans)}
 .st-chart.st-in-stage{height:min(66vh,720px);max-height:66vh}
-.st-chart text{font-family:var(--font-mono);fill:var(--muted);font-variant-numeric:tabular-nums}
+.st-chart text{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.st-chart text:not([fill]){fill:var(--muted)}
 .st-chart text:not([font-size]){font-size:14px}
 .st-chart .st-axis-line{stroke:var(--rule-soft);stroke-width:1.5}
 .st-chart .st-grid{stroke:var(--rule-soft);stroke-width:1;stroke-dasharray:2 4}
@@ -853,6 +884,20 @@ html{scroll-padding-top:16px}
 }
 .st-presenting .rs-header,.st-presenting .footer,.st-presenting .st-chapter,.st-presenting .st-findings{display:none!important}
 .st-presenting nav.pgm,.st-presenting .story-nav,.st-presenting .story-hero{display:none!important}
+
+/* forced reduced motion (testing hook ?reduced=1) mirrors the media query */
+.st-reduced *,.st-reduced *::before,.st-reduced *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+/* v1.2.5 phone: cap any stage figure, however deeply nested, so it fits the pinned half-screen stage; presenter on phones falls back to normal reading */
+@media(max-width:800px){
+  .st-stage-inner svg,.st-stage-inner canvas:not(.st-orb){max-height:40vh;max-height:40svh}
+  .st-presenting .st-step{min-height:80vh}
+}
+/* forced reduced motion gets the same end states as the media query */
+.st-reduced .st-reveal{opacity:1!important;transform:none!important;transition:none!important}
+.st-reduced .st-step{opacity:1!important;transition:none!important}
+.st-reduced .st-scene.st-flow .st-step > *{opacity:1!important;transform:none!important;transition:none!important}
+.st-reduced .st-stage-inner.st-layers > [data-show]{transition:none!important}
+.st-reduced .st-companion .st-companion-cap{transition:none!important}
 /*STORY_CSS_END*/</style>
 </head>
 <body>
@@ -860,20 +905,50 @@ html{scroll-padding-top:16px}
 
 <section class="hero" id="top">
   <div class="wrap">
-    <div class="hero-orb-wrap st-orb-wrap" data-state="idle">
-      <canvas class="st-orb hero-orb" id="hero-orb" width="320" height="320" role="img"
-              aria-label="Animated mark that follows the calculator: it works while the numbers recompute, settles when the investment clears your payback hurdle, and turns warning-coloured when it does not."></canvas>
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div class="hero-eyebrow" data-st-reveal><span class="pulse"></span><span class="label">Decision tool - arithmetic only, nothing uploaded</span></div>
+        <h1 class="display" data-st-reveal>Price a safety control twice, and compare the two paybacks</h1>
+        <p class="hero-role" data-st-reveal>Enter what the incidents cost you in a year, what the control costs, and how much risk you assume it removes. The page returns payback, ROI, a sensitivity tornado and a 2,000-draw simulation for two accountings side by side: booked cost lines only, and booked plus the human-capital lines nobody invoices.</p>
+        <p class="hero-lede" data-st-reveal>Everything runs in your browser. Nothing is uploaded and nothing is stored beyond your theme choice.</p>
+        <div class="hero-links" data-st-reveal>
+          <a class="btn btn-primary" href="#calculator">Open the calculator</a>
+          <a class="btn btn-story" href="story.html">Read the story<span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+      <div class="hero-demo" data-st-reveal>
+        <span class="label">What it shows, on the loaded example</span>
+        <div class="hero-demo-nums">
+          <span class="hero-demo-n"><b>3.41</b><small>Years payback<br>Booked cost lines only</small></span>
+          <span class="hero-demo-arrow" aria-hidden="true">&rarr;</span>
+          <span class="hero-demo-n accent"><b>1.59</b><small>Years payback<br>Human-capital lines priced</small></span>
+        </div>
+        <p class="hero-demo-note">The same $150,000 loading-station control against a 3-year hurdle. It fails on the left count and clears on the right. Nothing about the equipment changed.</p>
+        <p class="hero-demo-src">Worked example from Brandon (2025), loaded in the calculator below</p>
+      </div>
     </div>
-    <div class="hero-eyebrow" data-st-reveal><span class="pulse"></span><span class="label">Decision tool - arithmetic only, nothing uploaded</span></div>
-    <h1 class="display" data-st-reveal>Two ways to count the cost of the same control</h1>
-    <p class="hero-role" data-st-reveal>Booked costs only, or booked plus human-capital costs. Move the sliders and watch where the two verdicts diverge.</p>
-    <p class="hero-lede" data-st-reveal>Runs in your browser. Nothing is sent or stored beyond your theme choice.</p>
-    <div class="hero-links" data-st-reveal>
-      <a class="btn btn-primary btn-story" href="story.html">Read the story<span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
-      <a class="btn" href="#calculator">Open the calculator</a>
-      <a class="btn" href="https://github.com/priyatham9/ehs-capitals-calculator">Repository</a>
-      <a class="btn" href="https://priyatham9.github.io/grounded/">All projects</a>
-    </div>
+
+    <nav class="doors" aria-label="Three ways in" data-st-reveal>
+      <a class="door" href="story.html">
+        <span class="door-k">Story</span>
+        <span class="door-t">The capital case</span>
+        <span class="door-s">Eleven findings, scene by scene, with the figures that make the argument. Start here if you want the case before the controls.</span>
+        <span class="door-go mono">Read it &rarr;</span>
+      </a>
+      <a class="door door-here" href="#calculator" aria-current="page">
+        <span class="door-k">You are here</span>
+        <span class="door-t">The calculator</span>
+        <span class="door-s">Your own cost lines, your own risk reduction, your own hurdle. Payback, ROI, tornado and Monte Carlo, recomputed as you type.</span>
+        <span class="door-go mono">Open it &darr;</span>
+      </a>
+      <a class="door" href="https://github.com/priyatham9/ehs-capitals-calculator">
+        <span class="door-k">Repository</span>
+        <span class="door-t">The model, in Python</span>
+        <span class="door-s">Four lines of arithmetic in src/capitals.py, the seeded simulation in src/montecarlo.py, and the tests that hold this page to them.</span>
+        <span class="door-go mono">Open on GitHub &rarr;</span>
+      </a>
+    </nav>
+
     <div class="status">
       <div class="st-cell"><span class="st-k">Model</span><span class="st-v" data-st-count>4 lines</span></div>
       <div class="st-cell"><span class="st-k">Discounting</span><span class="st-v">None</span></div>
@@ -2363,7 +2438,10 @@ document.querySelectorAll(".tab").forEach(tab => {
      0. small utilities
      --------------------------------------------------------- */
   var mqReduce = global.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : null;
-  function reduced() { return !!(mqReduce && mqReduce.matches); }
+  // ?reduced=1 forces the reduced-motion path so it can be tested without changing OS settings
+  var forceReduced = /[?&]reduced=1/.test(location.search);
+  if (forceReduced) document.documentElement.classList.add("st-reduced");
+  function reduced() { return forceReduced || !!(mqReduce && mqReduce.matches); }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function lerp(a, b, t) { return a + (b - a) * t; }
   function isEl(x) { return x && x.nodeType === 1; }
@@ -4647,32 +4725,13 @@ document.querySelectorAll(".tab").forEach(tab => {
 <script id="story-glue">
 (function () {
   "use strict";
-  var S = window.Story, wrap = document.querySelector('.hero-orb-wrap');
-  if (!S) { if (wrap) wrap.classList.add('no-orb'); return; }
+  var S = window.Story;
+  /* this page carries no orb: the tool is the subject, the story page keeps the orb */
+  window.orbVerdict = function () {};
+  if (!S) return;
   if (S.progressBar) { try { S.progressBar(); } catch (e) {} }
   if (S.reveal) { try { S.reveal(document.body); } catch (e) {} }
   if (S.countUp) { try { S.countUp(document.querySelectorAll('[data-st-count]')); } catch (e) {} }
-  var cv = document.getElementById('hero-orb');
-  if (!wrap || !cv || !S.orb) { if (wrap) wrap.classList.add('no-orb'); return; }
-  var orb;
-  try { orb = S.orb(cv, { size: 320 }); } catch (e) { wrap.classList.add('no-orb'); return; }
-  function set(name) {
-    try { orb.setState(name); } catch (e) {}
-    wrap.setAttribute('data-state', name);
-  }
-  set('idle');
-  // the calculator calls window.orbVerdict at the end of every render()
-  var settle = null;
-  window.orbVerdict = function (clears) {
-    set('solving');
-    if (settle) clearTimeout(settle);
-    settle = setTimeout(function () { set(clears ? 'grounded' : 'wrong'); }, 620);
-  };
-  // first paint already ran before this script loaded, so state it once
-  try {
-    var v = document.getElementById('story-roi-h-v');
-    if (v) window.orbVerdict(v.classList.contains('pass'));
-  } catch (e) {}
 })();
 </script>
 </body>

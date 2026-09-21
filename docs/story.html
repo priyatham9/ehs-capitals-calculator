@@ -215,15 +215,11 @@ body{overflow-x:hidden}
 /* ============ story page ============ */
 body{overflow-x:hidden}
 .hero h1{max-width:18ch;overflow-wrap:break-word}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center}
-.hero-orb{width:300px;height:300px;justify-self:end}
-@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-orb{width:200px;height:200px;justify-self:start}}
 .scene-sec{padding:0 0 10px;border-bottom:2px solid var(--rule)}
 .scene-head{padding:56px 0 6px}
 .scene-head h2{font-size:clamp(1.5rem,3vw,2.1rem)}
 .scene-head p{margin-top:12px;max-width:66ch;color:var(--ink-2)}
 .scene-head details.data-table{max-width:560px}
-.stage-orb{width:92px;height:92px;margin-bottom:16px}
 .stage-card{border:2px solid var(--rule);background:var(--surface);padding:18px 20px 14px}
 .stage-take{margin:0 0 12px;font-size:.95rem;font-weight:600;line-height:1.45}
 .stage-take .num{color:var(--accent);font-weight:700;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
@@ -231,7 +227,7 @@ body{overflow-x:hidden}
 .st-step .label{color:var(--accent)}
 .st-step .step-fig{margin:14px 0 0;font-family:var(--font-mono);font-size:.8125rem;font-variant-numeric:tabular-nums;color:var(--ink)}
 .st-step .step-fig b{color:var(--accent)}
-.verdict-pill{display:inline-block;margin-top:12px;padding:4px 9px;font-family:var(--font-mono);font-size:.5625rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.verdict-pill{display:inline-block;align-self:flex-start;margin-top:12px;padding:4px 9px;font-family:var(--font-mono);font-size:.5625rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
 .verdict-pill.pass{color:#FFFFFF;background:var(--good-bg)}
 .verdict-pill.fail{color:#FFFFFF;background:var(--bad-bg)}
 .ledger-row{display:grid;grid-template-columns:minmax(0,1fr) 78px;gap:10px;align-items:center;margin-bottom:6px;opacity:.22;transition:opacity .45s ease}
@@ -266,7 +262,6 @@ svg.fig .mc.trad{fill:var(--ink-2);stroke:var(--ink-2)}
 svg.fig .hurdle{stroke:var(--warn);stroke-width:2;stroke-dasharray:5 4}
 svg.fig .hurdle-t{fill:var(--warn);font-weight:700}
 svg.fig .band{fill:var(--accent);opacity:.12}
-svg.fig .band-t{fill:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 svg.fig .median{stroke:var(--ink);stroke-width:2.5}
 svg.fig .callout-lead{fill:none;stroke:var(--ink);stroke-width:1.5}
 svg.fig .callout-t{fill:var(--ink);font-size:13px;font-weight:700}
@@ -286,12 +281,11 @@ table.dt td{color:var(--ink)}
 .honesty ul{margin:14px 0 0;padding-left:20px}
 .honesty li{margin-bottom:10px;font-size:.9375rem;line-height:1.6;color:var(--ink-2)}
 .honesty li strong{color:var(--ink)}
-.monday{display:grid;grid-template-columns:110px minmax(0,1fr);gap:26px;align-items:start;border:2px solid var(--rule);background:var(--surface);padding:28px 30px}
-.monday-orb{width:110px;height:110px}
+.monday{border:2px solid var(--rule);background:var(--surface);padding:30px 34px}
 .monday h2{font-size:clamp(1.4rem,2.6vw,1.9rem)}
 .monday ol{margin:16px 0 0;padding-left:20px}
 .monday li{margin-bottom:9px;font-size:.9375rem;line-height:1.6;color:var(--ink-2)}
-@media(max-width:700px){.monday{grid-template-columns:1fr}.monday-orb{width:84px;height:84px}}
+@media(max-width:700px){.monday{padding:24px 22px}}
 .section{padding:56px 0;border-bottom:2px solid var(--rule)}
 .sec-lede{max-width:68ch;margin:0 0 30px;padding-left:18px;border-left:2px solid var(--accent);font-size:1.02rem;line-height:1.6;color:var(--ink-2)}
 .sec-lede strong{color:var(--ink);font-weight:700}
@@ -310,7 +304,6 @@ table.dt td{color:var(--ink)}
 /* the sticky stage is short on a phone: drop the per-line bars and let the card scroll */
 @media(max-width:800px){
   .st-scene .st-stage,.st-scene[data-side="left"] .st-stage{height:60vh;height:60svh}
-  .stage-orb{width:44px;height:44px;margin-bottom:8px}
   .stage-card{padding:13px 14px 11px}
   .stage-take{margin-bottom:9px;font-size:.875rem}
   .ledger-bar{display:none}
@@ -375,19 +368,14 @@ svg.fig{max-height:62vh;max-height:62svh}
 /* chapter cards sit edge to edge between scenes */
 .st-chapter{border-bottom:2px solid var(--rule)}
 /* the next card */
-.nextcard{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:36px;align-items:center;border:2px solid var(--rule);background:var(--surface);padding:38px 40px;text-decoration:none;color:var(--ink);transition:background .18s}
+.nextcard{display:block;border:2px solid var(--rule);background:var(--surface);padding:38px 40px;text-decoration:none;color:var(--ink);transition:background .18s}
 .nextcard:hover{background:var(--accent-wash)}
 .nextcard h2{margin-top:10px;font-size:clamp(2rem,4vw,3.2rem)}
 .nextcard p{margin-top:14px;font-size:1.05rem;color:var(--ink-2);max-width:52ch}
 .nextcard-go{display:inline-block;margin-top:18px;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:3px}
-.nextcard-orb{width:220px;height:220px;justify-self:end}
 .nextcard-alt{margin:18px 0 0;font-size:.9rem;color:var(--muted)}
 /* the fixed wayfinder bar must never sit on top of page content */
 body{padding-bottom:78px}
-@media(max-width:900px){
-  .nextcard{grid-template-columns:1fr;gap:24px}
-  .nextcard-orb{width:150px;height:150px;justify-self:start;order:-1}
-}
 @media(max-width:800px){
   .stage-nums .st-bignum{font-size:clamp(2rem,9vw,2.6rem)}
   .hero-nums .st-bignum{font-size:clamp(2rem,9vw,2.6rem)}
@@ -399,16 +387,23 @@ body{padding-bottom:78px}
   svg.fig text{font-size:12px}
   svg.fig .tor-lbl{font-size:12px}
   svg.fig{max-height:44vh;max-height:44svh}
+  /* the phone drawings use a narrow viewBox, so type can be set large and still fit */
+  svg.fig.phone text{font-size:14px}
+  svg.fig.phone .tor-lbl{font-size:14px;fill:var(--ink)}
+  svg.fig.phone .callout-t{font-size:13px}
+  svg.fig.phone .hurdle-t{font-size:13px}
+  svg.fig.phone{max-height:50vh;max-height:50svh}
   .stage-src{display:none}
   .legend{display:none}
   .st-scene .st-stage-inner{padding-bottom:54px}
-  .st-scene .st-companion{--st-comp:40px;right:0;left:auto;top:auto;bottom:0;flex-direction:row;align-items:center;gap:8px}
+  .st-scene .st-companion{display:none}
   .st-hero .st-hero-orb{width:min(58vw,240px)}
   .crumb{font-size:.625rem;gap:6px}
   .nextcard{padding:26px 22px}
 }
-/* presenter mode hides this page's own chrome (the engine hides its own) */
-.st-presenting header.rs-header,.st-presenting .pn-wrap,.st-presenting .footer,.st-presenting .skip,.st-presenting .st-hide-on-present{display:none!important}
+/* the engine's forced-reduced hook (?reduced=1) only shortens durations, so mirror the
+   prefers-reduced-motion rules here: nothing may sit at opacity 0 waiting for an observer */
+.st-reduced .st-reveal,.st-reduced .st-step,.st-reduced .st-scene.st-flow .st-step > *{opacity:1;transform:none;transition:none}
 @media print{.skip{display:none}body{background:#fff!important;color:#000!important}}
 /*STORY_CSS_START*/
 /* ============================================================
@@ -497,7 +492,8 @@ body{padding-bottom:78px}
 /* ---------- charts ---------- */
 .st-chart{display:block;width:100%;overflow:visible;font-family:var(--font-sans)}
 .st-chart.st-in-stage{height:min(66vh,720px);max-height:66vh}
-.st-chart text{font-family:var(--font-mono);fill:var(--muted);font-variant-numeric:tabular-nums}
+.st-chart text{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.st-chart text:not([fill]){fill:var(--muted)}
 .st-chart text:not([font-size]){font-size:14px}
 .st-chart .st-axis-line{stroke:var(--rule-soft);stroke-width:1.5}
 .st-chart .st-grid{stroke:var(--rule-soft);stroke-width:1;stroke-dasharray:2 4}
@@ -691,6 +687,20 @@ html{scroll-padding-top:16px}
 }
 .st-presenting .rs-header,.st-presenting .footer,.st-presenting .st-chapter,.st-presenting .st-findings{display:none!important}
 .st-presenting nav.pgm,.st-presenting .story-nav,.st-presenting .story-hero{display:none!important}
+
+/* forced reduced motion (testing hook ?reduced=1) mirrors the media query */
+.st-reduced *,.st-reduced *::before,.st-reduced *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+/* v1.2.5 phone: cap any stage figure, however deeply nested, so it fits the pinned half-screen stage; presenter on phones falls back to normal reading */
+@media(max-width:800px){
+  .st-stage-inner svg,.st-stage-inner canvas:not(.st-orb){max-height:40vh;max-height:40svh}
+  .st-presenting .st-step{min-height:80vh}
+}
+/* forced reduced motion gets the same end states as the media query */
+.st-reduced .st-reveal{opacity:1!important;transform:none!important;transition:none!important}
+.st-reduced .st-step{opacity:1!important;transition:none!important}
+.st-reduced .st-scene.st-flow .st-step > *{opacity:1!important;transform:none!important;transition:none!important}
+.st-reduced .st-stage-inner.st-layers > [data-show]{transition:none!important}
+.st-reduced .st-companion .st-companion-cap{transition:none!important}
 /*STORY_CSS_END*/
 </style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
@@ -827,9 +837,9 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
-<section class="st-chapter" data-num="01" data-orb="working" aria-label="Chapter one: the ledger">
-  <h2 class="st-chapter-title display">The ledger</h2>
-  <p>Seven cost lines sit behind one loading station. Three of them are invoiced. The committee only ever sees those three.</p>
+<section class="st-chapter" data-num="01" data-orb="working" aria-label="Finding one">
+  <h2 class="st-chapter-title display">Pricing four unbooked cost lines takes the payback from 3.41 years to 1.59</h2>
+  <p>The same control fails a 3-year hurdle on one count and clears it on the other. What your committee votes on is the scope of the count.</p>
 </section>
 
 <!-- ======================= SCENE 1: the ledger ======================= -->
@@ -837,8 +847,8 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
       <span class="label">Scene one</span>
-      <h2 class="display">The ledger</h2>
-      <p>One loading station. One control. The committee sees the annual cost of the incidents the control removes, and divides the capital cost by what the control saves.</p>
+      <h2 class="display">Pricing four unbooked cost lines takes the payback from 3.41 years to 1.59</h2>
+      <p>One loading station, one $150,000 control, seven cost lines behind the incidents it removes. Three of those lines are invoiced. The committee usually sees only those three.</p>
     </div>
     <div class="st-scene" data-scene="1">
       <div class="st-scene-rail" aria-hidden="true"></div>
@@ -861,27 +871,27 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       <div class="st-steps">
         <div class="st-step" data-step="0" data-orb="idle">
           <span class="label">Step 01</span>
-          <h3>What the ledger shows</h3>
-          <p>Downtime, spilled material, injury costs. Three lines, all of them invoiced, all of them already in a system somebody owns. They total $55,000 a year at this station.</p>
+          <h3>Three invoiced lines total $55,000 a year</h3>
+          <p>Equipment downtime, spilled material, injury costs. Each one is already invoiced and already sits in a system somebody owns.</p>
           <p class="step-fig">Annual incident cost counted <b>$55,000</b></p>
         </div>
         <div class="st-step" data-step="1" data-orb="working">
           <span class="label">Step 02</span>
-          <h3>The arithmetic on those three lines</h3>
-          <p>Assume the control removes 80% of that cost. The annual saving is $44,000. Divide the $150,000 capital cost by it and the payback lands at 3.41 years, past a 3-year hurdle.</p>
+          <h3>On those three lines the payback is 3.41 years</h3>
+          <p>At 80% risk reduction the control saves $44,000 a year. Divide $150,000 of capital by that saving and the payback lands past the 3-year hurdle, so the request is rejected.</p>
           <p class="step-fig">Payback <b>3.41 yr</b> &middot; 5-year ROI <b>147%</b></p>
           <span class="verdict-pill fail">Fails the hurdle</span>
         </div>
         <div class="st-step" data-step="2" data-orb="connecting">
           <span class="label">Step 03</span>
-          <h3>The costs nobody invoices</h3>
-          <p>Lost work time, retraining after turnover, productivity loss, the morale hit on the crew. Four more lines, $63,000 a year, real but unbooked. They belong to the same incidents.</p>
+          <h3>Four unbooked lines add $63,000 a year</h3>
+          <p>Lost work time, retraining after turnover, productivity loss, crew morale. Same incidents, no invoice. Counted, the station costs $118,000 a year.</p>
           <p class="step-fig">Annual incident cost counted <b>$118,000</b></p>
         </div>
         <div class="st-step" data-step="3" data-orb="solving">
           <span class="label">Step 04</span>
-          <h3>Same control, different verdict</h3>
-          <p>The saving becomes $94,400 and the payback drops to 1.59 years. Nothing about the equipment moved. The scope of the count moved.</p>
+          <h3>The same control now pays back in 1.59 years</h3>
+          <p>The annual saving becomes $94,400 and the payback halves. Nothing about the equipment moved. If you only ever show one accounting, you are choosing the verdict before the vote.</p>
           <p class="step-fig">Payback <b>1.59 yr</b> &middot; 5-year ROI <b>315%</b></p>
           <span class="verdict-pill pass">Clears the hurdle</span>
         </div>
@@ -890,9 +900,9 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   </div>
 </section>
 
-<section class="st-chapter" data-num="02" data-orb="solving" aria-label="Chapter two: what the answer rests on">
-  <h2 class="st-chapter-title display">What the answer rests on</h2>
-  <p>Move each of the nine inputs on its own. Two of them carry the whole case, and neither one is invoiced.</p>
+<section class="st-chapter" data-num="02" data-orb="solving" aria-label="Finding two">
+  <h2 class="st-chapter-title display">Risk reduction swings the payback 1.00 year, more than all seven cost lines together</h2>
+  <p>The input that decides the case is typed in by the person making the case. Say so out loud, in the same sentence as the payback.</p>
 </section>
 
 <!-- ======================= SCENE 2: tornado ======================= -->
@@ -900,8 +910,8 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
       <span class="label">Scene two</span>
-      <h2 class="display">What the answer rests on</h2>
-      <p>A payback of 1.59 years is a number built out of nine assumptions. Move each one by 30% on its own and the bars sort themselves by how much the answer swings.</p>
+      <h2 class="display">Risk reduction swings the payback 1.00 year, more than all seven cost lines together</h2>
+      <p>A payback of 1.59 years rests on nine inputs. Move each one by 30% on its own, hold the other eight, and the bars sort themselves by how far the answer travels.</p>
       <details class="data-table" id="tor-table"></details>
     </div>
     <div class="st-scene" data-scene="2" data-side="left">
@@ -920,28 +930,28 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       <div class="st-steps">
         <div class="st-step" data-step="0" data-orb="working">
           <span class="label">Step 05</span>
-          <h3>Nine inputs, one at a time</h3>
-          <p>Risk reduction, capital cost, and each of the seven cost lines. Each one is pushed 30% up and 30% down while the other eight hold at their base value.</p>
+          <h3>Nine inputs, each moved 30% on its own</h3>
+          <p>Risk reduction, capital cost, and the seven cost lines. One moves 30% up and 30% down while the other eight hold at base. Bars are in input order.</p>
         </div>
         <div class="st-step" data-step="1" data-orb="solving">
           <span class="label">Step 06</span>
-          <h3>Two bars carry the case</h3>
-          <p>Risk reduction swings the payback by a full year. Capital cost swings it by 0.95. The widest cost line, equipment downtime, moves it 0.24.</p>
+          <h3>Sorted, two bars dwarf the other seven</h3>
+          <p>Risk reduction swings the payback 1.00 year. Capital cost swings it 0.95. The widest cost line, equipment downtime, moves it 0.24.</p>
           <p class="step-fig">Risk reduction <b>1.27 to 2.27 yr</b> &middot; capital cost <b>1.11 to 2.07 yr</b></p>
         </div>
         <div class="st-step" data-step="2" data-orb="wrong">
           <span class="label">Step 07</span>
-          <h3>The widest bar is the one you invented</h3>
-          <p>Risk reduction is not measured here. It is typed in. The tool multiplies by whatever number you supply, and that number moves the answer more than every cost line put together.</p>
+          <h3>The widest bar is the number you typed, not one you measured</h3>
+          <p>Risk reduction is nowhere measured in this tool. It multiplies by whatever you supply. Put that assumption on the slide beside the payback, or the committee is voting on your guess without being told.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="st-chapter" data-num="03" data-orb="searching" aria-label="Chapter three: two thousand versions of the same decision">
-  <h2 class="st-chapter-title display">Two thousand versions</h2>
-  <p>Run the same decision 2,000 times with every input jittered. The spread is wide. It is not what decides this.</p>
+<section class="st-chapter" data-num="03" data-orb="searching" aria-label="Finding three">
+  <h2 class="st-chapter-title display">99.9% of draws clear the hurdle on one count, 31.3% on the other</h2>
+  <p>Two thousand seeded draws, every input jittered 30%. Uncertainty is not what separates the two verdicts, so do not let a sensitivity run stand in for the argument.</p>
 </section>
 
 <!-- ======================= SCENE 3: monte carlo ======================= -->
@@ -949,7 +959,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
       <span class="label">Scene three</span>
-      <h2 class="display">Two thousand versions of the same decision</h2>
+      <h2 class="display">99.9% of draws clear the hurdle on one count, 31.3% on the other</h2>
       <p>Draw every input independently across the same &plusmn;30% window, 2,000 times, seeded so the run reproduces. Each draw goes through the same four-line model and returns one payback.</p>
       <details class="data-table" id="mc-table"></details>
     </div>
@@ -961,7 +971,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
             <p class="stage-take" id="mc-take">Filling the histogram, draw by draw.</p>
             <div class="st-bignum-row stage-nums"><span class="st-bignum" id="mc-big">99.9%<small>Draws that clear the 3-year hurdle</small></span></div>
             <div id="mc"></div>
-            <div class="legend"><span id="mc-legend-a"><i class="sw" style="background:var(--accent)"></i>Clears the 3-year hurdle</span><span id="mc-legend-b"><i class="sw" style="background:var(--surface-2);border:1px solid var(--rule-soft)"></i>Misses it</span></div>
+            <div class="legend"><span id="mc-legend-a"><i class="sw" style="background:var(--accent)"></i>Clears the 3-year hurdle</span><span id="mc-legend-b"><i class="sw" style="background:var(--surface-2);border:1px solid var(--rule-soft)"></i>Misses it</span><span><i class="sw" style="background:var(--accent);opacity:.25"></i>Middle 90% of draws</span><span><i class="sw" style="background:var(--ink);height:3px"></i>Median draw</span></div>
             <p class="stage-src">Seed 1904, 2,000 draws, mulberry32 - identical to docs/index.html and src/montecarlo.py</p>
           </div>
         </div>
@@ -969,25 +979,25 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       <div class="st-steps">
         <div class="st-step" data-step="0" data-orb="searching">
           <span class="label">Step 08</span>
-          <h3>Let it run</h3>
-          <p>Cost lines, capital cost, and risk reduction each get their own draw inside the &plusmn;30% band. Two thousand paybacks land in the bins.</p>
+          <h3>2,000 draws, every input jittered 30%</h3>
+          <p>Cost lines, capital cost and risk reduction each get their own independent draw inside the band. Every draw returns one payback and lands in a bin.</p>
         </div>
         <div class="st-step" data-step="1" data-orb="solving">
           <span class="label">Step 09</span>
-          <h3>Where the human-capital case lands</h3>
-          <p>The median draw pays back in 1.60 years, the 5th percentile in 1.05, the 95th in 2.43. Almost every draw clears the hurdle.</p>
+          <h3>99.9% of human-capital draws pay back inside 3 years</h3>
+          <p>The median draw lands at 1.60 years, the 5th percentile at 1.05, the 95th at 2.43. The spread is wide and it still clears.</p>
           <p class="step-fig">P(payback within 3 yr) <b id="mc-p-h">99.9%</b></p>
         </div>
         <div class="st-step" data-step="2" data-orb="wrong">
           <span class="label">Step 10</span>
-          <h3>The booked ledger, through the same machine</h3>
-          <p>Same seed, same spread, same model, three cost lines instead of seven. Now the median draw pays back in 3.40 years and fewer than a third of the draws clear the hurdle.</p>
+          <h3>31.3% of booked draws clear the same hurdle</h3>
+          <p>Same seed, same spread, same model, three cost lines instead of seven. The median draw now lands at 3.40 years, past the hurdle.</p>
           <p class="step-fig">P(payback within 3 yr) <b id="mc-p-t">31.3%</b></p>
         </div>
         <div class="st-step" data-step="3" data-orb="grounded">
           <span class="label">Step 11</span>
-          <h3>Uncertainty did not decide this</h3>
-          <p>Put both runs on the same axis. The middle 90% of the human-capital draws lands between 1.05 and 2.43 years; the booked draws land between 2.22 and 5.45. The gap between them is the scope of the count, not the noise in the inputs.</p>
+          <h3>The verdict turns on the count, not on the uncertainty</h3>
+          <p>On one axis the middle 90% of human-capital draws runs 1.05 to 2.43 years and the booked draws run 2.22 to 5.45. They share one fifth of a year. Tightening your input bands will not close that gap; only changing what you count will.</p>
           <p class="step-fig">Overlap <b>2.22 to 2.43 yr</b></p>
         </div>
       </div>
@@ -1018,7 +1028,6 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 <section class="section" id="monday">
   <div class="wrap">
     <div class="monday" data-st-reveal>
-      <div class="st-orb-wrap monday-orb" data-state="grounded"><canvas class="st-orb" id="orb-monday" role="img" aria-label="Orb resting in its settled state."></canvas></div>
       <div>
         <span class="label">Monday</span>
         <h2 class="display">Take both paybacks to the committee</h2>
@@ -1043,7 +1052,6 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         <p>A rate means nothing until you pick the peer group. Changing the NAICS band changes the verdict on the same site.</p>
         <span class="nextcard-go mono">Read it &rarr;</span>
       </div>
-      <div class="st-orb-wrap nextcard-orb" data-state="searching"><canvas class="st-orb" id="orb-next" role="img" aria-label="Orb turning toward the next story."></canvas></div>
     </a>
     <p class="nextcard-alt">or press <b class="mono">M</b> to open the map of the whole site.</p>
   </div>
@@ -1085,7 +1093,10 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
      0. small utilities
      --------------------------------------------------------- */
   var mqReduce = global.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : null;
-  function reduced() { return !!(mqReduce && mqReduce.matches); }
+  // ?reduced=1 forces the reduced-motion path so it can be tested without changing OS settings
+  var forceReduced = /[?&]reduced=1/.test(location.search);
+  if (forceReduced) document.documentElement.classList.add("st-reduced");
+  function reduced() { return forceReduced || !!(mqReduce && mqReduce.matches); }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function lerp(a, b, t) { return a + (b - a) * t; }
   function isEl(x) { return x && x.nodeType === 1; }
@@ -3523,6 +3534,12 @@ function ledgerState(step) {
   put("pb-h", "pb-hv", "pb-h-h", RES_H, step >= 3);
 }
 
+/* Phones get their own drawing of each figure: a narrower viewBox, fewer ticks
+   and larger type, so the number and the one label that matters stay readable.
+   The maths is untouched; only the layout of the SVG changes. */
+const PHONE = window.matchMedia ? window.matchMedia("(max-width:800px)") : { matches: false, addEventListener: null };
+const isPhone = () => !!PHONE.matches;
+
 /* ===========================================================================
    Scene 2: tornado, same one-at-a-time perturbation as the calculator
    =========================================================================== */
@@ -3553,7 +3570,39 @@ function tornadoRows(spread) {
 }
 const TOR_UNSORTED = tornadoRows(SPREAD);
 const TOR_SORTED = TOR_UNSORTED.slice().sort((x, y) => y.swing - x.swing);
+function drawTornadoPhone(rows, highlightTop) {
+  const host = $("tornado");
+  host.innerHTML = "";
+  const W = 360, PAD = 5, T = 40, pitch = 32, barH = 14;
+  const H = T + rows.length * pitch + 26;
+  const base = RES_H.payback;
+  const lo = Math.min(base, ...rows.map(r => r.min));
+  const hi = Math.max(base, ...rows.map(r => r.max));
+  const x = v => PAD + (v - lo) / (hi - lo) * (W - PAD * 2);
+  const svg = svgEl("svg", {
+    class: "fig phone", viewBox: "0 0 " + W + " " + H, role: "img",
+    "aria-label": "Tornado chart. Risk reduction and capital cost swing the payback by about a year each; every cost line moves it by a quarter of a year or less."
+  });
+  rows.forEach((r, i) => {
+    const top = T + i * pitch, dim = (highlightTop && i >= 2) ? .45 : 1;
+    svg.appendChild(svgEl("text", { class: "tor-lbl", x: PAD, y: top + 10, opacity: dim }, r.label));
+    svg.appendChild(svgEl("text", { x: W - PAD, y: top + 10, "text-anchor": "end", opacity: dim }, r.swing.toFixed(2) + " yr"));
+    svg.appendChild(svgEl("rect", { class: "tor-hi", x: x(r.min).toFixed(1), y: top + 15,
+      width: Math.max(1, x(base) - x(r.min)).toFixed(1), height: barH, opacity: dim }));
+    svg.appendChild(svgEl("rect", { class: "tor-lo", x: x(base).toFixed(1), y: top + 15,
+      width: Math.max(1, x(r.max) - x(base)).toFixed(1), height: barH, opacity: dim }));
+  });
+  const bx = x(base);
+  svg.appendChild(svgEl("line", { class: "base", x1: bx, x2: bx, y1: T + 10, y2: H - 22 }));
+  svg.appendChild(svgEl("text", { x: bx, y: H - 6, "text-anchor": "middle" }, "base " + base.toFixed(2)));
+  svg.appendChild(svgEl("text", { x: PAD, y: H - 6 }, lo.toFixed(2)));
+  svg.appendChild(svgEl("text", { x: W - PAD, y: H - 6, "text-anchor": "end" }, hi.toFixed(2) + " yr"));
+  svg.appendChild(svgEl("text", { class: "callout-t", x: PAD, y: 18 },
+    highlightTop ? "Widest two: typed in, not invoiced" : "Payback, years"));
+  host.appendChild(svg);
+}
 function drawTornado(rows, highlightTop) {
+  if (isPhone()) return drawTornadoPhone(rows, highlightTop);
   const host = $("tornado");
   host.innerHTML = "";
   const W = 780, L = 252, R = 108, T = 48, rowH = 30, gap = 11;
@@ -3594,7 +3643,9 @@ function drawTornado(rows, highlightTop) {
   }
   host.appendChild(svg);
 }
+let TOR_STEP = 0, MC_STEP = 0;
 function tornadoState(step) {
+  TOR_STEP = step;
   const take = $("tor-take");
   const big = $("tor-big");
   if (step === 0) big.innerHTML = "9<small>Inputs moved &plusmn;30%, one at a time</small>";
@@ -3648,8 +3699,53 @@ function histogram(d) {
 }
 const HIST_H = histogram(DRAWS_H), HIST_T = histogram(DRAWS_T);
 const MC_MAXCOUNT = Math.max(...HIST_H, ...HIST_T);
+function drawMCPhone(series, frac, label) {
+  const host = $("mc");
+  host.innerHTML = "";
+  const W = 360, H = 300, L = 34, R = 8, T = 16, B = 44;
+  const x = i => L + i * ((W - L - R) / BINS);
+  const bw = (W - L - R) / BINS;
+  const y = c => T + (H - T - B) * (1 - c / MC_MAXCOUNT);
+  const svg = svgEl("svg", { class: "fig phone", viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": label });
+  svg.appendChild(svgEl("line", { class: "ax-main", x1: L, x2: W - R, y1: H - B, y2: H - B }));
+  const pFront = series[series.length - 1], pIv = pFront.iv, pShowIv = pIv && frac > .55;
+  const px = v => L + (Math.min(v, MC_MAX) / MC_MAX) * (W - L - R);
+  if (pShowIv) {
+    svg.appendChild(svgEl("rect", { class: "band", x: px(pIv[0]).toFixed(1), y: T,
+      width: Math.max(1, px(pIv[2]) - px(pIv[0])).toFixed(1), height: (H - B - T).toFixed(1) }));
+  }
+  series.forEach(s => {
+    s.counts.forEach((c, i) => {
+      const shown = Math.round(c * frac);
+      if (!shown) return;
+      const pays = series.length > 1 ? true : ((i + .5) * BINW) <= INP.hurdle;
+      svg.appendChild(svgEl("rect", {
+        class: "mc" + (pays ? " " + s.cls : ""), x: x(i).toFixed(1), y: y(shown).toFixed(1),
+        width: Math.max(1, bw - .6).toFixed(1), height: Math.max(0, (H - B) - y(shown)).toFixed(1),
+        opacity: series.length > 1 ? .72 : 1
+      }));
+    });
+  });
+  if (pShowIv) {
+    const m = px(pIv[1]);
+    svg.appendChild(svgEl("line", { class: "median", x1: m, x2: m, y1: T, y2: H - B }));
+    svg.appendChild(svgEl("text", { class: "callout-t", x: L, y: H - 4 }, "median " + pIv[1].toFixed(2) + " yr"));
+  }
+  const hx = L + (INP.hurdle / MC_MAX) * (W - L - R);
+  svg.appendChild(svgEl("line", { class: "hurdle", x1: hx, x2: hx, y1: T, y2: H - B }));
+  svg.appendChild(svgEl("text", { class: "hurdle-t", x: W - R, y: T + 14, "text-anchor": "end" }, "3-yr hurdle"));
+  [0, MC_MAX / 2, MC_MAX].forEach((v, k) => {
+    svg.appendChild(svgEl("text", { x: L + (v / MC_MAX) * (W - L - R), y: H - B + 20,
+      "text-anchor": k === 0 ? "start" : (k === 2 ? "end" : "middle") }, v.toFixed(1)));
+  });
+  svg.appendChild(svgEl("text", { x: W - R, y: H - 4, "text-anchor": "end" }, "payback, years"));
+  svg.appendChild(svgEl("text", { x: L - 6, y: T + 10, "text-anchor": "end" }, String(MC_MAXCOUNT)));
+  svg.appendChild(svgEl("text", { x: L - 6, y: H - B, "text-anchor": "end" }, "0"));
+  host.appendChild(svg);
+}
 function drawMC(series, frac, label) {
   /* series: [{counts, cls}] - one histogram, or both overlaid */
+  if (isPhone()) return drawMCPhone(series, frac, label);
   const host = $("mc");
   host.innerHTML = "";
   const W = 780, H = 480, L = 66, R = 18, T = 18, B = 64;
@@ -3658,6 +3754,13 @@ function drawMC(series, frac, label) {
   const y = c => T + (H - T - B) * (1 - c / MC_MAXCOUNT);
   const svg = svgEl("svg", { class: "fig", viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": label });
   svg.appendChild(svgEl("line", { class: "ax-main", x1: L, x2: W - R, y1: H - B, y2: H - B }));
+  /* the 5th-95th band is painted first so it sits behind the bars, not over them */
+  const front = series[series.length - 1], iv = front.iv, showIv = iv && frac > .55;
+  const xv = v => L + (Math.min(v, MC_MAX) / MC_MAX) * (W - L - R);
+  if (showIv) {
+    svg.appendChild(svgEl("rect", { class: "band", x: xv(iv[0]).toFixed(1), y: T,
+      width: Math.max(1, xv(iv[2]) - xv(iv[0])).toFixed(1), height: (H - B - T).toFixed(1) }));
+  }
   series.forEach(s => {
     s.counts.forEach((c, i) => {
       const shown = Math.round(c * frac);
@@ -3671,18 +3774,12 @@ function drawMC(series, frac, label) {
       }));
     });
   });
-  /* shaded 5th-95th interval of the front series, then the median marker */
-  const front = series[series.length - 1];
-  const iv = front.iv;
-  if (iv && frac > .55) {
-    const a = L + (Math.min(iv[0], MC_MAX) / MC_MAX) * (W - L - R);
-    const b = L + (Math.min(iv[2], MC_MAX) / MC_MAX) * (W - L - R);
-    svg.appendChild(svgEl("rect", { class: "band", x: a.toFixed(1), y: T, width: Math.max(1, b - a).toFixed(1), height: (H - B - T).toFixed(1) }));
-    const m = L + (Math.min(iv[1], MC_MAX) / MC_MAX) * (W - L - R);
-    svg.appendChild(svgEl("line", { class: "median", x1: m, x2: m, y1: T, y2: H - B }));
-    svg.appendChild(svgEl("path", { class: "callout-lead", d: "M" + m + " " + (T + 4) + " L" + (m + 24) + " " + (T + 30) }));
-    svg.appendChild(svgEl("text", { class: "callout-t", x: m + 28, y: T + 35 }, "median " + iv[1].toFixed(2) + " yr"));
-    svg.appendChild(svgEl("text", { class: "band-t", x: ((a + b) / 2).toFixed(1), y: T + 12, "text-anchor": "middle" }, "middle 90% of draws"));
+  /* median marker: the line on top of the bars, its label clear of them under the axis */
+  if (showIv) {
+    const m = xv(iv[1]);
+    svg.appendChild(svgEl("line", { class: "median", x1: m, x2: m, y1: T, y2: H - B + 8 }));
+    svg.appendChild(svgEl("text", { class: "callout-t", x: m, y: H - B + 44, "text-anchor": "middle" },
+      "median " + iv[1].toFixed(2) + " yr"));
   }
   const hx = L + (INP.hurdle / MC_MAX) * (W - L - R);
   svg.appendChild(svgEl("line", { class: "hurdle", x1: hx, x2: hx, y1: T, y2: H - B }));
@@ -3701,7 +3798,8 @@ let mcAnim = 0;
 function fillMC(series, label, take) {
   if (mcAnim) { cancelAnimationFrame(mcAnim); mcAnim = 0; }
   const paint = f => { drawMC(series, f, label); $("mc-take").innerHTML = take(f); };
-  if (Story.reduced()) { paint(1); return; }
+  /* reduced motion, or a hidden tab where rAF is throttled: land the final frame */
+  if (Story.reduced() || document.hidden) { paint(1); return; }
   const t0 = performance.now();
   (function step(now) {
     const p = Math.min(1, (now - t0) / 1100);
@@ -3711,6 +3809,7 @@ function fillMC(series, label, take) {
   })(t0);
 }
 function mcState(step) {
+  MC_STEP = step;
   const labH = "Histogram of 2,000 simulated paybacks for the human-capital accounting. Almost all of them fall left of the three-year hurdle.";
   const labT = "Histogram of 2,000 simulated paybacks for the booked accounting. Most of them fall right of the three-year hurdle.";
   const labBoth = "Both histograms on one axis. The human-capital draws sit left of the three-year hurdle; the booked draws sit mostly right of it, with a narrow overlap.";
@@ -3751,14 +3850,10 @@ dataTable($("mc-table"), "Simulated payback distribution (2,000 draws each)",
    =========================================================================== */
 (function wire() {
   const S = window.Story;
-  const mk = (id, density, label) => S.orb($(id), { density: density, state: "breathing", label: label });
-  const orbs = {
-    hero: mk("orb-hero", 2200, "Animated dot orb standing in for the investment case under review."),
-    next: mk("orb-next", 700, "Orb turning toward the next story."),
-    monday: mk("orb-monday", 400, "Orb resting in its settled state.")
-  };
-  orbs.monday.setState("grounded");
-  orbs.next.setState("searching");
+  const heroOrb = S.orb($("orb-hero"), {
+    density: 2200, state: "breathing",
+    label: "Animated dot orb standing in for the investment case under review."
+  });
   S.field($("hero-field"), { density: 1 });
   [
     { sel: '[data-scene="1"]', apply: ledgerState },
@@ -3772,11 +3867,19 @@ dataTable($("mc-table"), "Simulated payback distribution (2,000 draws each)",
       companionSize: 132,
       onStep: (i) => {
         sc.apply(i);
-        if (root.dataset.scene === "1") orbs.hero.setState(i >= 3 ? "grounded" : "working");
+        if (root.dataset.scene === "1") heroOrb.setState(i >= 3 ? "grounded" : "working");
       },
       onProgress: (i, p) => { root.style.setProperty("--p", p.toFixed(3)); }
     });
   });
+  /* a tab that was hidden mid-fill comes back to a complete histogram */
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) mcState(MC_STEP); });
+
+  /* crossing the phone breakpoint swaps both figures for their other drawing */
+  const onBreak = () => { tornadoState(TOR_STEP); mcState(MC_STEP); };
+  if (PHONE.addEventListener) PHONE.addEventListener("change", onBreak);
+  else if (PHONE.addListener) PHONE.addListener(onBreak);
+
   S.reveal(document);
   S.progressBar();
   /* presenter mode: the engine binds P and ?present=1 itself via autoPresent() */
