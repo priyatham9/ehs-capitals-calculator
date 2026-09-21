@@ -709,7 +709,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 /* ---------- presenter mode ---------- */
 .st-presenting .st-hide-on-present,.st-presenting header.banner,.st-presenting .footer,.st-presenting .skip{display:none!important}
 .st-presenting body,body.st-presenting{font-size:19px}
-.st-presenting .st-step{opacity:1;min-height:0}
+.st-presenting .st-step{min-height:100vh;min-height:100svh}
 .st-presenting .st-scene.st-flow .st-step > *{opacity:1;transform:none}
 .st-present-dots{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px;z-index:70;padding:9px 13px;border:2px solid var(--rule);background:var(--surface)}
 .st-present-dots b{display:block;width:8px;height:8px;background:var(--rule-soft);border-radius:50%}
@@ -838,6 +838,21 @@ html{scroll-padding-top:16px}
   body.st-story .st-stage-inner svg,body.st-story .st-stage-inner canvas:not(.st-orb){max-height:calc(100vh - var(--st-way-h,60px) - 230px);max-height:calc(100svh - var(--st-way-h,60px) - 230px);width:auto;max-width:100%;margin-inline:auto}
   body.st-story .st-stage-inner svg.st-chart{width:100%}
 }
+
+/* v1.2.3 phone: no Present button, label gets the room */
+@media(max-width:800px){.st-way-present{display:none!important}}
+
+/* v1.2.4 presenter: same pinned-figure mechanics as reading mode, one step per screen, no chrome */
+@media(min-width:801px){
+  .st-presenting .st-scene .st-stage,.st-presenting .st-scene[data-side="left"] .st-stage{position:sticky!important;top:0!important;height:100vh!important;height:100svh!important;padding:24px 0!important}
+  .st-presenting .st-scene .st-step{min-height:100vh!important;min-height:100svh!important;display:flex;flex-direction:column;justify-content:center}
+  .st-presenting .st-scene .st-step:not(.is-active){opacity:.08!important}
+  .st-presenting .st-scene .st-step.is-active{opacity:1!important}
+  .st-presenting .st-step h3{font-size:clamp(2rem,3vw,2.8rem)}
+  .st-presenting .st-step p{font-size:1.35rem;line-height:1.5}
+}
+.st-presenting .rs-header,.st-presenting .footer,.st-presenting .st-chapter,.st-presenting .st-findings{display:none!important}
+.st-presenting nav.pgm,.st-presenting .story-nav,.st-presenting .story-hero{display:none!important}
 /*STORY_CSS_END*/</style>
 </head>
 <body>
@@ -3343,15 +3358,18 @@ document.querySelectorAll(".tab").forEach(tab => {
       if (opts.onStep) opts.onStep(i, node, i > prev ? 1 : -1);
     }
 
+    // presenter mode drives steps directly, so it never depends on scroll observers firing
+    steps.forEach(function (st, j) { st.__stActivate = function () { if (active === j && st.classList.contains("is-active")) return; active = -1; setActive(j); }; });
+
     if (global.IntersectionObserver) {
       // under 800px the stage is stacked on top, so the active band sits in the lower part of the viewport
-      var narrow = global.matchMedia && global.matchMedia("(max-width:800px)").matches, bandMid = narrow ? 0.78 : 0.5;
+      var narrow = global.matchMedia && global.matchMedia("(max-width:800px)").matches, bandMid = narrow ? 0.66 : 0.5;
       ioStep = new IntersectionObserver(function (es) {
         // pick the entry closest to the middle band of the viewport
         var best = null, bestD = Infinity;
         es.forEach(function (e) { if (e.isIntersecting) { var d = Math.abs(e.boundingClientRect.top + e.boundingClientRect.height / 2 - innerHeight * bandMid); if (d < bestD) { bestD = d; best = e; } } });
-        if (best) setActive(steps.indexOf(best.target));
-      }, { rootMargin: narrow ? "-68% 0px -12% 0px" : "-45% 0px -45% 0px", threshold: 0 });
+        if (best && !presentState) setActive(steps.indexOf(best.target));
+      }, { rootMargin: narrow ? "-56% 0px -24% 0px" : "-45% 0px -45% 0px", threshold: 0 });
       steps.forEach(function (s) { ioStep.observe(s); });
     } else { steps.forEach(function (s) { s.classList.add("is-entered"); }); setActive(0); }
 
@@ -3379,7 +3397,9 @@ document.querySelectorAll(".tab").forEach(tab => {
     return {
       steps: steps, stage: stage, scene: scene, companion: comp,
       get index() { return active; },
-      go: function (i) { if (steps[i]) steps[i].scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "center" }); },
+      go: function (i) { // instant jump: the figure still animates, and a smooth scroll can stall between steps on some displays
+      if (steps[i]) { var r = steps[i].getBoundingClientRect(); global.scrollTo({ top: r.top + global.pageYOffset - (global.innerHeight - r.height) / 2, behavior: "instant" }); }
+      if (steps[i] && steps[i].__stActivate) { var cur = steps[i]; cur.__stActivate(); setTimeout(function () { if (steps[i] === cur) cur.__stActivate(); }, 120); } },
       destroy: function () {
         if (ioStep) ioStep.disconnect();
         if (comp) comp.destroy();
@@ -4218,24 +4238,27 @@ document.querySelectorAll(".tab").forEach(tab => {
     function go(n) {
       i = clamp(n, 0, steps.length - 1);
       if (dots) Array.prototype.forEach.call(dots.children, function (b, j) { b.classList.toggle("is-on", j === i); });
-      if (steps[i]) steps[i].scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "center" });
+      // instant jump: the figure still animates, and a smooth scroll can stall between steps on some displays
+      if (steps[i]) { var r = steps[i].getBoundingClientRect(); global.scrollTo({ top: r.top + global.pageYOffset - (global.innerHeight - r.height) / 2, behavior: "instant" }); }
+      if (steps[i] && steps[i].__stActivate) { var cur = steps[i]; cur.__stActivate(); setTimeout(function () { if (steps[i] === cur) cur.__stActivate(); }, 150); }
       if (opts.onStep) opts.onStep(i, steps[i]);
     }
     function key(e) {
-      if (e.key === "Escape") { exit(); return; }
-      if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") { e.preventDefault(); go(i + 1); }
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); go(i - 1); }
+      // capture phase + stop: pages may carry their own arrow handlers, the presenter must be the only one acting
+      if (e.key === "Escape") { e.stopImmediatePropagation(); exit(); return; }
+      if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") { e.preventDefault(); e.stopImmediatePropagation(); go(i + 1); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); e.stopImmediatePropagation(); go(i - 1); }
     }
     function exit() {
       document.documentElement.classList.remove("st-presenting");
       document.body.classList.remove("st-presenting");
-      removeEventListener("keydown", key);
+      removeEventListener("keydown", key, true);
       if (dots) dots.remove();
       hint.remove();
       presentState = null;
       if (opts.onExit) opts.onExit();
     }
-    addEventListener("keydown", key);
+    addEventListener("keydown", key, true);
     go(0);
     presentState = { go: go, exit: exit, get index() { return i; }, steps: steps };
     return presentState;
