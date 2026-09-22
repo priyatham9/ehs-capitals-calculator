@@ -554,6 +554,125 @@ html.st-printing .scene-sec{padding:0 0 6pt!important;border-bottom:0!important}
 html.st-printing .scene-head{padding:0 0 5pt!important;max-width:none!important}
 html.st-printing .scene-head h2{font-size:14pt!important}
 html.st-printing .scene-head p{font-size:10pt!important;color:#000!important;max-width:none!important}
+/* ============ round 7: the leader briefing layer ============ */
+/* money-flow figure (hero and sandbox) */
+.flow{margin:0;min-width:0;position:relative}
+.flow-hero{width:clamp(360px,34vw,520px);max-width:100%;justify-self:center}
+.flow-hero::before{content:"";position:absolute;inset:6% 4% 22%;z-index:-1;pointer-events:none;border-radius:50%;
+ background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 16%,transparent),transparent);filter:blur(12px)}
+.flow-cv{display:block;width:100%;aspect-ratio:1/.92;touch-action:pan-y}
+.flow-try{margin-top:20px;padding-top:16px;border-top:var(--pg-hair)}
+.flow-try .flow-cv{aspect-ratio:1/.8}
+.flow-toggle{display:inline-flex;margin-top:10px;border:var(--pg-hair);border-radius:999px;padding:3px;background:var(--surface)}
+.flow-toggle button{appearance:none;border:0;background:transparent;color:var(--ink-2);cursor:pointer;padding:8px 14px;border-radius:999px;
+ font-family:var(--font-mono);font-size:.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:background .3s ease-in-out,color .3s ease-in-out}
+.flow-toggle button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.flow-toggle button:hover:not([aria-pressed="true"]){background:var(--accent-wash)}
+.flow-cap{margin:10px 0 0;font-size:.875rem;line-height:1.5;color:var(--ink-2);max-width:52ch}
+.flow-cap b{color:var(--ink);font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.flow-key{display:flex;flex-wrap:wrap;gap:4px 14px;margin:8px 0 0;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.flow-key .sw{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
+.sw-b{background:var(--ink-2)}.sw-h{background:var(--accent)}.sw-o{border:1px solid var(--ink-2);opacity:.6}.sw-l{background:var(--bad-bg)}
+@media(max-width:800px){.flow-hero{width:100%;order:0}.st-hero .flow-hero{margin-top:6px}}
+/* kinetic type: one key phrase per heading gets an accent underline that draws in once */
+.kw{background-image:linear-gradient(var(--accent),var(--accent));background-repeat:no-repeat;background-position:0 92%;background-size:0% .12em;transition:background-size .8s cubic-bezier(.65,0,.35,1) .25s}
+.is-in .kw,.kw.is-in,.st-reduced .kw{background-size:100% .12em}
+@media (prefers-reduced-motion:reduce){.kw{transition:none;background-size:100% .12em}.flow-toggle button{transition:none}}
+/* the engine paints .st-hero::before 4% past each side; clip it so the page never scrolls sideways */
+.hero{overflow-x:clip}
+/* 60-second summary strip */
+.brief{padding:44px 0 50px;border-bottom:var(--pg-hair)}
+.brief > .wrap{max-width:1240px}
+.brief-k{display:block;margin:0 0 6px;color:var(--accent)}
+.brief h2{font-size:clamp(1.4rem,2.6vw,2rem);max-width:30ch}
+.brief-lede{margin:12px 0 0;max-width:68ch;color:var(--ink-2)}
+.brief-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:24px}
+.brief-card{display:flex;flex-direction:column;gap:10px;padding:18px 18px 16px;border:var(--pg-hair);border-radius:var(--st-radius,14px);background:var(--surface);color:var(--ink);text-decoration:none;transition:background .16s,transform .16s,border-color .16s;min-width:0}
+.brief-card:hover{background:var(--accent-wash);border-color:var(--accent);transform:translateY(-1px)}
+.brief-n{font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;font-size:clamp(1.7rem,2.6vw,2.3rem);line-height:1;letter-spacing:-.03em;color:var(--accent);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.brief-n .from{color:var(--ink-2)}
+.brief-n .arrow{font-size:.6em;color:var(--muted)}
+.brief-n small{font-size:.42em;letter-spacing:.04em;color:var(--muted);font-weight:600}
+.brief-claim{font-size:.9rem;line-height:1.5;color:var(--ink-2);flex:1}
+.brief-go{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+@media(max-width:1000px){.brief-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.brief-cards{grid-template-columns:1fr}.brief{padding:34px 0 38px}}
+/* what it means / ask your finance partner */
+.so-what{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:34px 0 46px;max-width:1240px}
+.so-what > div{padding:18px 20px;border:var(--pg-hair);border-radius:var(--st-radius,14px);background:var(--surface)}
+.so-what > div:first-child{background:var(--accent-wash);border-color:var(--accent)}
+.so-k{display:block;margin-bottom:8px;font-family:var(--font-mono);font-size:.625rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.so-what p{margin:0;font-size:.97rem;line-height:1.6;color:var(--ink)}
+.so-what .ask{font-weight:600;font-size:1.02rem;line-height:1.45}
+.so-what .ask-why{margin-top:8px;font-size:.875rem;color:var(--ink-2)}
+@media(max-width:760px){.so-what{grid-template-columns:1fr;margin:24px 0 34px}}
+/* your turn: the two-dial sandbox */
+.try > .wrap,.assume > .wrap{max-width:1240px}
+.try-head h2,.assume-head h2{font-size:clamp(1.5rem,3vw,2.3rem);max-width:30ch}
+.try-head p,.assume-head p{margin:12px 0 0;max-width:68ch;color:var(--ink-2)}
+.try-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:14px;margin-top:26px}
+.try-panel{padding:20px 22px;border:var(--pg-hair);border-radius:var(--st-radius,14px);background:var(--surface);min-width:0}
+.dial{margin-bottom:20px}
+.dial-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.dial label{font-weight:700;font-size:.97rem}
+.dial-v{font-family:var(--font-mono);font-weight:700;font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.dial input[type=range]{width:100%;margin:10px 0 4px;accent-color:var(--accent);height:28px;cursor:pointer}
+.dial-note{margin:0;font-size:.8125rem;color:var(--ink-2);line-height:1.5}
+.tag{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--warn);color:var(--warn);font-family:var(--font-mono);font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;vertical-align:2px}
+.tag.src{border-color:var(--rule-soft);color:var(--muted)}
+.try-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.try-actions button{cursor:pointer;font-family:var(--font-mono);font-size:.75rem}
+.try-out-k{display:block;margin-bottom:10px}
+.try-verdicts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.try-v{padding:14px 16px;border:var(--pg-hair);border-radius:var(--st-radius-sm,10px);min-width:0}
+.try-v .label{display:block}
+.try-n{display:block;margin:6px 0 4px;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;font-size:clamp(2rem,4vw,3rem);line-height:1;letter-spacing:-.03em}
+.try-v.human .try-n{color:var(--accent)}
+.try-v.trad .try-n{color:var(--ink-2)}
+.try-sub{display:block;font-family:var(--font-mono);font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.try-v .verdict-pill{margin-top:10px}
+.try-bars{margin-top:18px}
+.try-key{margin:4px 0 0;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.try-sentence{margin:16px 0 0;font-size:1.02rem;line-height:1.55;font-weight:600;min-height:3.1em}
+.try-sentence .num{color:var(--accent);font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.try-be{margin:14px 0 0;padding-top:12px;border-top:var(--pg-hair);font-size:.875rem;color:var(--ink-2)}
+.try-be b{font-family:var(--font-mono);color:var(--ink);font-variant-numeric:tabular-nums}
+@media(max-width:900px){.try-grid{grid-template-columns:1fr}}
+.try-bars .pbbar-v{white-space:nowrap}
+@media(max-width:800px){.try-bars .pbbar-row{grid-template-columns:minmax(0,1fr) 88px}}
+@media(max-width:420px){.try-verdicts{grid-template-columns:1fr}}
+/* which inputs are assumptions */
+.assume-table{margin-top:24px;border:var(--pg-hair);border-radius:var(--st-radius,14px);background:var(--surface);overflow:hidden}
+.assume-table table{width:100%;border-collapse:collapse;font-size:.9rem}
+.assume-table th,.assume-table td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:var(--pg-hair)}
+.assume-table tr:last-child td{border-bottom:0}
+.assume-table th{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+.assume-table td.v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
+.assume-table td.w{color:var(--ink-2)}
+.kind{display:inline-block;padding:2px 9px;border-radius:999px;font-family:var(--font-mono);font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;border:1px solid}
+.kind.judgement{color:var(--warn);border-color:var(--warn);background:var(--warn-wash)}
+.kind.rule{color:var(--accent);border-color:var(--accent)}
+.kind.transcribed{color:var(--muted);border-color:var(--rule-soft)}
+@media(max-width:700px){
+  .assume-table thead{display:none}
+  .assume-table tr{display:block;padding:12px 14px;border-bottom:var(--pg-hair)}
+  .assume-table tr:last-child{border-bottom:0}
+  .assume-table td{display:block;padding:2px 0;border:0}
+  .assume-table td.v{white-space:normal}
+}
+/* Monday: actions plus the questions to bring */
+.monday-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:30px;align-items:start}
+.monday-ask{padding:18px 20px;border-radius:var(--st-radius-sm,10px);background:var(--accent-wash);border:1px solid var(--accent)}
+.monday-ask ol{margin-top:10px}
+.monday-ask li{color:var(--ink)}
+@media(max-width:860px){.monday-grid{grid-template-columns:1fr;gap:20px}}
+@media (prefers-reduced-motion:reduce){.brief-card,.brief-card:hover{transition:none;transform:none}}
+@media print{
+  .brief-card,.so-what > div,.try-panel,.assume-table,.monday-ask{border:1pt solid #000!important;background:none!important;break-inside:avoid}
+  .try-actions,.dial input[type=range]{display:none!important}
+}
+html.st-printing .brief-card,html.st-printing .so-what > div,html.st-printing .try-panel,html.st-printing .assume-table,html.st-printing .monday-ask{border:1pt solid #000!important;background:none!important;break-inside:avoid}
+html.st-printing .try-actions,html.st-printing .dial input[type=range]{display:none!important}
 /*STORY_CSS_START*/
 /* ============================================================
    story.css  -  shared storytelling engine styles  (v1.1)
@@ -1280,12 +1399,53 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         </div>
         <p class="hero-lede">Every number here runs through the same four-line model as the calculator on this site. Press <b class="mono">P</b> for presenter mode, <b class="mono">M</b> for the site map.</p>
         <div class="hero-links">
-          <a class="btn btn-primary" href="./">Open the calculator</a>
+          <a class="btn btn-primary" href="#your-numbers">Move the assumptions yourself</a>
+          <a class="btn" href="./">Open the calculator</a>
           <a class="btn" href="https://github.com/priyatham9/ehs-capitals-calculator">Repository</a>
           <a class="btn" href="https://priyatham9.github.io/grounded/">All projects</a>
         </div>
       </div>
-      <div class="st-orb-wrap st-hero-orb" data-state="idle"><canvas class="st-orb" id="orb-hero" role="img" aria-label="Animated dot orb standing in for the investment case under review."></canvas></div>
+      <figure class="flow flow-hero" id="flow-hero">
+        <canvas class="flow-cv" id="flow-hero-cv" role="img" aria-label="Money flow figure: the annual incident cost as $1,000 tiles, and how many years of saving it takes to repay the $150,000 control."></canvas>
+        <div class="flow-toggle" role="group" aria-label="Which cost lines to count">
+          <button type="button" data-count="booked" aria-pressed="false">Booked, 3 lines</button>
+          <button type="button" data-count="human" aria-pressed="true">All 7 lines</button>
+        </div>
+        <figcaption class="flow-cap" id="flow-hero-cap" aria-live="polite">All seven lines: <b>$118,000</b> a year of incident cost, 80% removed, repays <b>$150,000</b> in <b>1.59 years</b>. Clears the 3-year hurdle.</figcaption>
+        <p class="flow-key"><span><i class="sw sw-b"></i>Booked line</span><span><i class="sw sw-h"></i>Human-capital line</span><span><i class="sw sw-o"></i>Not removed</span><span><i class="sw sw-l"></i>Repaid after year 3</span><span>1 tile = $1,000</span></p>
+      </figure>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================= 60-second version ======================= -->
+<section class="brief" id="brief" aria-labelledby="brief-h">
+  <div class="wrap">
+    <span class="label brief-k">The case in 60 seconds</span>
+    <h2 class="display" id="brief-h" data-st-reveal>What you <span class="kw">count</span> decides the verdict more than any number you refine</h2>
+    <p class="brief-lede">Four findings from one published example: a $150,000 loading-station control, seven annual cost lines, an 80% risk reduction and a 3-year payback hurdle. Every figure below is recomputed in this page from the same model as the calculator. Select a card to jump to its evidence.</p>
+    <div class="brief-cards">
+      <a class="brief-card" data-st-reveal href="#ledger">
+        <span class="brief-n"><span class="from">3.41</span><span class="arrow" aria-hidden="true">&rarr;</span><span data-brief-count>1.59</span><small>yr</small></span>
+        <span class="brief-claim">Pricing four unbooked cost lines takes the payback from a rejection to an approval against a 3-year hurdle.</span>
+        <span class="brief-go">Finding 1 &darr;</span>
+      </a>
+      <a class="brief-card" data-st-reveal href="#sensitivity">
+        <span class="brief-n"><span data-brief-count id="brief-swing">1.00</span><small>yr swing</small></span>
+        <span class="brief-claim">Risk reduction, a number you type rather than measure, moves the payback more than any single cost line.</span>
+        <span class="brief-go">Finding 2 &darr;</span>
+      </a>
+      <a class="brief-card" data-st-reveal href="#uncertainty">
+        <span class="brief-n"><span class="from" id="brief-pt">31.3%</span><span class="arrow" aria-hidden="true">vs</span><span id="brief-ph">99.9%</span></span>
+        <span class="brief-claim">Share of 2,000 jittered draws that clear 3 years, booked count against human-capital count. Uncertainty does not close the gap.</span>
+        <span class="brief-go">Finding 3 &darr;</span>
+      </a>
+      <a class="brief-card" data-st-reveal href="#your-numbers">
+        <span class="brief-n"><span data-brief-count id="brief-be-h">42%</span><span class="arrow" aria-hidden="true">vs</span><span class="from" id="brief-be-t">91%</span></span>
+        <span class="brief-claim">The lowest risk reduction that still clears 3 years: human-capital count against booked count. Try your own.</span>
+        <span class="brief-go">Your turn &darr;</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1350,6 +1510,10 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         </div>
       </div>
     </div>
+    <div class="so-what" data-st-reveal>
+      <div><span class="so-k">What it means for a leader</span><p>The payback on a safety request is partly a choice about scope. A request that fails on the three invoiced lines can clear once the other four are priced. But $63,000 of the $118,000 is estimated, not invoiced, so the approval is only as good as those estimates.</p></div>
+      <div><span class="so-k">Ask your finance partner</span><p class="ask">&ldquo;Which cost lines does our capital template count for a safety control, and who decided to leave out lost work time, turnover and productivity?&rdquo;</p><p class="ask-why">If the answer is &ldquo;nobody decided&rdquo;, the scope of the count is a default, not a policy.</p></div>
+    </div>
   </div>
 </section>
 
@@ -1398,6 +1562,10 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
           <p>Risk reduction is nowhere measured in this tool. It multiplies by whatever you supply. Put that assumption on the slide beside the payback, or the committee is voting on your guess without being told.</p>
         </div>
       </div>
+    </div>
+    <div class="so-what" data-st-reveal>
+      <div><span class="so-k">What it means for a leader</span><p>Before anyone spends a week refining cost lines, test the risk reduction. It moves the answer furthest and nobody measured it. At half the assumed effect, 40% instead of 80%, even the human-capital payback slips to <span class="mono" id="sw-half">3.18</span> years, past the hurdle.</p></div>
+      <div><span class="so-k">Ask your finance partner</span><p class="ask">&ldquo;Where does the 80% come from: a vendor claim, a pilot, a comparable site? And what payback do we get at half of it?&rdquo;</p><p class="ask-why">A case that only works at the optimistic end of its evidence should be presented that way.</p></div>
     </div>
   </div>
 </section>
@@ -1455,6 +1623,87 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
         </div>
       </div>
     </div>
+    <div class="so-what" data-st-reveal>
+      <div><span class="so-k">What it means for a leader</span><p>More simulation will not settle this. Under the same &plusmn;30% jitter, one count clears the hurdle almost every time and the other misses more often than it clears. The decision in front of the committee is what belongs in the count, and that is a policy call you can make once for every request.</p></div>
+      <div><span class="so-k">Ask your finance partner</span><p class="ask">&ldquo;Would we accept a standing rule that safety requests show both paybacks, with each human-capital estimate labelled and signed off by the person who made it?&rdquo;</p><p class="ask-why">That turns a one-off argument into a repeatable review standard.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================= your turn ======================= -->
+<section class="section try" id="your-numbers" aria-labelledby="try-h">
+  <div class="wrap">
+    <div class="try-head" data-st-reveal>
+      <span class="label brief-k">Your turn</span>
+      <h2 class="display" id="try-h">The human-capital case clears 3 years down to <span class="kw">42% risk reduction</span>; the booked case needs 91%</h2>
+      <p>Move the two assumptions a finance reviewer will push on first. The seven cost lines stay at the published example, the hurdle stays at 3 years, and both paybacks recompute with the same <span class="mono">evaluate()</span> as the calculator.</p>
+    </div>
+    <div class="try-grid">
+      <div class="try-panel">
+        <div class="dial">
+          <div class="dial-top"><label for="try-rr">Risk reduction <span class="tag">assumption</span></label><output class="dial-v" id="try-rr-v" for="try-rr">80%</output></div>
+          <input type="range" id="try-rr" min="0" max="100" step="1" value="80" aria-describedby="try-rr-note">
+          <p class="dial-note" id="try-rr-note">Share of the annual incident cost the control removes. Published example: 80%. Nothing in this tool measures it.</p>
+        </div>
+        <div class="dial">
+          <div class="dial-top"><label for="try-capex">Capital cost <span class="tag src">estimate</span></label><output class="dial-v" id="try-capex-v" for="try-capex">$150,000</output></div>
+          <input type="range" id="try-capex" min="25000" max="500000" step="5000" value="150000" aria-describedby="try-capex-note">
+          <p class="dial-note" id="try-capex-note">Up-front cost of the control. Published example: $150,000. Usually a quote, so it is the firmer of the two.</p>
+        </div>
+        <div class="try-actions">
+          <button class="btn" type="button" id="try-reset">Reset to the published example</button>
+          <a class="btn btn-primary" id="try-open" href="./">Open this in the calculator</a>
+        </div>
+        <figure class="flow flow-try" id="flow-try">
+          <canvas class="flow-cv" id="flow-try-cv" role="img" aria-label="Money flow figure for your assumptions."></canvas>
+          <div class="flow-toggle" role="group" aria-label="Which cost lines the figure counts">
+            <button type="button" data-count="booked" aria-pressed="false">Booked, 3 lines</button>
+            <button type="button" data-count="human" aria-pressed="true">All 7 lines</button>
+          </div>
+          <figcaption class="flow-cap" id="flow-try-cap">All seven lines: <b>$118,000</b> a year of incident cost, 80% removed, repays <b>$150,000</b> in <b>1.59 years</b>. Clears the 3-year hurdle.</figcaption>
+        </figure>
+      </div>
+      <div class="try-panel" aria-live="polite" aria-atomic="true" id="try-out">
+        <span class="label try-out-k">Payback against a 3-year hurdle</span>
+        <div class="try-verdicts">
+          <div class="try-v trad"><span class="label">Booked count, 3 lines</span><span class="try-n" id="try-pt">3.41 yr</span><span class="try-sub" id="try-pt-sub">saves $44,000 a year</span><span class="verdict-pill fail" id="try-pt-pill">Misses the hurdle</span></div>
+          <div class="try-v human"><span class="label">Human-capital count, 7 lines</span><span class="try-n" id="try-ph">1.59 yr</span><span class="try-sub" id="try-ph-sub">saves $94,400 a year</span><span class="verdict-pill pass" id="try-ph-pill">Clears the hurdle</span></div>
+        </div>
+        <div class="pbbar try-bars" aria-hidden="true">
+          <div class="pbbar-row trad"><span class="pbbar-k">Booked</span><span class="pbbar-track"><i class="pbbar-fill" id="try-bt"></i><i class="pbbar-hurdle" id="try-bht"></i></span><span class="pbbar-v" id="try-btv">3.41 yr</span></div>
+          <div class="pbbar-row human"><span class="pbbar-k">Human-capital</span><span class="pbbar-track"><i class="pbbar-fill" id="try-bh"></i><i class="pbbar-hurdle" id="try-bhh"></i></span><span class="pbbar-v" id="try-bhv">1.59 yr</span></div>
+        </div>
+        <p class="try-key"><span style="display:inline-block;width:10px;height:2px;background:var(--warn);vertical-align:middle;margin-right:5px"></span>3-year hurdle &middot; bars run to 8 years</p>
+        <p class="try-sentence" id="try-sentence">The two counts disagree: the booked ledger rejects the control and the human-capital ledger approves it.</p>
+        <p class="try-be" id="try-be">At this capital cost the booked case needs at least <b>90.9%</b> risk reduction to clear 3 years; the human-capital case needs <b>42.4%</b>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= which inputs are assumptions ======================= -->
+<section class="section assume" id="assumptions" aria-labelledby="assume-h">
+  <div class="wrap">
+    <div class="assume-head" data-st-reveal>
+      <span class="label brief-k">Label your inputs</span>
+      <h2 class="display" id="assume-h">Every default comes from one published example, and the inputs that decide the verdict are <span class="kw">judgement calls</span></h2>
+      <p>Nothing on this page is measured from a plant. The worked example is transcribed from Brandon (2025); the rest is arithmetic. When this reaches a committee, each input should carry one of these three labels.</p>
+    </div>
+    <div class="assume-table" data-st-reveal>
+      <table>
+        <thead><tr><th scope="col">Input</th><th scope="col">Default here</th><th scope="col">Kind</th><th scope="col">Where it comes from</th></tr></thead>
+        <tbody>
+          <tr><td>Risk reduction</td><td class="v">80%</td><td><span class="kind judgement">Judgement</span></td><td class="w">Stated in the article's example. Not measured by anyone here, and the widest bar in the tornado.</td></tr>
+          <tr><td>Four human-capital lines</td><td class="v">$63,000 / yr</td><td><span class="kind judgement">Judgement</span></td><td class="w">Lost work time $20,000, retraining $8,000, productivity $25,000, morale $10,000. Transcribed from the article; in your plant, priced estimates.</td></tr>
+          <tr><td>Three booked lines</td><td class="v">$55,000 / yr</td><td><span class="kind transcribed">Transcribed</span></td><td class="w">Equipment downtime $30,000, material loss $10,000, injury costs $15,000. From the article's table; in your plant, invoices.</td></tr>
+          <tr><td>Capital cost</td><td class="v">$150,000</td><td><span class="kind transcribed">Transcribed</span></td><td class="w">From the article's example. In practice a quote.</td></tr>
+          <tr><td>Payback hurdle</td><td class="v">3 years</td><td><span class="kind rule">Your rule</span></td><td class="w">The calculator's default decision rule, not from the article. Use your own committee's hurdle.</td></tr>
+          <tr><td>ROI horizon</td><td class="v">5 years</td><td><span class="kind transcribed">Transcribed</span></td><td class="w">The article's horizon. Benefits are assumed flat and undiscounted across it.</td></tr>
+          <tr><td>Uncertainty band</td><td class="v">&plusmn;30%, independent</td><td><span class="kind judgement">Judgement</span></td><td class="w">An illustrative placeholder for the tornado and the simulation (README, &ldquo;Provenance of the numbers&rdquo;). Not measured, not elicited.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -1484,13 +1733,26 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       <div>
         <span class="label">Monday</span>
         <h2 class="display">Take both paybacks to the committee</h2>
-        <ol>
-          <li>Pull the next capital request that was rejected on payback. Write down the cost lines it counted.</li>
-          <li>Price the four human-capital lines for the same incidents: lost work time, retraining after turnover, productivity loss, morale. Mark each one as an estimate and say who estimated it.</li>
-          <li>Run both accountings, and state the risk reduction you assumed as an assumption, in the same sentence as the payback.</li>
-          <li>Show the committee the tornado, not only the headline. If the case turns on a number you typed, they should see that before they vote.</li>
-        </ol>
-        <p style="margin:18px 0 0"><a class="btn btn-primary" href="./">Run your own numbers</a></p>
+        <div class="monday-grid">
+          <div>
+            <ol>
+              <li>Pull the next capital request that was rejected on payback. Write down the cost lines it counted.</li>
+              <li>Price the four human-capital lines for the same incidents: lost work time, retraining after turnover, productivity loss, morale. Mark each one as an estimate and say who estimated it.</li>
+              <li>Run both accountings, and state the risk reduction you assumed as an assumption, in the same sentence as the payback.</li>
+              <li>Find the break-even: the lowest risk reduction at which the request still clears your hurdle. If your evidence cannot support that number, say so before the vote.</li>
+              <li>Show the committee the tornado, not only the headline. If the case turns on a number you typed, they should see that before they vote.</li>
+            </ol>
+          </div>
+          <div class="monday-ask">
+            <span class="so-k">Three questions for your finance partner</span>
+            <ol>
+              <li>Which cost lines does our template count for a safety control, and who chose them?</li>
+              <li>What evidence would you accept for a risk-reduction figure, and what payback do we get at half of ours?</li>
+              <li>Would you sign off a standing rule that safety requests show both paybacks, estimates labelled?</li>
+            </ol>
+          </div>
+        </div>
+        <p style="margin:18px 0 0"><a class="btn btn-primary" href="./">Run your own numbers</a> <a class="btn" href="#your-numbers">Back to the two dials</a></p>
       </div>
     </div>
   </div>
@@ -1500,7 +1762,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   <div class="wrap">
     <a class="nextcard" data-st-spotlight data-st-reveal href="https://priyatham9.github.io/ehs-benchmarks/story.html">
       <div>
-        <span class="label">Next story - 6 of 7</span>
+        <span class="label">Next story - 6 of 6</span>
         <h2 class="display">Compared with whom</h2>
         <p>A rate means nothing until you pick the peer group. Changing the NAICS band changes the verdict on the same site.</p>
         <span class="nextcard-go mono">Read it &rarr;</span>
@@ -4861,14 +5123,362 @@ dataTable($("mc-table"), "Simulated payback distribution (2,000 draws each)",
    ["P(within 3 yr)", P_H.toFixed(1) + "%", P_T.toFixed(1) + "%"]]);
 
 /* ===========================================================================
+   Leader layer: the 60-second strip, the "so what" figures, and the two-dial
+   sandbox. Every number is recomputed here from evaluate() and EXAMPLE, so the
+   static text in the HTML is only a no-script fallback.
+   =========================================================================== */
+const pct1 = v => (v * 100).toFixed(1) + "%";
+/* risk-reduction breakeven = capex / (hurdle x annual_cost), README "sensitivity.py" */
+const beRR = (cost, capex, hurdle) => capex / (hurdle * cost);
+(function leaderLayer() {
+  const totalH = INP.booked + INP.human;
+  $("brief-swing").textContent = TOR_SORTED[0].swing.toFixed(2);
+  $("brief-pt").textContent = P_T.toFixed(1) + "%";
+  $("brief-ph").textContent = P_H.toFixed(1) + "%";
+  $("brief-be-h").textContent = Math.round(beRR(totalH, INP.capex, INP.hurdle) * 100) + "%";
+  $("brief-be-t").textContent = Math.round(beRR(INP.booked, INP.capex, INP.hurdle) * 100) + "%";
+  $("sw-half").textContent = yr2(evaluate(totalH, INP.capex, INP.rr / 2, INP.horizon).payback);
+  const S = window.Story;
+  const cards = document.querySelector(".brief-cards");
+  if (S && S.countUp && S.inView && cards && !S.reduced()) {
+    S.inView(cards, () => S.countUp(document.querySelectorAll("[data-brief-count]")), { once: true });
+  }
+})();
+
+(function sandbox() {
+  const rr = $("try-rr"), cx = $("try-capex");
+  if (!rr || !cx) return;
+  const totalH = INP.booked + INP.human;
+  const H = INP.hurdle;
+  const verdict = (res) => res.payback !== null && res.payback <= H;
+  const flow = MoneyFlow($("flow-try-cv"), { onState: t => flowCaption($("flow-try-cap"), t),
+    onFirstView: () => flow.set({}, "replay") });
+  flowToggle($("flow-try"), flow);
+  function pill(id, ok) {
+    const p = $(id);
+    p.className = "verdict-pill " + (ok ? "pass" : "fail");
+    p.textContent = ok ? "Clears the hurdle" : "Misses the hurdle";
+  }
+  function bar(fillId, hurdleId, valId, res, scale) {
+    const w = res.payback === null ? 100 : Math.min(100, (res.payback / scale) * 100);
+    $(fillId).style.width = w.toFixed(1) + "%";
+    $(hurdleId).style.left = ((H / scale) * 100).toFixed(1) + "%";
+    $(valId).textContent = res.payback === null ? "never" : (res.payback > scale ? "> " + scale.toFixed(0) : yr2(res.payback)) + " yr";
+  }
+  function stateHash(capex, rrPct) {
+    const rows = r => r.map(([n, v]) => encodeURIComponent(n) + ":" + v).join(",");
+    return "#capex=" + capex + "&rr=" + rrPct + "&yr=" + INP.horizon + "&hu=" + H +
+      "&b=" + rows(EXAMPLE.booked) + "&hm=" + rows(EXAMPLE.human);
+  }
+  function update() {
+    const r = (+rr.value) / 100, capex = +cx.value;
+    $("try-rr-v").textContent = rr.value + "%";
+    $("try-capex-v").textContent = money(capex);
+    rr.setAttribute("aria-valuetext", rr.value + " percent risk reduction");
+    cx.setAttribute("aria-valuetext", money(capex) + " capital cost");
+    const t = evaluate(INP.booked, capex, r, INP.horizon), h = evaluate(totalH, capex, r, INP.horizon);
+    const okT = verdict(t), okH = verdict(h);
+    $("try-pt").textContent = t.payback === null ? "never" : yr2(t.payback) + " yr";
+    $("try-ph").textContent = h.payback === null ? "never" : yr2(h.payback) + " yr";
+    $("try-pt-sub").textContent = "saves " + money(t.annualBenefit) + " a year";
+    $("try-ph-sub").textContent = "saves " + money(h.annualBenefit) + " a year";
+    pill("try-pt-pill", okT); pill("try-ph-pill", okH);
+    const scale = 8;
+    bar("try-bt", "try-bht", "try-btv", t, scale);
+    bar("try-bh", "try-bhh", "try-bhv", h, scale);
+    let msg;
+    if (okT && okH) msg = 'Both counts clear the 3-year hurdle. Here the scope of the count does not change the decision, only the margin.';
+    else if (!okT && okH) msg = 'The two counts disagree: the booked ledger rejects the control and the human-capital ledger approves it. The verdict now rests on whether the committee accepts the <span class="num">' + money(INP.human) + '</span> of estimated lines.';
+    else if (r === 0) msg = 'At 0% risk reduction the control saves nothing, so neither count ever pays back.';
+    else msg = 'Neither count clears the hurdle. Counting more cost lines cannot rescue this request at these assumptions.';
+    $("try-sentence").innerHTML = msg;
+    const bt = beRR(INP.booked, capex, H), bh = beRR(totalH, capex, H);
+    const fmtBE = v => v > 1 ? "more than 100% (not possible)" : pct1(v);
+    $("try-be").innerHTML = "At " + money(capex) + " the booked case needs at least <b>" + fmtBE(bt) +
+      "</b> risk reduction to clear 3 years; the human-capital case needs <b>" + fmtBE(bh) +
+      "</b>. You have assumed <b>" + rr.value + "%</b>.";
+    $("try-open").href = "./" + stateHash(capex, +rr.value);
+    if (flow.state.r !== r || flow.state.capex !== capex) flow.set({ r, capex }, "move");
+  }
+  rr.addEventListener("input", update);
+  cx.addEventListener("input", update);
+  $("try-reset").addEventListener("click", () => {
+    rr.value = String(EXAMPLE.riskReductionPct); cx.value = String(EXAMPLE.capex); update(); rr.focus();
+  });
+  update();
+})();
+
+/* ===========================================================================
+   Money flow: the opening figure and the sandbox figure. One tile is $1,000
+   of the published example, so the picture is the arithmetic:
+     left  - the annual incident cost, one tile per $1,000 (booked lines in
+             ink, human-capital lines in accent); tiles the control does not
+             remove (1 - risk reduction) are drawn hollow.
+     right - the capital cost as empty slots. Each year's saving fills
+             annual_benefit / 1000 slots; slots filled after year 3 are drawn
+             in the "slower" colour, so any of them means the hurdle is missed.
+   Payback = slots / saving per year, exactly evaluate()'s capex / benefit.
+   Motion: each tile chases its target; loops run only while something is
+   moving, only on screen, never when reduced motion is asked for.
+   =========================================================================== */
+function MoneyFlow(canvas, opts) {
+  const S = window.Story;
+  const ctx = canvas.getContext("2d");
+  const TILE = 1000, COLS = 10;
+  let W = 0, H = 0, dpr = 1, geo = null, visible = true, un = null, played = false;
+  let state = { r: INP.rr, capex: INP.capex, count: "human" };
+  const cost = [], fill = [];
+  const NB = Math.round(INP.booked / TILE), NH = Math.round(INP.human / TILE);
+  for (let i = 0; i < NB + NH; i++) cost.push({ i, human: i >= NB, x: 0, y: 0, a: 0, tx: 0, ty: 0, ta: 1, d: 0, hollow: false, hd: 0 });
+  const col = {};
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    ["accent", "ink", "ink-2", "muted", "rule-soft", "rule", "warn", "bad-bg", "surface", "paper"].forEach(k => {
+      col[k] = (cs.getPropertyValue("--" + k) || "").trim() || "#888";
+    });
+  }
+  readColors();
+  function reducedNow() { return !!(S && S.reduced && S.reduced()); }
+
+  function totals() {
+    const human = state.count === "human";
+    const annualCost = INP.booked + (human ? INP.human : 0);
+    const res = evaluate(annualCost, state.capex, state.r, INP.horizon);
+    return { human, annualCost, res, perYear: res.annualBenefit / TILE, slots: Math.max(1, Math.round(state.capex / TILE)) };
+  }
+  function layout() {
+    const r = canvas.getBoundingClientRect();
+    W = Math.max(200, r.width); H = Math.max(200, r.height);
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    geom();
+  }
+  /* tile size follows the larger of the two stacks, so dragging the capital
+     cost shrinks every tile together and the two sides stay comparable */
+  function geom() {
+    const pad = Math.max(10, W * 0.035), top = 44, bottom = 58, mid = Math.max(18, W * 0.07);
+    const panelW = (W - pad * 2 - mid - 20) / 2; /* 20px kept on the right for the year labels */
+    const rowsNeeded = Math.max(Math.ceil((NB + NH) / COLS), Math.ceil(Math.max(state.capex / TILE, 150) / COLS));
+    const s = Math.max(3, Math.min(panelW / COLS, (H - top - bottom) / rowsNeeded, 22));
+    geo = { pad, top, bottom, mid, panelW, s, base: H - bottom,
+      lx: pad + (panelW - s * COLS) / 2, rx: pad + panelW + mid + (panelW - s * COLS) / 2 };
+  }
+  function slotXY(k, left) {
+    const c = k % COLS, row = Math.floor(k / COLS);
+    return [(left ? geo.lx : geo.rx) + c * geo.s, geo.base - (row + 1) * geo.s];
+  }
+  /* which cost tiles are saved: the first round(n * r) of each group */
+  function savedList(t) {
+    const bs = Math.round(NB * state.r), hs = t.human ? Math.round(t.annualCost / TILE * state.r) - bs : 0;
+    const out = [];
+    cost.forEach(c => {
+      const k = c.human ? c.i - NB : c.i;
+      c.saved = c.human ? (t.human && k < hs) : k < bs;
+      if (c.saved) out.push(c);
+    });
+    return out;
+  }
+  function retarget(mode) {
+    /* mode: "intro" (drop from above), "replay" (refill with delays), "snap", "move" */
+    if (!geo) layout(); else geom();
+    const t = totals(), saved = savedList(t);
+    const intro = mode === "intro", replay = mode === "replay" || intro;
+    cost.forEach(c => {
+      const [x, y] = slotXY(c.i, true);
+      c.tx = x; c.ty = y;
+      const on = !c.human || t.human;
+      c.ta = on ? 1 : 0;
+      if (!on) c.ty = y + geo.s * 3;
+      c.hollowT = on && !c.saved;
+      if (intro) {
+        c.x = x; c.y = y - geo.top - geo.s * 4 - (c.i % 7) * 3; c.a = 0; c.hollow = false;
+        c.d = (c.human ? 420 : 0) + c.i * 7;
+        c.hd = 1100 + (c.human ? 420 : 0);
+      } else if (mode === "replay" && c.human && on && c.a < 0.5) {
+        c.y = y - geo.s * 6; c.d = (c.i - NB) * 6; c.hd = 700;
+      } else { c.d = 0; c.hd = mode === "replay" ? 300 : 0; }
+    });
+    const n = t.slots, per = t.perYear;
+    const years = per > 0 ? Math.ceil(n / per) : 0;
+    const yearDur = years ? Math.min(520, 2600 / years) : 0;
+    const start = intro ? 1500 + (t.human ? 420 : 0) : (mode === "replay" ? 500 : 0);
+    while (fill.length < n) fill.push({ x: 0, y: 0, a: 0, tx: 0, ty: 0, ta: 1, d: 0, late: false, fresh: true });
+    fill.forEach((f, k) => {
+      if (k >= n || per <= 0) { f.ta = 0; f.d = 0; return; }
+      const [x, y] = slotXY(k, false);
+      const yr = Math.floor(k / per);            /* 0-based year in which this slot is repaid */
+      f.late = (k + 1) > per * INP.hurdle + 1e-9;
+      f.tx = x; f.ty = y; f.ta = 1;
+      if (replay || f.fresh || f.a < 0.05) {
+        const src = saved.length ? saved[k % saved.length] : null;
+        f.x = src ? src.tx : x; f.y = src ? src.ty : y; f.a = 0;
+        f.d = replay ? start + yr * yearDur + ((k - yr * per) / per) * yearDur * 0.85 : (k % COLS) * 4;
+      } else f.d = 0;
+      f.fresh = false;
+    });
+    const label = "Money flow figure. " + (t.human ? "All seven cost lines" : "Booked lines only") + ": " +
+      money(t.annualCost) + " a year of incident cost, " + Math.round(state.r * 100) + "% removed, so " +
+      money(t.res.annualBenefit) + " a year repays a " + money(state.capex) + " control in " +
+      (t.res.payback === null ? "never" : yr2(t.res.payback) + " years") + ", which " +
+      (t.res.payback !== null && t.res.payback <= INP.hurdle ? "clears" : "misses") + " the 3-year hurdle.";
+    canvas.setAttribute("aria-label", label);
+    if (opts.onState) opts.onState(t);
+    if (reducedNow() || mode === "snap") { settleAll(); paint(); return; }
+    start_();
+  }
+  function settleAll() {
+    cost.forEach(c => { c.x = c.tx; c.y = c.ty; c.a = c.ta; c.d = 0; c.hd = 0; c.hollow = c.hollowT; });
+    fill.forEach(f => { f.x = f.tx; f.y = f.ty; f.a = f.ta; f.d = 0; });
+  }
+  function step(dt) {
+    const ms = dt * 1000, k = 1 - Math.exp(-ms / 120), ka = 1 - Math.exp(-ms / 160);
+    let moving = false;
+    const upd = o => {
+      if (o.d > 0) { o.d -= ms; moving = true; return; }
+      o.x += (o.tx - o.x) * k; o.y += (o.ty - o.y) * k; o.a += (o.ta - o.a) * ka;
+      if (Math.abs(o.tx - o.x) > 0.25 || Math.abs(o.ty - o.y) > 0.25 || Math.abs(o.ta - o.a) > 0.01) moving = true;
+      else { o.x = o.tx; o.y = o.ty; o.a = o.ta; }
+    };
+    cost.forEach(c => {
+      upd(c);
+      if (c.hollow !== c.hollowT) { if (c.hd > 0) { c.hd -= ms; moving = true; } else c.hollow = c.hollowT; }
+    });
+    fill.forEach(upd);
+    paint();
+    if (!moving) { un = null; return false; }
+  }
+  function start_() {
+    if (un || !visible || !S || !S.tick) { if (!S || !S.tick) { settleAll(); paint(); } return; }
+    un = S.tick(step);
+  }
+  function tile(x, y, s, color, a, hollow) {
+    if (a <= 0.01) return;
+    const g = Math.max(1, s * 0.16);
+    ctx.globalAlpha = a;
+    if (hollow) {
+      ctx.strokeStyle = color; ctx.lineWidth = 1;
+      ctx.globalAlpha = a * 0.55;
+      ctx.strokeRect(x + g / 2 + 0.5, y + g / 2 + 0.5, s - g - 1, s - g - 1);
+    } else { ctx.fillStyle = color; ctx.fillRect(x + g / 2, y + g / 2, s - g, s - g); }
+  }
+  function paint() {
+    if (!geo) return;
+    const t = totals(), s = geo.s;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+    const small = W < 420;
+    const f = (px, w) => (w || 600) + " " + px + "px 'IBM Plex Mono', ui-monospace, monospace";
+    /* panel heads */
+    ctx.fillStyle = col.muted; ctx.font = f(small ? 9.5 : 10.5); ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    ctx.fillText("INCIDENT COST / YR", geo.lx, 14);
+    ctx.fillText("CAPITAL COST", geo.rx, 14);
+    ctx.fillStyle = col.ink; ctx.font = f(small ? 13 : 15, 700);
+    ctx.fillText(money(t.annualCost), geo.lx, 32);
+    ctx.fillText(money(state.capex), geo.rx, 32);
+    /* empty capital slots */
+    ctx.strokeStyle = col["rule-soft"]; ctx.lineWidth = 1; ctx.globalAlpha = 0.9;
+    for (let k = 0; k < t.slots; k++) { const [x, y] = slotXY(k, false); const g = Math.max(1, s * 0.16); ctx.strokeRect(x + g / 2 + 0.5, y + g / 2 + 0.5, s - g - 1, s - g - 1); }
+    ctx.globalAlpha = 1;
+    /* tiles */
+    cost.forEach(c => tile(c.x, c.y, s, c.human ? col.accent : col["ink-2"], c.a, c.hollow));
+    fill.forEach(f2 => tile(f2.x, f2.y, s, f2.late ? col["bad-bg"] : col.accent, f2.a, false));
+    ctx.globalAlpha = 1;
+    /* hurdle marker: the slot level reached by the end of year 3 */
+    if (t.perYear > 0) {
+      const lvl = t.perYear * INP.hurdle;
+      if (lvl < t.slots) {
+        const rows = lvl / COLS, y = geo.base - rows * s;
+        ctx.strokeStyle = col.warn; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
+        ctx.beginPath(); ctx.moveTo(geo.rx - 6, y); ctx.lineTo(geo.rx + COLS * s + 6, y); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = col.warn; ctx.font = f(small ? 9.5 : 10.5, 700); ctx.textAlign = "right";
+        ctx.fillText("YR 3", geo.rx - 8, y + 4);
+      }
+    }
+    /* one tick per year of saving on the right edge of the capital block */
+    if (t.perYear > 0) {
+      const years = Math.min(Math.ceil(t.slots / t.perYear), 12);
+      ctx.strokeStyle = col.muted; ctx.lineWidth = 1; ctx.fillStyle = col.muted; ctx.font = f(small ? 8.5 : 9.5); ctx.textAlign = "left";
+      const xr = geo.rx + COLS * s + 3;
+      let lastY = Infinity;
+      for (let y = 1; y <= years; y++) {
+        const lvl = Math.min(t.slots, t.perYear * y), yy = geo.base - (lvl / COLS) * s;
+        ctx.beginPath(); ctx.moveTo(xr, yy); ctx.lineTo(xr + 5, yy); ctx.stroke();
+        if (lastY - yy >= 11) { ctx.fillText(String(y), xr + 8, yy + 3); lastY = yy; }
+      }
+    }
+    /* result line */
+    const ok = t.res.payback !== null && t.res.payback <= INP.hurdle;
+    ctx.textAlign = "left";
+    ctx.fillStyle = col.muted; ctx.font = f(small ? 9.5 : 10.5);
+    ctx.fillText("SAVED " + money(t.res.annualBenefit) + " / YR", geo.lx, H - 34);
+    ctx.fillText("REPAID IN", geo.rx, H - 34);
+    ctx.fillStyle = ok ? col.accent : col["bad-bg"]; ctx.font = f(small ? 15 : 18, 700);
+    ctx.fillText(t.res.payback === null ? "never" : yr2(t.res.payback) + " yr", geo.rx, H - 12);
+    ctx.fillStyle = col.ink; ctx.font = f(small ? 10 : 11, 600);
+    ctx.fillText(small ? (ok ? "Clears 3 yr" : "Misses 3 yr") : (ok ? "Clears the 3-yr hurdle" : "Misses the 3-yr hurdle"), geo.lx, H - 12);
+  }
+  layout();
+  if (window.ResizeObserver) new ResizeObserver(() => { const r = canvas.getBoundingClientRect(); if (Math.abs(r.width - W) > 1 || Math.abs(r.height - H) > 1) { layout(); retarget("snap"); } }).observe(canvas);
+  if (S && S.theme && S.theme.onChange) S.theme.onChange(() => { readColors(); paint(); });
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(es => {
+      visible = es[0].isIntersecting;
+      if (visible && !played) { played = true; if (opts.onFirstView) opts.onFirstView(); else retarget("intro"); }
+      else if (visible) start_();
+      else if (un) { un(); un = null; settleAll(); paint(); }
+    }, { threshold: 0.25 }).observe(canvas);
+  } else played = true;
+  /* initial frame: the final state is drawn immediately, so the figure is never blank */
+  retarget("snap");
+  return {
+    set(next, mode) { Object.assign(state, next); retarget(mode || "move"); },
+    get state() { return Object.assign({}, state); }
+  };
+}
+
+function flowToggle(root, flow, onChange) {
+  const btns = Array.from(root.querySelectorAll("[data-count]"));
+  const sync = () => btns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.count === flow.state.count)));
+  btns.forEach(b => b.addEventListener("click", () => {
+    if (flow.state.count === b.dataset.count) return;
+    flow.set({ count: b.dataset.count }, "replay"); sync(); if (onChange) onChange();
+  }));
+  sync();
+  return { sync };
+}
+function flowCaption(el, t) {
+  if (!el) return;
+  const ok = t.res.payback !== null && t.res.payback <= INP.hurdle;
+  el.innerHTML = (t.human ? "All seven lines" : "Booked lines only") + ": <b>" + money(t.annualCost) +
+    "</b> a year of incident cost, " + Math.round(t.res.annualBenefit / t.annualCost * 100 || 0) + "% removed, repays <b>" +
+    money(t.slots * 1000) + "</b> in <b>" + (t.res.payback === null ? "never" : yr2(t.res.payback) + " years") + "</b>. " +
+    (ok ? "Clears" : "Misses") + " the 3-year hurdle.";
+}
+
+/* ===========================================================================
    Wiring: orbs, scenes, chrome
    =========================================================================== */
 (function wire() {
   const S = window.Story;
-  const heroOrb = S.orb($("orb-hero"), {
-    density: 2200, state: "breathing",
-    label: "Animated dot orb standing in for the investment case under review."
+  /* the opening figure: the booked count fills the capital slots first, then
+     the four human-capital lines arrive and the same slots refill faster */
+  let heroTouched = false, heroTimer = 0, heroToggle = null;
+  const heroFlow = MoneyFlow($("flow-hero-cv"), {
+    onState: t => flowCaption($("flow-hero-cap"), t),
+    onFirstView: () => {
+      if (S.reduced()) return;
+      heroFlow.set({ count: "booked" }, "intro");
+      if (heroToggle) heroToggle.sync();
+      heroTimer = setTimeout(() => {
+        if (heroTouched) return;
+        heroFlow.set({ count: "human" }, "replay");
+        if (heroToggle) heroToggle.sync();
+      }, 4600);
+    }
   });
+  heroToggle = flowToggle($("flow-hero"), heroFlow, () => { heroTouched = true; clearTimeout(heroTimer); });
   S.field($("hero-field"), { density: 1 });
   [
     { sel: '[data-scene="1"]', apply: ledgerState },
@@ -4882,7 +5492,6 @@ dataTable($("mc-table"), "Simulated payback distribution (2,000 draws each)",
       companionSize: 132,
       onStep: (i) => {
         sc.apply(i);
-        if (root.dataset.scene === "1") heroOrb.setState(i >= 3 ? "grounded" : "working");
       },
       onProgress: (i, p) => { root.style.setProperty("--p", p.toFixed(3)); }
     });
