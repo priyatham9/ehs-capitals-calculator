@@ -675,7 +675,7 @@ html.st-printing .brief-card,html.st-printing .so-what > div,html.st-printing .t
 html.st-printing .try-actions,html.st-printing .dial input[type=range]{display:none!important}
 /*STORY_CSS_START*/
 /* ============================================================
-   story.css  -  shared storytelling engine styles  (v1.1)
+   story.css  -  shared storytelling engine styles  (v1.4)
    Depends on tokens defined in tools/shared.css:
    --paper --surface --surface-2 --ink --ink-2 --muted --rule
    --rule-soft --accent --accent-2 --accent-ink --accent-wash
@@ -1273,6 +1273,62 @@ html.st-printing [class*="stat"],html.st-printing [class*="kpi"],html.st-printin
 /* print tokens must beat page theme blocks (:root[data-theme], prefers-color-scheme) */
 html.st-printing:root,html.st-printing:root[data-theme="dark"],html.st-printing:root[data-theme="light"],html.st-printing:root:not([data-theme="light"]){--paper:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--ink-2:#1a1a1a;--muted:#444;--rule:#000;--rule-soft:#b8b8b8;--accent:#000;--accent-2:#000;--accent-ink:#fff;--accent-wash:#fff;--warn:#000;--warn-wash:#fff;background:#fff;color:#000}
 @media print{:root,:root[data-theme="dark"],:root[data-theme="light"],:root:not([data-theme="light"]){--paper:#fff;--surface:#fff;--surface-2:#fff;--ink:#000;--ink-2:#1a1a1a;--muted:#444;--rule:#000;--rule-soft:#b8b8b8;--accent:#000;--accent-2:#000;--accent-ink:#fff;--accent-wash:#fff;--warn:#000;--warn-wash:#fff;background:#fff;color:#000}}
+
+/* ---------- v1.4 dock: phone safe areas, calmer motion, visible focus ---------- */
+/* the dock clears the iPhone home indicator; the page's end clears the dock */
+.st-way{bottom:calc(12px + env(safe-area-inset-bottom, 0px))}
+body.st-has-way{padding-bottom:calc(var(--st-way-h,64px) + 22px + env(safe-area-inset-bottom, 0px))}
+/* the pill clips its children, so the focus ring sits inside the button, not outside it */
+.st-way .st-way-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+/* tap targets on phones: at least 40px tall */
+@media(max-width:520px){.st-way a.st-way-btn,.st-way button.st-way-btn{min-height:40px;min-width:40px;justify-content:center}}
+/* reduced motion: no lift on hover, no sliding lamp */
+@media (prefers-reduced-motion: reduce){.st-way a.st-way-btn,.st-way button.st-way-btn,.st-way-map .st-way-btn{transition:none!important}.st-way a.st-way-btn:hover,.st-way button.st-way-btn:hover,.st-way-map .st-way-btn:hover{transform:none!important}}
+.st-reduced .st-way a.st-way-btn:hover,.st-reduced .st-way button.st-way-btn:hover{transform:none!important}
+/* an open site map owns the screen: the dock underneath is inert to the eye too */
+html:has(.st-way-map.is-open) .st-way{visibility:hidden}
+/* phones: the headline comes first and the orb follows it, smaller; the dotted backdrop
+   never pokes past the viewport edge (it caused sideways scroll at 390px) */
+@media(max-width:900px){
+  .st-hero .st-hero-orb{order:0;width:min(56vw,260px)}
+  .st-hero::before{left:0;right:0}
+}
+
+/* ---------- v1.4 motion primitives ---------- */
+/* particles: the canvas takes its container's width; height is set by the engine */
+canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
+/* kinetic type: words rise line by line; the key word gets an accent underline once the line lands */
+.st-kinetic .st-kw{display:inline-block;opacity:0;transform:translateY(.42em);
+  transition:opacity .6s var(--st-ease,cubic-bezier(.2,.7,.2,1)),transform .75s var(--st-ease,cubic-bezier(.2,.7,.2,1));
+  transition-delay:calc(var(--l,0) * 110ms)}
+.st-kinetic.is-in .st-kw{opacity:1;transform:none}
+.st-kinetic .st-kkey{font-style:inherit;background-image:linear-gradient(var(--accent),var(--accent));background-repeat:no-repeat;
+  background-position:0 92%;background-size:0% .09em;transition:background-size .8s cubic-bezier(.65,0,.35,1) .55s;color:inherit}
+.st-kinetic.is-in .st-kkey{background-size:100% .09em}
+.st-kinetic mark.st-kkey{background-color:transparent}
+.st-reduced .st-kinetic .st-kw,.st-printing .st-kinetic .st-kw{opacity:1!important;transform:none!important;transition:none!important}
+.st-reduced .st-kinetic .st-kkey,.st-printing .st-kinetic .st-kkey{background-size:100% .09em!important;transition:none!important}
+@media (prefers-reduced-motion: reduce){
+  .st-kinetic .st-kw{opacity:1!important;transform:none!important;transition:none!important}
+  .st-kinetic .st-kkey{background-size:100% .09em!important;transition:none!important}
+}
+@media print{.st-kinetic .st-kw{opacity:1!important;transform:none!important}}
+/* view transitions: a short, even cross-fade; none at all under reduced motion */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.42s;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+@media (prefers-reduced-motion: reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+/* scroll-driven reveal and parallax, CSS only, where the browser supports view timelines.
+   Elsewhere (and under reduced motion) the element simply sits in its final place. */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    [data-st-scrollfade]{animation:st-sd-fade linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
+    [data-st-parallax]{animation:st-sd-par linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+  }
+}
+@keyframes st-sd-fade{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes st-sd-par{from{transform:translateY(calc(var(--st-par, 24px) * 1))}to{transform:translateY(calc(var(--st-par, 24px) * -1))}}
+.st-reduced [data-st-scrollfade],.st-reduced [data-st-parallax],.st-printing [data-st-scrollfade],.st-printing [data-st-parallax]{animation:none!important;opacity:1!important;transform:none!important}
+/* cross-page transitions: same-origin navigations across the programme cross-fade where supported; instant elsewhere */
+@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}
 /*STORY_CSS_END*/
 </style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
@@ -1390,7 +1446,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     <div class="st-hero">
       <canvas class="st-field" id="hero-field" aria-hidden="true"></canvas>
       <div>
-        <div class="hero-eyebrow"><span class="pulse"></span><span class="label">The capital case - story 5 of 6</span></div>
+        <div class="hero-eyebrow"><span class="pulse"></span><span class="label">The capital case - story 6 of 7</span></div>
         <h1 class="display">The same control, counted twice, gets two answers</h1>
         <p class="hero-role">A $150,000 loading-station control pays back in 3.41 years on the booked ledger and 1.59 years once the human-capital lines are priced. The control did not change. The accounting did.</p>
         <div class="st-bignum-row hero-nums">
@@ -1762,7 +1818,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   <div class="wrap">
     <a class="nextcard" data-st-spotlight data-st-reveal href="https://priyatham9.github.io/ehs-benchmarks/story.html">
       <div>
-        <span class="label">Next story - 6 of 6</span>
+        <span class="label">Next story - 7 of 7</span>
         <h2 class="display">Compared with whom</h2>
         <p>A rate means nothing until you pick the peer group. Changing the NAICS band changes the verdict on the same site.</p>
         <span class="nextcard-go mono">Read it &rarr;</span>
@@ -3759,8 +3815,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       // capture phase + stop: pages may carry their own arrow handlers, the presenter must be the only one acting
       if (e.key === "Escape") { e.stopImmediatePropagation(); exit(); return; }
       if (e.key === "n" || e.key === "N") {
-        var t = e.target;
-        if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+        if (isTyping(e.target)) return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         e.preventDefault(); e.stopImmediatePropagation(); toggleNotes(); return;
       }
@@ -3786,12 +3841,17 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     };
     return presentState;
   }
+  // a key press that belongs to a form control never triggers a page shortcut
+  function isTyping(t) {
+    return !!(t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable));
+  }
   function autoPresent(opts) {
     // P toggles, ?present=1 starts in presenter mode
     addEventListener("keydown", function (e) {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      var t = e.target;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey || e.defaultPrevented) return;
+      if (isTyping(e.target)) return;
+      // the site map is a modal: P must not start a presentation behind it
+      if (document.querySelector(".st-way-map.is-open")) return;
       if (e.key === "p" || e.key === "P") { if (presentState) presentState.exit(); else present(opts); }
     });
     if (/[?&]present=1/.test(location.search)) {
@@ -3898,15 +3958,23 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   };
   var DOOR_LABEL = { story: "Story", project: "Project page", tool: "Tool" };
 
+  // The page's own address. Preview hosts, localhost and file:// serve the page
+  // under a different path, so the canonical link (when present) wins.
+  function pagePath() {
+    var path = location.pathname, canon = document.querySelector('link[rel="canonical"]');
+    if (canon && canon.href) { try { path = new URL(canon.href).pathname; } catch (e) { } }
+    return path;
+  }
   function detectCurrent() {
-    var parts = location.pathname.split("/").filter(Boolean);
+    var path = pagePath();
+    var parts = path.split("/").filter(Boolean);
     var key = null, file = parts.length ? parts[parts.length - 1] : "";
     for (var i = 0; i < parts.length; i++) if (REPO_KEY[parts[i]]) key = REPO_KEY[parts[i]];
     if (!key) return null;
     if (!/\.html?$/.test(file)) file = "";
     var door = "project";
     if (file === "story.html" || (key === "hub" && (file === "" || file === "index.html"))) door = "story";
-    else if (/^(explore|try|walkthrough|crosswalk|observatory|start|changelog)\.html$/.test(file) || /api/.test(location.pathname)) door = "tool";
+    else if (/^(explore|try|walkthrough|crosswalk|observatory|start|changelog)\.html$/.test(file) || /\/api(\/|$)/.test(path)) door = "tool";
     return { key: key, door: door };
   }
 
@@ -4001,11 +4069,16 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
       lamp.style.width = r.width.toFixed(1) + "px";
     }
     function measure() {
-      document.documentElement.style.setProperty("--st-way-h", Math.round(bar.getBoundingClientRect().height || 64) + "px");
+      var h = Math.round(bar.getBoundingClientRect().height || 64);
+      document.documentElement.style.setProperty("--st-way-h", h + "px");
+      // keyboard focus, find-in-page and anchor jumps scroll content clear of the floating dock
+      document.documentElement.style.scrollPaddingBottom = (h + 28) + "px";
       lampTo(idx);
     }
     measure();
     addEventListener("resize", measure);
+    // the bar's height settles once webfonts load; the lamp and the padding follow it
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure, function () { });
     // hovering Prev or Next previews where the light would move
     function peek(btn, to) {
       if (!btn) return;
@@ -4135,8 +4208,9 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     closeBtn.addEventListener("click", close);
     function key2(e) {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      var t = e.target;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if (isTyping(e.target) || e.defaultPrevented) return;
+      // presenter mode hides the map; opening it there would only lock the page's scroll
+      if (presentState) return;
       if ((e.key === "m" || e.key === "M") && !isOpen) { e.preventDefault(); open(); }
     }
     addEventListener("keydown", key2);
@@ -4165,7 +4239,8 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   function autoFindings() {
     var ch = els(".st-chapter");
     // story pages and the hub (itself a story) keep one fixed bar only: the wayfinder
-    if (/story\.html$/.test(location.pathname) || /\/grounded\/(docs\/)?(index\.html)?$/.test(location.pathname)) document.body.classList.add("st-story");
+    var pp = pagePath();
+    if (/story\.html$/.test(pp) || /story\.html$/.test(location.pathname) || /\/grounded\/(docs\/)?(index\.html)?$/.test(pp)) document.body.classList.add("st-story");
     if (ch.length < 2 || document.querySelector(".st-findings")) return;
     var nav = html("nav", "st-findings");
     nav.setAttribute("aria-label", "Findings in this story");
@@ -4604,6 +4679,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     autoChapters(); autoFindings();
     try { autoGloss(); } catch (e) { if (global.console) console.error(e); }
     try { autoWords(); } catch (e) { if (global.console) console.error(e); }
+    try { autoKinetic(); } catch (e) { if (global.console) console.error(e); }
     autoWayfinder();
     try { spotlight(document); } catch (e) { if (global.console) console.error(e); }
     // ?print=1 previews the handout layout on screen; reload or call Story._printRestore() to leave it
@@ -4613,10 +4689,394 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
   else boot();
 
   /* ---------------------------------------------------------
+     8e. motion primitives (v1.4)  -  data-true, reduced-motion safe
+
+     Story.particles(host, opts)          canvas scene: N marks built from real
+                                          counts morph between layouts
+     Story.morphScene(scene, figure, o)   pinned scroll scene that drives a
+                                          figure between named states
+     Story.marks(svgGroup, opts)          keyed SVG marks, tweened between
+                                          states (object constancy)
+     Story.kinetic(node, opts)            staggered line reveal, key-word
+                                          emphasis, count-up numbers
+     Story.viewTransition(update)         View Transitions API with an
+                                          instant fallback
+
+     Rules shared by all five: the final state is always reachable without
+     animation (reduced motion, ?reduced=1, print, no IntersectionObserver),
+     loops run on the shared ticker (so a hidden tab stops them) and stop
+     when the element leaves the viewport, and canvas backing stores cap
+     devicePixelRatio at 2.
+     --------------------------------------------------------- */
+
+  /* seeded random, so a layout is the same on every visit and every resize */
+  function seeded(seed) {
+    var s = (seed >>> 0) || 1;
+    return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+  }
+  function easeInOut(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function colorOf(c) {
+    // a token name ("accent", "--muted") or any CSS colour
+    if (!c) return Theme.rgb("muted");
+    var name = String(c).replace(/^--/, "");
+    if (Theme.tokens[name]) return Theme.rgb(name);
+    return parseColor(c);
+  }
+
+  /* Story.particles(host, {
+       groups: [{ count, color, label }],   counts are real values (or real values scaled; say so in the label)
+       layout: "field" | "grid" | "bars" | fn(i, opts, W, H, {group, rank, n}) -> [x, y, cell?]
+       shape: "square" | "dot",  aspect: height/width (default .62), height: px (overrides aspect)
+       label: aria-label text, gap: px between grid cells, seed
+     })
+     -> { to(layout, {groups, duration, stagger, cols, order}), layouts, el, canvas, setLabel, destroy, get state }
+
+     Membership is by index: with groups [{count:21},{count:979}] marks 0..20
+     belong to group 0. Passing new counts to to() recolours marks in place, so
+     the same marks carry the change (object constancy). */
+  function particles(host, opts) {
+    opts = opts || {};
+    host = isEl(host) ? host : el(host);
+    if (!host) return null;
+    var canvas = host.tagName === "CANVAS" ? host : host.querySelector("canvas.st-particles");
+    if (!canvas) { canvas = document.createElement("canvas"); canvas.className = "st-particles"; host.appendChild(canvas); }
+    canvas.setAttribute("role", "img");
+    if (opts.label) canvas.setAttribute("aria-label", opts.label);
+    var ctx = canvas.getContext("2d");
+    var groups = (opts.groups || [{ count: 100 }]).map(function (g) { return { count: Math.max(0, Math.round(g.count || 0)), color: g.color, label: g.label }; });
+    var N = groups.reduce(function (a, g) { return a + g.count; }, 0);
+    var shape = opts.shape || "square";
+    var rnd = seeded(opts.seed || 7);
+    var jitter = []; for (var j = 0; j < N * 3; j++) jitter.push(rnd());
+    // per-mark state: from/to position, current group and previous group (for the colour cross-fade)
+    var X = new Float32Array(N), Y = new Float32Array(N), FX = new Float32Array(N), FY = new Float32Array(N),
+      TX = new Float32Array(N), TY = new Float32Array(N), G = new Uint16Array(N), PG = new Uint16Array(N),
+      D = new Float32Array(N), R = new Uint32Array(N);
+    var W = 0, H = 0, dpr = 1, cell = 4, size = 3, t = 1, dur = 900, unTick = null, visible = true, destroyed = false;
+    var state = null, curLayout = "field", layoutOpts = {}, drift = 0, palette = [];
+
+    function assign(gs) {
+      var k = 0;
+      for (var gi = 0; gi < gs.length; gi++) for (var c = 0; c < gs[gi].count && k < N; c++) G[k++] = gi;
+      while (k < N) G[k++] = gs.length - 1;
+    }
+    assign(groups); PG.set(G);
+    var pstr = [], mixCache = {};
+    function readPalette() {
+      palette = groups.map(function (g) { return colorOf(g.color); });
+      pstr = palette.map(function (c) { return "rgb(" + (c[0] | 0) + "," + (c[1] | 0) + "," + (c[2] | 0) + ")"; });
+      mixCache = {};
+    }
+    readPalette();
+
+    var layouts = {
+      // scattered: the noise before the analysis
+      field: function (i) {
+        var pad = size * 2;
+        return [pad + jitter[i * 3] * (W - pad * 2), pad + jitter[i * 3 + 1] * (H - pad * 2)];
+      },
+      // waffle: row-major cells, marks in index order (group 0 first)
+      grid: function (i, o) {
+        var cols = o.cols || Math.max(10, Math.round(Math.sqrt(N * W / Math.max(1, H))));
+        var rows = Math.ceil(N / cols), c = Math.min(W / cols, H / rows);
+        var ox = (W - cols * c) / 2, oy = (H - rows * c) / 2;
+        return [ox + (i % cols + .5) * c, oy + (Math.floor(i / cols) + .5) * c, c];
+      },
+      // one column per group, stacked from the baseline; heights follow counts
+      bars: function (i, o) {
+        var ng = groups.length, colW = W / ng, per = o.perRow || Math.max(4, Math.floor(colW * .62 / Math.max(3, cell)));
+        var gi = G[i], idx = R[i];
+        var c = Math.min(cell, (colW * .62) / per);
+        var x0 = colW * gi + (colW - per * c) / 2;
+        return [x0 + (idx % per + .5) * c, H - (Math.floor(idx / per) + .5) * c - 2, c];
+      }
+    };
+
+    function resize() {
+      var r = (host.tagName === "CANVAS" ? host.parentNode : host).getBoundingClientRect();
+      var w = Math.max(160, Math.round(r.width));
+      var h = Math.round(opts.height || w * (opts.aspect || .62));
+      if (w === W && h === H) return false;
+      W = w; H = h;
+      dpr = Math.min(2, global.devicePixelRatio || 1);
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + "px"; canvas.style.height = H + "px";
+      // mark size from the area each mark gets in a filled grid
+      cell = Math.sqrt((W * H) / Math.max(1, N)) * .92;
+      size = Math.max(1.4, cell * (opts.fill || .72));
+      return true;
+    }
+    function targets(layout, o) {
+      var fn = typeof layout === "function" ? layout : layouts[layout] || layouts.field;
+      curLayout = layout;
+      // each mark's rank inside its own group (bars and custom layouts use it)
+      var seen = {};
+      for (var r = 0; r < N; r++) { R[r] = seen[G[r]] || 0; seen[G[r]] = R[r] + 1; }
+      for (var i = 0; i < N; i++) {
+        var p = fn(i, o || {}, W, H, { group: G[i], rank: R[i], n: N });
+        TX[i] = p[0]; TY[i] = p[1];
+        if (p[2]) { cell = p[2]; size = Math.max(1.4, cell * (opts.fill || .72)); }
+      }
+    }
+    function paint() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      var s = size, hs = s / 2, lastColor = "";
+      for (var i = 0; i < N; i++) {
+        var local = clamp((t * (1 + (opts.stagger == null ? .35 : opts.stagger)) - D[i]), 0, 1), e = easeInOut(local);
+        var x = X[i] = lerp(FX[i], TX[i], e), y = Y[i] = lerp(FY[i], TY[i], e);
+        if (drift && !reduced()) { x += Math.sin(drift * .8 + i) * cell * .18; y += Math.cos(drift * .6 + i * 1.3) * cell * .18; }
+        // colour cross-fade in 16 cached steps: no string building per mark per frame
+        var pa = PG[i], pb = G[i], col;
+        if (pa === pb || e >= 1) col = pstr[pb] || pstr[0];
+        else {
+          var q = (e * 16) | 0, ck = pa * 4096 + pb * 32 + q;
+          col = mixCache[ck];
+          if (!col) {
+            var a = palette[pa] || palette[0], b = palette[pb] || palette[0], f = q / 16;
+            col = mixCache[ck] = "rgb(" + (lerp(a[0], b[0], f) | 0) + "," + (lerp(a[1], b[1], f) | 0) + "," + (lerp(a[2], b[2], f) | 0) + ")";
+          }
+        }
+        if (col !== lastColor) { ctx.fillStyle = col; lastColor = col; }
+        if (shape === "dot") { ctx.beginPath(); ctx.arc(x, y, hs, 0, 6.2832); ctx.fill(); }
+        else ctx.fillRect(x - hs, y - hs, s, s);
+      }
+    }
+    function loop(dt) {
+      if (destroyed) return false;
+      if (!visible) { unTick = null; return false; }
+      var moving = t < 1;
+      if (moving) t = Math.min(1, t + dt * 1000 / dur);
+      // the field breathes a little while it is the current state; every other layout holds still
+      if (state === "field" && !reduced()) drift += dt; else drift = 0;
+      paint();
+      if (!moving && state !== "field") { PG.set(G); unTick = null; return false; }
+    }
+    function run() { if (!unTick && visible && !destroyed) unTick = tick(loop); }
+
+    function to(layout, o) {
+      o = o || {};
+      layoutOpts = o;
+      if (o.groups) {
+        PG.set(G);
+        o.groups.forEach(function (g, gi) { if (groups[gi]) groups[gi].count = Math.max(0, Math.round(g.count || 0)); });
+        assign(groups);
+      } else PG.set(G);
+      for (var i = 0; i < N; i++) { FX[i] = X[i]; FY[i] = Y[i]; }
+      targets(layout, o);
+      state = typeof layout === "string" ? layout : "custom";
+      dur = o.duration || opts.duration || 900;
+      // stagger by position (left to right, top to bottom) so the change reads as a wave
+      var sg = o.stagger == null ? (opts.stagger == null ? .35 : opts.stagger) : o.stagger;
+      for (var k = 0; k < N; k++) D[k] = sg * ((TX[k] / Math.max(1, W)) * .6 + (TY[k] / Math.max(1, H)) * .25 + jitter[k * 3 + 2] * .15);
+      if (reduced() || printing || !visible || o.instant) { t = 1; paint(); PG.set(G); return api; }
+      t = 0; run();
+      return api;
+    }
+
+    resize();
+    targets(opts.layout || "field", {});
+    for (var i0 = 0; i0 < N; i0++) { X[i0] = FX[i0] = TX[i0]; Y[i0] = FY[i0] = TY[i0]; }
+    state = typeof opts.layout === "string" ? opts.layout : (opts.layout ? "custom" : "field");
+    t = 1; paint();
+
+    var io = null, ro = null;
+    if (global.IntersectionObserver) {
+      io = new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && (t < 1 || state === "field")) run(); }, { rootMargin: "80px" });
+      io.observe(canvas);
+    }
+    function onResize() {
+      if (!resize()) return;
+      targets(curLayout, layoutOpts);
+      for (var i = 0; i < N; i++) { X[i] = FX[i] = TX[i]; Y[i] = FY[i] = TY[i]; }
+      t = 1; paint();
+    }
+    if (global.ResizeObserver) { ro = new ResizeObserver(onResize); ro.observe(host.tagName === "CANVAS" ? host.parentNode : host); }
+    else addEventListener("resize", onResize);
+    var unTheme = Theme.onChange(function () { readPalette(); paint(); });
+    if (state === "field") run();
+
+    var api = {
+      el: host, canvas: canvas, layouts: layouts, to: to,
+      get state() { return state; }, get count() { return N; },
+      setLabel: function (s) { canvas.setAttribute("aria-label", s); },
+      destroy: function () {
+        destroyed = true; if (unTick) unTick(); if (io) io.disconnect(); if (ro) ro.disconnect(); else removeEventListener("resize", onResize);
+        unTheme(); if (canvas.parentNode === host) canvas.remove();
+      }
+    };
+    return api;
+  }
+
+  /* Story.morphScene(scene, figure, opts)
+     A pinned .st-scene whose steps carry data-state="name". As the reader
+     scrolls, the figure is driven to that state: figure.to(name, {dir, step})
+     for a particles/marks-style object, or figure(name, index, dir) for a
+     function. Built on scenes(), so presenter mode, print and reduced motion
+     (which lands on the last step) all work unchanged. opts are passed to
+     scenes(); the companion orb is off by default. */
+  function morphScene(root, figure, opts) {
+    opts = opts || {};
+    var user = opts.onStep, lastState = null;
+    var o = {};
+    for (var k in opts) o[k] = opts[k];
+    if (o.companion == null) o.companion = false;
+    o.onStep = function (i, node, dir) {
+      var name = node && node.getAttribute("data-state");
+      if (name && name !== lastState) {
+        lastState = name;
+        if (typeof figure === "function") figure(name, i, dir);
+        else if (figure && figure.to) figure.to(name, { dir: dir, step: i, node: node });
+      }
+      if (user) user(i, node, dir);
+    };
+    return scenes(root, o);
+  }
+
+  /* Story.marks(svgOrGroup, { duration, ease })
+     -> { update([{ key, tag, attrs, text }], { duration }), get(key), clear() }
+     Keyed SVG marks: a mark with the same key keeps its element and tweens its
+     numeric attributes (x, y, width, height, cx, cy, r, x1..y2, opacity) to the
+     new values; new keys fade in, missing keys fade out. Under reduced motion
+     every update lands at once. */
+  var NUMERIC = /^(x|y|x1|x2|y1|y2|cx|cy|r|rx|ry|width|height|opacity|stroke-width|fill-opacity|stroke-opacity)$/;
+  function marks(parent, mopts) {
+    mopts = mopts || {};
+    parent = isEl(parent) ? parent : el(parent);
+    var byKey = {};
+    function setAttrs(n, attrs) { for (var a in attrs) if (attrs[a] != null) n.setAttribute(a, attrs[a]); }
+    function update(list, o) {
+      o = o || {};
+      var dur = o.duration || mopts.duration || 600, seen = {};
+      (list || []).forEach(function (m, idx) {
+        var key = String(m.key != null ? m.key : idx);
+        seen[key] = 1;
+        var rec = byKey[key], attrs = m.attrs || {};
+        if (!rec) {
+          var n = mk(m.tag || "rect", null, parent);
+          n.setAttribute("data-key", key);
+          setAttrs(n, attrs);
+          if (m.text != null) n.textContent = m.text;
+          rec = byKey[key] = { n: n, cur: {} };
+          for (var a in attrs) if (NUMERIC.test(a)) rec.cur[a] = parseFloat(attrs[a]);
+          var op = attrs.opacity != null ? parseFloat(attrs.opacity) : 1;
+          n.setAttribute("opacity", 0);
+          tween(0, op, function (v) { n.setAttribute("opacity", v.toFixed(3)); }, { duration: dur * .8 });
+          return;
+        }
+        if (rec.anim) rec.anim.stop();
+        if (rec.leaving) { rec.leaving = false; }
+        if (m.text != null) rec.n.textContent = m.text;
+        var from = {}, dest = {};
+        for (var b in attrs) {
+          if (NUMERIC.test(b) && isFinite(parseFloat(attrs[b]))) {
+            from[b] = rec.cur[b] != null ? rec.cur[b] : parseFloat(rec.n.getAttribute(b) || attrs[b]);
+            dest[b] = parseFloat(attrs[b]);
+          } else rec.n.setAttribute(b, attrs[b]);
+        }
+        if (attrs.opacity == null && rec.n.getAttribute("opacity") !== "1") { from.opacity = parseFloat(rec.n.getAttribute("opacity") || 1); dest.opacity = 1; }
+        rec.anim = tween(0, 1, function (v) {
+          var e = v;
+          for (var c in dest) { var val = lerp(from[c], dest[c], e); rec.cur[c] = val; rec.n.setAttribute(c, +val.toFixed(2)); }
+        }, { duration: dur, ease: "inOut" });
+      });
+      Object.keys(byKey).forEach(function (key) {
+        if (seen[key]) return;
+        var rec = byKey[key];
+        if (rec.anim) rec.anim.stop();
+        rec.leaving = true;
+        var op0 = parseFloat(rec.n.getAttribute("opacity") || 1);
+        rec.anim = tween(op0, 0, function (v, done) {
+          rec.n.setAttribute("opacity", v.toFixed(3));
+          if (done && rec.leaving) { rec.n.remove(); delete byKey[key]; }
+        }, { duration: dur * .6, onDone: function () { if (rec.leaving && rec.n.parentNode) { rec.n.remove(); delete byKey[key]; } } });
+      });
+    }
+    return {
+      update: update,
+      get: function (key) { var r = byKey[String(key)]; return r ? r.n : null; },
+      clear: function () { Object.keys(byKey).forEach(function (k) { byKey[k].n.remove(); }); byKey = {}; }
+    };
+  }
+
+  /* Story.kinetic(node, { key, count })
+     Headline or number that enters as a considered moment, once:
+       * words rise in line by line (a stagger per rendered line, not per word)
+       * the key word (an <em>, <mark> or [data-st-key] inside) gets an accent
+         underline that draws after the line lands
+       * any [data-st-count] inside counts up to the number already written in it
+     The text is fully present in the HTML; without JS, or with reduced motion,
+     it simply shows. Auto-applied to [data-st-kinetic]. */
+  function kinetic(node, kopts) {
+    kopts = kopts || {};
+    node = isEl(node) ? node : el(node);
+    if (!node || node.__stKinetic) return null;
+    node.__stKinetic = 1;
+    var counts = els("[data-st-count]", node);
+    if (node.hasAttribute("data-st-count")) counts.push(node);
+    var keys = els("em,mark,[data-st-key]", node);
+    keys.forEach(function (k) { k.classList.add("st-kkey"); });
+    var full = (node.textContent || "").replace(/\s+/g, " ").trim();
+    var spans = [];
+    if (full && full.length <= 400 && kopts.words !== false && !node.hasAttribute("data-st-count")) {
+      // wrap words in text nodes only; elements (links, abbr, em) stay intact around them
+      var walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null), tn, list = [];
+      while ((tn = walker.nextNode())) if (/\S/.test(tn.nodeValue)) list.push(tn);
+      list.forEach(function (t) {
+        if (t.parentNode && t.parentNode.closest && t.parentNode.closest("[data-st-count]")) return;
+        var frag = document.createDocumentFragment();
+        t.nodeValue.split(/(\s+)/).forEach(function (p) {
+          if (!p) return;
+          if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+          var s = document.createElement("span"); s.className = "st-kw"; s.textContent = p;
+          frag.appendChild(s); spans.push(s);
+        });
+        t.parentNode.replaceChild(frag, t);
+      });
+      if (!node.getAttribute("aria-label") && /^H[1-6]$|^P$/.test(node.tagName)) node.setAttribute("aria-label", full);
+      spans.forEach(function (s) { s.setAttribute("aria-hidden", "true"); });
+    }
+    function lines() {
+      var top = null, line = -1;
+      spans.forEach(function (s) {
+        var tp = Math.round(s.offsetTop);
+        if (top === null || Math.abs(tp - top) > 4) { line++; top = tp; }
+        s.style.setProperty("--l", line);
+      });
+    }
+    node.classList.add("st-kinetic");
+    lines();
+    function go() {
+      lines();
+      node.classList.add("is-in");
+      counts.forEach(function (c) { countUp(c, { now: true, duration: kopts.duration || 1300 }); });
+    }
+    if (reduced() || printing) { node.classList.add("is-in"); return node; }
+    inView(node, go, { once: true, margin: "0px 0px -10% 0px" });
+    return node;
+  }
+  function autoKinetic() {
+    els("[data-st-kinetic]").forEach(function (n) { try { kinetic(n); } catch (e) { if (global.console) console.error(e); } });
+  }
+
+  /* Story.viewTransition(update) -> the ViewTransition, or a resolved stand-in
+     Wrap a DOM state change (a toggle, a filter) so supporting browsers
+     cross-fade and move named elements; everywhere else, and under reduced
+     motion, the update simply happens. */
+  function viewTransition(update) {
+    var done = { finished: Promise.resolve(), ready: Promise.resolve(), updateCallbackDone: Promise.resolve(), skipTransition: function () { } };
+    if (!reduced() && !printing && typeof document.startViewTransition === "function") {
+      try { return document.startViewTransition(update); } catch (e) { }
+    }
+    try { update(); } catch (e2) { if (global.console) console.error(e2); }
+    return done;
+  }
+
+  /* ---------------------------------------------------------
      9. export
      --------------------------------------------------------- */
   var Story = {
-    version: "1.3.0",
+    version: "1.4.0",
     orb: orb,
     orbInline: orbInline,
     companion: companion,
@@ -4640,6 +5100,11 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
     spotlight: spotlight,
     words: words,
     beam: beam,
+    particles: particles,
+    morphScene: morphScene,
+    marks: marks,
+    kinetic: kinetic,
+    viewTransition: viewTransition,
     print: printHandout,
     _printPrepare: printPrepare,
     _printRestore: printRestore,
