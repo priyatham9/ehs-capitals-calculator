@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. The format follows
 Keep a Changelog and this project uses semantic versioning.
 
+## [Unreleased]
+
+### Added
+- Calculator: pin a scenario and compare paybacks and ROI against the current inputs
+- Calculator: copy a plain-text decision memo for a capital request (inputs, both accountings, verdict, scenario link)
+- Calculator: copy-link and reset controls next to the outputs; the page now follows hash edits and back/forward
+- Calculator: spring-animated payback figures, verdict flip cue, formatted capital-cost echo, inline range validation, Shift+Arrow steps by 10
+
+### Fixed
+- A malformed or truncated scenario link no longer puts NaN into the form
+
 ## [0.1.0] - 2026-09-09
 
 ### Added

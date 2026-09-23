@@ -79,5 +79,17 @@ class TestDocsPageStructure(unittest.TestCase):
         self.assertIn('id="copy-link"', self.html)
 
 
+    def test_scenario_tools_present(self):
+        for control in ("pin-scenario", "pin-compare", "copy-memo", "copy-link-out", "reset-example"):
+            with self.subTest(control=control):
+                self.assertIn('id="' + control + '"', self.html)
+
+    def test_hash_follows_edits_and_decoding_guards_nan(self):
+        self.assertIn('addEventListener("hashchange"', self.html)
+        self.assertIn("must not put NaN into the form", self.html)
+
+    def test_reduced_motion_respected_by_output_springs(self):
+        self.assertIn("prefers-reduced-motion: reduce", self.html)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

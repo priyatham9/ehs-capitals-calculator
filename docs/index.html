@@ -837,6 +837,9 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
    --rule-soft --accent --accent-2 --accent-ink --accent-wash
    --warn --warn-wash --font-sans --font-mono
    ============================================================ */
+/* shared motion tokens (v1.4): out-eases for entrances, shorter in-eases for exits, inOut for scrubbed moves */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-p1o:cubic-bezier(.25,.46,.45,.94);--ease-p2o:cubic-bezier(.215,.61,.355,1);--ease-p3o:cubic-bezier(.165,.84,.44,1);--ease-p4o:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.65,0,.35,1);--ease-back:cubic-bezier(.34,1.56,.64,1);--d-fast:150ms;--d-base:300ms;--d-slow:600ms;--d-hero:1000ms}
+
 
 /* ---------- orb ---------- */
 .st-orb{display:block;width:100%;height:100%;touch-action:manipulation}
@@ -957,7 +960,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 .st-tip.is-on{opacity:1}
 
 /* ---------- reveal ---------- */
-.st-reveal{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.22,.7,.2,1),transform .6s cubic-bezier(.22,.7,.2,1)}
+.st-reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
 .st-reveal.is-in{opacity:1;transform:none}
 
 /* ---------- progress bar ---------- */
@@ -1701,6 +1704,19 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
       <div class="pane-out">
         <h2 class="sub-h">Side by side</h2>
         <p class="verdict-line" id="verdict-line" aria-live="polite">-</p>
+        <div class="c7-bar" role="group" aria-label="Scenario tools">
+          <button type="button" class="c7-btn" id="pin-scenario" aria-pressed="false">Pin to compare</button>
+          <button type="button" class="c7-btn" id="copy-memo">Copy decision memo</button>
+          <button type="button" class="c7-btn" id="copy-link-out">Copy link</button>
+          <button type="button" class="c7-btn ghostish" id="reset-example">Reset</button>
+          <span class="c7-note" id="c7-note" role="status" aria-live="polite"></span>
+        </div>
+        <div class="c7-pin" id="pin-compare" hidden>
+          <span class="label">Pinned vs now</span>
+          <div class="c7-pin-rows" id="pin-rows"></div>
+          <button type="button" class="c7-btn" id="pin-restore">Restore pinned</button>
+        </div>
+        <textarea class="c7-memo" id="memo-fallback" readonly hidden aria-label="Decision memo text"></textarea>
         <div class="results">
           <div class="res-card trad">
             <p class="res-title">Traditional accounting</p>
@@ -2868,13 +2884,20 @@ function decodeState(hash) {
     kv[pair.slice(0, i)] = pair.slice(i + 1);
   });
   if (!("capex" in kv)) return null;
+  // a hand-edited or truncated link must not put NaN into the form
+  const num = (v, dflt, lo, hi) => {
+    const n = parseFloat(v);
+    return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : dflt;
+  };
+  let booked, human;
+  try { booked = decodeRows(kv.b); human = decodeRows(kv.hm); } catch (e) { return null; }
   return {
-    capex: parseFloat(kv.capex),
-    rrPct: parseFloat(kv.rr),
-    horizon: parseInt(kv.yr, 10) || EXAMPLE.horizon,
-    hurdle: parseFloat(kv.hu) || EXAMPLE.hurdle,
-    booked: decodeRows(kv.b),
-    human: decodeRows(kv.hm)
+    capex: num(kv.capex, 150000, 1, 1e12),
+    rrPct: num(kv.rr, 80, 0, 100),
+    horizon: Math.round(num(kv.yr, 5, 1, 50)),
+    hurdle: num(kv.hu, 3, 0.1, 50),
+    booked: booked,
+    human: human
   };
 }
 
@@ -2974,6 +2997,217 @@ document.querySelectorAll(".tab").forEach(tab => {
   } else {
     loadExample();
   }
+})();
+</script>
+<style id="calc-r7-css">
+:root{--c7-out:var(--ease-out,cubic-bezier(.22,1,.36,1));--c7-back:var(--ease-back,cubic-bezier(.34,1.56,.64,1))}
+.c7-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 16px}
+.c7-btn{padding:8px 12px;border:1px solid var(--rule-soft);border-radius:999px;background:var(--surface);color:var(--ink);font-size:.625rem;transition:transform .18s var(--c7-out),border-color .18s var(--c7-out)}
+.c7-btn:hover{border-color:var(--accent)}
+@media (hover:hover){.c7-btn:hover{transform:translateY(-1px)}}
+.c7-btn:active{transform:scale(.97);transition-duration:.08s}
+.c7-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.c7-btn.ghostish{color:var(--muted)}
+.c7-note{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.c7-pin{border:1px dashed var(--accent);border-radius:var(--st-radius-sm,10px);padding:12px 14px;margin:0 0 16px;display:grid;gap:8px}
+.c7-pin-rows{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:4px 14px;font-family:var(--font-mono);font-size:.8125rem;font-variant-numeric:tabular-nums;align-items:baseline}
+.c7-pin-rows .h{font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.c7-pin-rows .up{color:var(--bad)}.c7-pin-rows .down{color:var(--good)}
+@media(max-width:480px){.c7-pin-rows{grid-template-columns:auto 1fr 1fr;}.c7-pin-rows .d{grid-column:2 / -1}}
+.c7-pin .c7-btn{justify-self:start}
+.c7-memo{width:100%;min-height:180px;font-family:var(--font-mono);font-size:.75rem;padding:10px;margin:0 0 16px;border:1px solid var(--rule-soft);border-radius:var(--st-radius-sm,10px);background:var(--surface);color:var(--ink)}
+.c7-echo{display:block;margin-top:4px;font-family:var(--font-mono);font-size:.6875rem;color:var(--muted);font-variant-numeric:tabular-nums;min-height:1em}
+.c7-err{color:var(--bad)}
+input[aria-invalid="true"]{border-color:var(--bad)!important}
+.headline span[id$="-payback"]{display:inline-block;will-change:auto}
+.verdict.c7-flip{animation:c7pop .5s var(--c7-back)}
+@keyframes c7pop{0%{transform:scale(.9)}100%{transform:none}}
+.pb-fill{transition:width .5s var(--c7-out)}
+@media (prefers-reduced-motion:reduce){.c7-btn:hover,.c7-btn:active{transform:none}.verdict.c7-flip{animation:none}}
+html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-btn{display:none!important}
+</style>
+<script id="calc-r7-js">
+(function () {
+  "use strict";
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches || /[?&]reduced=1/.test(location.search);
+  var g = function (id) { return document.getElementById(id); };
+  var note = g("c7-note"), noteT;
+  function say(msg) { note.textContent = msg; clearTimeout(noteT); noteT = setTimeout(function () { note.textContent = ""; }, 2600); }
+
+  /* ---- spring: critically-damped-ish (ratio ~0.9, no visible overshoot on data) ---- */
+  function spring(el, from, to, fmt) {
+    if (el.__raf) cancelAnimationFrame(el.__raf);
+    if (RM || document.hidden || !isFinite(from) || !isFinite(to) || from === to) { el.textContent = fmt(to); return; }
+    var k = 210, c = 26, x = from, v = 0, last = performance.now();
+    (function step(now) {
+      var dt = Math.min(0.032, (now - last) / 1000); last = now;
+      var a = -k * (x - to) - c * v; v += a * dt; x += v * dt;
+      if (Math.abs(v) < 0.005 && Math.abs(x - to) < 0.005) { el.textContent = fmt(to); el.__raf = 0; return; }
+      el.textContent = fmt(x); el.__raf = requestAnimationFrame(step);
+    })(last);
+  }
+  var SPRUNG = [["t-payback", 2], ["h-payback", 2]];
+  var VERD = ["t-verdict", "h-verdict", "story-roi-t-v", "story-roi-h-v"];
+  var orig = window.render;
+  if (typeof orig === "function") {
+    window.render = function () {
+      var before = SPRUNG.map(function (p) { var e = g(p[0]); return e ? parseFloat(e.textContent) : NaN; });
+      var vb = VERD.map(function (id) { var e = g(id); return e ? e.className : ""; });
+      var r = orig.apply(this, arguments);
+      SPRUNG.forEach(function (p, i) {
+        var e = g(p[0]); if (!e) return;
+        var target = parseFloat(e.textContent);
+        if (isFinite(before[i]) && isFinite(target)) spring(e, before[i], target, function (n) { return n.toFixed(p[1]); });
+      });
+      VERD.forEach(function (id, i) {
+        var e = g(id); if (!e || RM) return;
+        if (vb[i] && vb[i] !== e.className) { e.classList.remove("c7-flip"); void e.offsetWidth; e.classList.add("c7-flip"); }
+      });
+      if (window.__c7pin) renderPin();
+      return r;
+    };
+  }
+
+  /* ---- input UX ---- */
+  function echo() {
+    var inp = readInputs();
+    var ce = g("capex-echo"); if (ce) ce.textContent = money(inp.capex) + " one-off";
+  }
+  var capex = g("capex");
+  if (capex && !g("capex-echo")) {
+    var o = document.createElement("output"); o.className = "c7-echo"; o.id = "capex-echo"; o.setAttribute("for", "capex");
+    capex.closest(".field").appendChild(o);
+  }
+  function validate(el) {
+    if (el.type !== "number") return;
+    var v = parseFloat(el.value), lo = el.min === "" ? -Infinity : parseFloat(el.min), hi = el.max === "" ? Infinity : parseFloat(el.max);
+    var bad = el.value === "" || !isFinite(v) || v < lo || v > hi;
+    el.setAttribute("aria-invalid", bad ? "true" : "false");
+    var f = el.closest(".field"); if (!f) return;
+    var m = f.querySelector(".c7-err");
+    if (bad) {
+      if (!m) { m = document.createElement("span"); m.className = "c7-echo c7-err"; m.id = el.id + "-err"; f.appendChild(m); el.setAttribute("aria-describedby", m.id); }
+      m.textContent = "Out of range" + (isFinite(lo) ? ", min " + lo : "") + (isFinite(hi) ? ", max " + hi : "") + ". The page uses the nearest valid value.";
+    } else if (m) { m.remove(); el.removeAttribute("aria-describedby"); }
+  }
+  document.addEventListener("input", function (e) { if (e.target.matches && e.target.matches("input")) { validate(e.target); echo(); } });
+  document.addEventListener("focusin", function (e) { var t = e.target; if (t.matches && t.matches('input[type="number"]')) setTimeout(function () { try { t.select(); } catch (x) {} }, 0); });
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (!e.shiftKey || !(e.key === "ArrowUp" || e.key === "ArrowDown") || !t.matches || !t.matches('input[type="number"]')) return;
+    e.preventDefault();
+    var step = parseFloat(t.step) || 1, v = parseFloat(t.value) || 0, d = (e.key === "ArrowUp" ? 1 : -1) * step * 10;
+    var n = v + d; if (t.min !== "") n = Math.max(parseFloat(t.min), n); if (t.max !== "") n = Math.min(parseFloat(t.max), n);
+    t.value = String(Math.round(n * 1000) / 1000);
+    t.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  [].slice.call(document.querySelectorAll("[data-add]")).forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var host = g(btn.getAttribute("data-add") === "booked" ? "booked-rows" : "human-rows");
+      var rows = host.querySelectorAll(".cost-row"), last = rows[rows.length - 1];
+      if (last) { var n = last.querySelector("input.name"); if (n) { n.focus(); n.select(); } }
+      if (last && !RM) last.animate([{ opacity: 0, transform: "translateY(-6px)" }, { opacity: 1, transform: "none" }], { duration: 300, easing: "cubic-bezier(.22,1,.36,1)" });
+    });
+  });
+
+  /* ---- shareable state: follow hash edits and back/forward ---- */
+  addEventListener("hashchange", function () {
+    if (location.hash === "#" + encodeState(readInputs())) return;
+    var s = decodeState(location.hash);
+    if (s && s.booked.length + s.human.length > 0) { applyState(s); say("Scenario loaded from link"); }
+  });
+  function copy(text, okMsg, fallback) {
+    var done = function () { say(okMsg); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  }
+  g("copy-link-out").addEventListener("click", function () {
+    var url = location.origin + location.pathname + "#" + encodeState(readInputs());
+    copy(url, "Link copied", function () { showMemo(url); });
+  });
+
+  /* ---- feature: decision memo ---- */
+  function memo() {
+    var inp = readInputs();
+    var t = evaluate(inp.booked, inp.capex, inp.rr, inp.horizon);
+    var h = evaluate(inp.booked + inp.human, inp.capex, inp.rr, inp.horizon);
+    var pass = function (r) { return r.payback !== null && r.payback <= inp.hurdle; };
+    var line = function (label, r) {
+      return label + ": payback " + yrs(r.payback) + " yr (" + (pass(r) ? "meets" : "misses") + " the " + inp.hurdle + "-yr hurdle), "
+        + inp.horizon + "-yr ROI " + (r.roi === null ? "n/a" : pct(r.roi)) + ", annual saving " + money(r.annualBenefit);
+    };
+    var rows = function (grp) { return rowsOf(grp).map(function (r) { return "  - " + r[0] + ": " + money(r[1]) + "/yr"; }).join("\n") || "  (none)"; };
+    return [
+      "Capital request: safety control, two accountings",
+      "",
+      "Capital cost: " + money(inp.capex) + ". Assumed risk reduction: " + Math.round(inp.rr * 100) + "% (an assumption, not a measured effect). Horizon: " + inp.horizon + " yr. Hurdle: " + inp.hurdle + " yr.",
+      "",
+      "Booked incident costs (" + money(inp.booked) + "/yr):", rows("booked"),
+      "Human-capital costs (" + money(inp.human) + "/yr):", rows("human"),
+      "",
+      line("Traditional accounting", t),
+      line("Human-capital-inclusive", h),
+      "",
+      (pass(t) === pass(h) ? "Both accountings reach the same verdict, so the accounting choice does not decide this one."
+        : pass(h) ? "The accountings disagree: the case rests on " + money(inp.human) + "/yr of cost that is not invoiced."
+        : "Traditional clears the hurdle and the broader view does not; check the inputs."),
+      "Not discounted. Arithmetic from ehs-capitals-calculator (src/capitals.py).",
+      "Scenario: " + location.origin + location.pathname + "#" + encodeState(inp)
+    ].join("\n");
+  }
+  function showMemo(text) { var ta = g("memo-fallback"); ta.value = text; ta.hidden = false; ta.focus(); ta.select(); say("Select and copy the text below"); }
+  g("copy-memo").addEventListener("click", function () { var m = memo(); copy(m, "Memo copied", function () { showMemo(m); }); });
+
+  /* ---- feature: pin a scenario and compare ---- */
+  var KEY = "capitals-pin";
+  function snap() {
+    var inp = readInputs();
+    return { hash: encodeState(inp), inp: inp,
+      t: evaluate(inp.booked, inp.capex, inp.rr, inp.horizon), h: evaluate(inp.booked + inp.human, inp.capex, inp.rr, inp.horizon) };
+  }
+  function renderPin() {
+    var P = window.__c7pin, box = g("pin-compare");
+    if (!P) { box.hidden = true; g("pin-scenario").setAttribute("aria-pressed", "false"); g("pin-scenario").textContent = "Pin to compare"; return; }
+    var N = snap(); box.hidden = false;
+    g("pin-scenario").setAttribute("aria-pressed", "true"); g("pin-scenario").textContent = "Unpin";
+    var cell = function (a, b, fmt, lowerBetter) {
+      if (a === null || b === null || !isFinite(a) || !isFinite(b)) return '<span class="d">-</span>';
+      var d = b - a; if (Math.abs(d) < 1e-9) return '<span class="d">same</span>';
+      var good = lowerBetter ? d < 0 : d > 0;
+      return '<span class="d ' + (good ? "down" : "up") + '">' + (d > 0 ? "+" : "") + fmt(d) + "</span>";
+    };
+    var f2 = function (n) { return n.toFixed(2); };
+    var rows = '<span class="h"></span><span class="h">Pinned</span><span class="h">Now</span><span class="h d">Change</span>';
+    [["Payback, traditional (yr)", "t", "payback", f2, true], ["Payback, human-capital (yr)", "h", "payback", f2, true],
+     ["ROI, traditional", "t", "roi", pct, false], ["ROI, human-capital", "h", "roi", pct, false]].forEach(function (r) {
+      var a = P[r[1]][r[2]], b = N[r[1]][r[2]];
+      var show = function (v) { return v === null || !isFinite(v) ? "never" : r[3](v); };
+      rows += "<span>" + r[0] + "</span><span>" + show(a) + "</span><span>" + show(b) + "</span>" + cell(a, b, r[3], r[4]);
+    });
+    g("pin-rows").innerHTML = rows;
+  }
+  g("pin-scenario").addEventListener("click", function () {
+    if (window.__c7pin) { window.__c7pin = null; try { localStorage.removeItem(KEY); } catch (e) {} say("Unpinned"); }
+    else { window.__c7pin = snap(); try { localStorage.setItem(KEY, window.__c7pin.hash); } catch (e) {} say("Pinned. Change inputs to compare"); }
+    renderPin();
+  });
+  g("pin-restore").addEventListener("click", function () {
+    var P = window.__c7pin; if (!P) return; var s = decodeState(P.hash); if (s) { applyState(s); say("Pinned scenario restored"); }
+  });
+  g("reset-example").addEventListener("click", function () { loadExample(); say("Reset to the published example"); });
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved) {
+      var s = decodeState(saved);
+      if (s) {
+        var ev = function (booked) { return evaluate(booked, s.capex, s.rrPct / 100, s.horizon); };
+        var sum = function (rows) { return rows.reduce(function (a, r) { return a + Math.max(0, r[1] || 0); }, 0); };
+        var b = sum(s.booked), hm = sum(s.human);
+        window.__c7pin = { hash: saved, t: ev(b), h: ev(b + hm) };
+      }
+    }
+  } catch (e) {}
+  echo(); renderPin();
 })();
 </script>
 <script id="rs-header-js">
@@ -3198,8 +3432,12 @@ document.querySelectorAll(".tab").forEach(tab => {
      3. motion primitives: spring, tween, flip, countUp, reveal
      --------------------------------------------------------- */
   // Critically damped by default: no overshoot on data.
+  // react-spring style named configs (tension/friction, mass 1); damping ratio
+  // near 1 for data, lower only for delight moments
+  var SPRING = { "default": [170, 26], gentle: [120, 14], wobbly: [180, 12], stiff: [210, 20], slow: [280, 60], molasses: [280, 120], snappy: [500, 30] };
   function spring(from, to, cb, opts) {
     opts = opts || {};
+    if (opts.config && SPRING[opts.config] && opts.stiffness == null) { opts.stiffness = SPRING[opts.config][0]; opts.damping = SPRING[opts.config][1]; }
     var k = opts.stiffness == null ? 170 : opts.stiffness;
     var d = opts.damping == null ? 2 * Math.sqrt(k) : opts.damping; // critical
     var prec = opts.precision == null ? 0.0008 : opts.precision;
@@ -3237,6 +3475,7 @@ document.querySelectorAll(".tab").forEach(tab => {
   }
   var EASE = {
     out: function (t) { return 1 - Math.pow(1 - t, 3); },
+    expo: function (t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); },
     inOut: function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; },
     linear: function (t) { return t; }
   };
@@ -3307,7 +3546,7 @@ document.querySelectorAll(".tab").forEach(tab => {
           if (grp) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           tickerPaint(n, pre + s + post, !reduced());
         }
-        : function () { tween(opts.from == null ? 0 : opts.from, target, function (v) { paint(v); }, { duration: opts.duration || 1100 }); };
+        : function () { tween(opts.from == null ? 0 : opts.from, target, function (v) { paint(v); }, { duration: opts.duration || 1400, ease: "expo" }); };
       if (opts.now) run(); else inView(n, run, { once: true });
     });
   }
@@ -3317,14 +3556,14 @@ document.querySelectorAll(".tab").forEach(tab => {
     var sel = opts.selector || "[data-st-reveal]";
     if (!root || root.nodeType === 9) root = document.body;
     var nodes = isEl(root) ? (root.matches && root.matches(sel) ? [root] : els(sel, root)) : Array.prototype.slice.call(root);
-    var step = opts.stagger == null ? 70 : opts.stagger;
+    var step = opts.stagger == null ? 60 : opts.stagger;
     nodes.forEach(function (n) { n.classList.add("st-reveal"); });
     var groups = new Map();
     nodes.forEach(function (n) {
       var p = n.parentNode;
       if (!groups.has(p)) groups.set(p, 0);
       var i = groups.get(p); groups.set(p, i + 1);
-      inView(n, function () { setTimeout(function () { n.classList.add("is-in"); }, reduced() ? 0 : i * step); }, { once: true, margin: "0px 0px -8% 0px" });
+      inView(n, function () { setTimeout(function () { n.classList.add("is-in"); }, reduced() ? 0 : Math.min(i, 10) * step); }, { once: true, margin: "0px 0px -8% 0px" });
     });
     return nodes;
   }
@@ -5869,6 +6108,152 @@ document.querySelectorAll(".tab").forEach(tab => {
   addEventListener("beforeprint", printPrepare);
   addEventListener("afterprint", printRestore);
 
+
+  /* ---------------------------------------------------------
+     8b. motion kit (v1.4): stagger, trail, draw, scrub, hover
+     Ideas from anime.js (stagger grids, line drawing), react-spring
+     (trails), GSAP (scrubbed scroll timelines, batch reveals) and
+     motion.dev (whileInView, spring gestures). Vanilla, no deps.
+     Every effect lands its final state under reduced motion / print.
+     --------------------------------------------------------- */
+  // stagger(step, {from:'first'|'last'|'center'|index, grid:[cols,rows], start}) -> fn(i, n)
+  function stagger(step, o) {
+    o = o || {}; step = step == null ? 60 : step;
+    return function (i, n) {
+      var from = o.from == null ? 0 : o.from, d;
+      if (o.grid) {
+        var c = o.grid[0], r = o.grid[1];
+        var fi = from === "center" ? [(c - 1) / 2, (r - 1) / 2] : from === "last" ? [c - 1, r - 1] : [(from | 0) % c, Math.floor((from | 0) / c)];
+        d = Math.hypot(i % c - fi[0], Math.floor(i / c) - fi[1]);
+      } else {
+        var f = from === "center" ? (n - 1) / 2 : from === "last" ? n - 1 : from === "first" ? 0 : +from;
+        d = Math.abs(i - f);
+      }
+      return (o.start || 0) + d * step;
+    };
+  }
+  // trail: children spring in one after another when the container enters view
+  function trail(root, opts) {
+    opts = opts || {};
+    var kids = opts.items ? Array.prototype.slice.call(opts.items) : Array.prototype.slice.call(root.children);
+    if (!kids.length || root.__stTrail) return;
+    root.__stTrail = 1;
+    var fromAttr = root.getAttribute && root.getAttribute("data-st-stagger");
+    var base = typeof opts.delay === "function" ? opts.delay : stagger(opts.step || 60, { from: fromAttr && fromAttr !== "" ? fromAttr : "first" });
+    // cap the cascade so a long list never takes more than ~0.6s to settle
+    var del = function (i, n) { return base(Math.min(i, 10), Math.min(n, 11)); };
+    if (reduced()) return;
+    var dy = opts.y == null ? 24 : opts.y;
+    kids.forEach(function (k) { k.style.opacity = "0"; k.style.transform = "translateY(" + dy + "px)"; });
+    function land(k) { k.style.opacity = ""; k.style.transform = ""; }
+    inView(root, function () {
+      kids.forEach(function (k, i) {
+        setTimeout(function () {
+          spring(0, 1, function (v, done) {
+            if (done) return land(k);
+            k.style.opacity = clamp(v * 1.4, 0, 1).toFixed(3);
+            k.style.transform = "translateY(" + ((1 - v) * dy).toFixed(2) + "px)";
+          }, { config: opts.config || "default", stiffness: opts.stiffness, damping: opts.damping });
+        }, document.hidden ? 0 : del(i, kids.length));
+      });
+      // safety net: a background tab or dropped frames must never leave items hidden
+      setTimeout(function () { kids.forEach(land); }, del(kids.length - 1, kids.length) + 2200);
+    }, { once: true, margin: "0px 0px -8% 0px" });
+  }
+  // draw: strokes of an SVG (or [data-st-draw] svgs in root) draw themselves in view
+  function draw(node, opts) {
+    opts = opts || {};
+    var list = isEl(node) && node.tagName.toLowerCase() === "svg" ? [node] : els("svg[data-st-draw], [data-st-draw] svg", node || document);
+    list.forEach(function (svg) {
+      if (svg.__stDraw) return; svg.__stDraw = 1;
+      if (reduced()) return;
+      var paths = els("path,line,polyline,circle,rect,ellipse,polygon", svg).filter(function (p) {
+        var st = getComputedStyle(p);
+        return st.stroke && st.stroke !== "none" && (st.fill === "none" || p.tagName === "line" || p.tagName === "polyline") && p.getTotalLength;
+      });
+      var lens = paths.map(function (p) { var l = 0; try { l = p.getTotalLength(); } catch (e) { } return l; });
+      paths.forEach(function (p, i) { if (lens[i]) { p.style.strokeDasharray = lens[i]; p.style.strokeDashoffset = lens[i]; } });
+      var del = stagger(opts.step || 150);
+      inView(svg, function () {
+        paths.forEach(function (p, i) {
+          if (!lens[i]) return;
+          tween(lens[i], 0, function (v, done) {
+            p.style.strokeDashoffset = done ? "" : v.toFixed(1);
+            if (done) p.style.strokeDasharray = "";
+          }, { duration: opts.duration || 1600, delay: del(Math.min(i, 8), paths.length), ease: "inOut" });
+        });
+      }, { once: true });
+    });
+  }
+  // scrub: GSAP-style scroll-linked progress. Writes --st-scrub (0..1) as the element
+  // travels from entering the bottom of the viewport to leaving the top. One shared
+  // scroll listener, only for elements currently on screen.
+  var scrubSet = [], scrubOn = [], scrubBound = false, scrubQueued = false;
+  function scrubPaint() {
+    scrubQueued = false;
+    var vh = innerHeight;
+    scrubOn.forEach(function (n) {
+      var r = n.getBoundingClientRect();
+      var p = reduced() ? 1 : clamp((vh - r.top) / (vh + r.height), 0, 1);
+      n.style.setProperty("--st-scrub", p.toFixed(4));
+    });
+  }
+  function scrubQueue() { if (!scrubQueued) { scrubQueued = true; requestAnimationFrame(scrubPaint); } }
+  function scrub(node) {
+    if (!node || node.__stScrub) return; node.__stScrub = 1;
+    scrubSet.push(node);
+    node.style.setProperty("--st-scrub", reduced() ? "1" : "0");
+    if (!global.IntersectionObserver) { scrubOn.push(node); }
+    else new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var i = scrubOn.indexOf(e.target);
+        if (e.isIntersecting && i < 0) scrubOn.push(e.target);
+        else if (!e.isIntersecting && i >= 0) scrubOn.splice(i, 1);
+      });
+      scrubQueue();
+    }).observe(node);
+    if (!scrubBound) { scrubBound = true; addEventListener("scroll", scrubQueue, { passive: true }); addEventListener("resize", scrubQueue); }
+    scrubQueue();
+  }
+  // hover: motion.dev-style spring gesture - lift, slight tilt toward the pointer,
+  // press dip. Transform only (no layout shift); off for touch and reduced motion.
+  function hover(node, opts) {
+    opts = opts || {};
+    if (!node || node.__stHover) return; node.__stHover = 1;
+    if (reduced() || (global.matchMedia && matchMedia("(hover: none)").matches)) return;
+    var lift = opts.lift == null ? 2 : opts.lift, tilt = opts.tilt == null ? 3 : opts.tilt;
+    var st = { y: 0, rx: 0, ry: 0, s: 1 }, sp = {};
+    function paint() { node.style.transform = (st.y || st.rx || st.ry || st.s !== 1) ? "perspective(700px) translateY(" + st.y.toFixed(2) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(4) + ")" : ""; }
+    function to(k, v) {
+      if (sp[k]) sp[k].setTarget(v);
+      else sp[k] = spring(st[k], v, function (x, done) { st[k] = x; paint(); if (done) sp[k] = null; }, { config: "stiff", force: true });
+    }
+    var queued = false, lx = 0, ly = 0;
+    node.addEventListener("pointerenter", function (e) { if (e.pointerType === "touch") return; to("y", -lift); });
+    node.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "touch") return;
+      lx = e.clientX; ly = e.clientY;
+      if (queued) return; queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        var r = node.getBoundingClientRect();
+        to("ry", ((lx - r.left) / r.width - 0.5) * 2 * tilt);
+        to("rx", -((ly - r.top) / r.height - 0.5) * 2 * tilt);
+      });
+    });
+    node.addEventListener("pointerleave", function () { to("y", 0); to("rx", 0); to("ry", 0); to("s", 1); });
+    node.addEventListener("pointerdown", function () { to("s", 0.97); });
+    node.addEventListener("pointerup", function () { to("s", 1); });
+  }
+  function autoMotion() {
+    els("[data-st-stagger]").forEach(function (n) { trail(n); });
+    draw(document);
+    els("[data-st-scrub]").forEach(scrub);
+    els("[data-st-count]").forEach(function (n) { countUp(n); });
+    els("[data-st-hover], .doors > a, .st-findings li").forEach(function (n) { hover(n); });
+    if (document.body && document.body.hasAttribute("data-st-progress")) progressBar();
+  }
+
   function boot() {
     autoChapters(); autoFindings();
     try { autoGloss(); } catch (e) { if (global.console) console.error(e); }
@@ -5876,6 +6261,7 @@ document.querySelectorAll(".tab").forEach(tab => {
     try { autoKinetic(); } catch (e) { if (global.console) console.error(e); }
     autoWayfinder();
     try { spotlight(document); } catch (e) { if (global.console) console.error(e); }
+    try { autoMotion(); } catch (e) { if (global.console) console.error(e); }
     // ?print=1 previews the handout layout on screen; reload or call Story._printRestore() to leave it
     if (/[?&]print=1/.test(location.search)) printPrepare();
   }
@@ -6281,6 +6667,8 @@ document.querySelectorAll(".tab").forEach(tab => {
     scenes: scenes,
     chart: chart,
     spring: spring,
+    springs: SPRING,
+    ease: EASE,
     tween: tween,
     flip: flip,
     countUp: countUp,
