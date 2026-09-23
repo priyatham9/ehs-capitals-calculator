@@ -1488,50 +1488,68 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
 .st-reduced [data-st-scrollfade],.st-reduced [data-st-parallax],.st-printing [data-st-scrollfade],.st-printing [data-st-parallax]{animation:none!important;opacity:1!important;transform:none!important}
 /* cross-page transitions: same-origin navigations across the programme cross-fade where supported; instant elsewhere */
 @media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}
+/* v1.4 motion kit: trail / draw / scrub / hover land their final state for print and reduced motion */
+[data-st-scrub].st-scrub-rise{transform:translateY(calc((1 - min(1, var(--st-scrub,1) * 2.2)) * 32px));opacity:calc(.25 + min(1, var(--st-scrub,1) * 2.2) * .75)}
+@media (prefers-reduced-motion:reduce){[data-st-stagger]>*,[data-st-scrub]{opacity:1!important;transform:none!important}}
+.st-reduced [data-st-stagger]>*,.st-reduced [data-st-scrub]{opacity:1!important;transform:none!important}
+@media print{[data-st-stagger]>*,[data-st-scrub],[data-st-hover],.doors>a,.st-findings li{opacity:1!important;transform:none!important}[data-st-draw] *{stroke-dashoffset:0!important}}
+html.st-printing [data-st-stagger]>*,html.st-printing [data-st-scrub],html.st-printing [data-st-hover],html.st-printing .st-findings li{opacity:1!important;transform:none!important}
+
+/* ---------- v2.0 motion layer (GSAP; see story.js header) ---------- */
+/* split lines keep their descenders inside the mask */
+[data-m-split] .word,[data-m-split] [class*="-mask"]{padding-bottom:.08em;margin-bottom:-.08em}
+[data-m-split]{font-kerning:none}
+.m-desk [data-m-pin]{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+[data-m-progress]{display:block;height:3px;border-radius:3px;background:var(--accent);transform-origin:0 50%}
+html:not(.m-desk) [data-m-progress]{transform:none}
+[data-m-spring]{will-change:transform}
+.m-desk [data-m-hero]{overflow:clip}
+@media (prefers-reduced-motion: reduce){[data-m-step],[data-m-hero-part],[data-m-reveal]{opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;clip-path:none!important}}
+.st-reduced [data-m-step],.st-reduced [data-m-hero-part],.st-printing [data-m-step]{opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;clip-path:none!important}
 /*STORY_CSS_END*/</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a><header class="rs-header" id="rs-header"><div class="rs-bar"><div class="rs-row"><a class="rs-brand" href="https://priyatham9.github.io/grounded/" aria-label="Grounded research hub"><span class="rs-mark" aria-hidden="true"></span>Grounded</a><a class="rs-author" href="https://priyatham9.github.io/">Priyatham Chimmani&nbsp;&#8599;</a><nav class="rs-nav" aria-label="Research site"><a class="rs-item" href="https://priyatham9.github.io/grounded/">Overview</a><a class="rs-item" href="https://priyatham9.github.io/grounded/start.html">Start here</a><a class="rs-item" href="https://priyatham9.github.io/grounded/observatory.html">Observatory</a><details class="rs-menu" data-current="true"><summary class="rs-item" aria-haspopup="true">Projects<span class="rs-caret" aria-hidden="true"></span></summary><div class="rs-panel"><a class="rs-opt" href="https://priyatham9.github.io/ehs-osha-analysis/"><span class="rs-t">OSHA data quality</span><span class="rs-n">2.8M real filings</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="rs-t">Grounding benchmark</span><span class="rs-n">first baselines</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-human-factors-ontology/"><span class="rs-t">Human factors ontology</span><span class="rs-n">derivation traces</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-risk-sem/"><span class="rs-t">SEM for safety risk</span><span class="rs-n">simulation studies</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page"><span class="rs-t">Cost-benefit calculator</span><span class="rs-n">interactive tool</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-benchmarks/"><span class="rs-t">OSHA benchmarks</span><span class="rs-n">TRIR/DART library</span></a></div></details><details class="rs-menu"><summary class="rs-item" aria-haspopup="true">Papers<span class="rs-caret" aria-hidden="true"></span></summary><div class="rs-panel"><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper.html"><span class="rs-t">Grounded reasoning for safety-critical AI</span><span class="rs-n">bundled draft</span></a><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper-osha.html"><span class="rs-t">The hours denominator</span><span class="rs-n">standalone OSHA paper</span></a></div></details><a class="rs-item rs-story" href="story.html">Read the story</a></nav><span class="rs-sep" aria-hidden="true"></span><button class="rs-btn" id="rs-theme" type="button" aria-label="Dark theme" aria-pressed="false" title="Switch colour theme"><svg class="rs-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg><svg class="rs-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button><button class="rs-btn rs-burger" id="rs-menu-btn" type="button" aria-expanded="false" aria-controls="rs-sheet" aria-label="Open menu"><i></i></button></div></div><div class="rs-sub"><div class="rs-row rs-subrow"><span class="rs-sublabel">On this page</span><nav class="rs-sections" id="rs-sections" aria-label="On this page"><a class="rs-sec" href="#story">Story</a><a class="rs-sec" href="#calculator">Calculator</a><a class="rs-sec" href="#sensitivity">Sensitivity</a><a class="rs-sec" href="#method">Method</a></nav><button class="rs-subbtn" id="rs-subbtn" type="button" aria-expanded="false" aria-controls="rs-sublist">On this page:<b id="rs-now">Story</b><span class="rs-caret" aria-hidden="true"></span></button></div><nav class="rs-sublist" id="rs-sublist" aria-label="On this page (list)" hidden><a class="rs-sec" href="#story">Story</a><a class="rs-sec" href="#calculator">Calculator</a><a class="rs-sec" href="#sensitivity">Sensitivity</a><a class="rs-sec" href="#method">Method</a></nav></div><div class="rs-sheet" id="rs-sheet" hidden><a class="rs-item" href="https://priyatham9.github.io/grounded/">Overview</a><a class="rs-item" href="https://priyatham9.github.io/grounded/start.html">Start here</a><a class="rs-item" href="https://priyatham9.github.io/grounded/observatory.html">Observatory</a><a class="rs-item rs-story" href="story.html">Read the story</a><span class="rs-group">Projects</span><a class="rs-opt" href="https://priyatham9.github.io/ehs-osha-analysis/"><span class="rs-t">OSHA data quality</span><span class="rs-n">2.8M real filings</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="rs-t">Grounding benchmark</span><span class="rs-n">first baselines</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-human-factors-ontology/"><span class="rs-t">Human factors ontology</span><span class="rs-n">derivation traces</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-risk-sem/"><span class="rs-t">SEM for safety risk</span><span class="rs-n">simulation studies</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page"><span class="rs-t">Cost-benefit calculator</span><span class="rs-n">interactive tool</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-benchmarks/"><span class="rs-t">OSHA benchmarks</span><span class="rs-n">TRIR/DART library</span></a><span class="rs-group">Papers</span><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper.html"><span class="rs-t">Grounded reasoning for safety-critical AI</span><span class="rs-n">bundled draft</span></a><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper-osha.html"><span class="rs-t">The hours denominator</span><span class="rs-n">standalone OSHA paper</span></a><a class="rs-sheet-author" href="https://priyatham9.github.io/">Priyatham Chimmani&nbsp;&#8599;</a></div><span class="rs-progress" aria-hidden="true"></span></header>
 
-<section class="hero" id="top">
+<section class="hero" id="top" data-m-hero>
   <div class="wrap">
     <div class="hero-grid">
-      <div class="hero-main">
-        <div class="hero-eyebrow" data-st-reveal><span class="pulse"></span><span class="label">Decision tool - arithmetic only, nothing uploaded</span></div>
-        <h1 class="display" data-st-reveal>Price a safety control twice, and compare the two paybacks</h1>
-        <p class="hero-role" data-st-reveal>Enter what the incidents cost you in a year, what the control costs, and how much risk you assume it removes. The page returns payback, ROI, a sensitivity tornado and a 2,000-draw simulation for two accountings side by side: booked cost lines only, and booked plus the human-capital lines nobody invoices.</p>
-        <p class="hero-lede" data-st-reveal>Everything runs in your browser. Nothing is uploaded and nothing is stored beyond your theme choice.</p>
-        <div class="hero-links" data-st-reveal>
-          <a class="btn btn-primary" href="#calculator">Open the calculator</a>
-          <a class="btn btn-story" href="story.html">Read the story<span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+      <div class="hero-main" data-m-hero-copy>
+        <div class="hero-eyebrow" data-m-hero-part="text"><span class="pulse"></span><span class="label">Decision tool - arithmetic only, nothing uploaded</span></div>
+        <h1 class="display" data-m-split="chars">Price a safety control twice, and compare the two paybacks</h1>
+        <p class="hero-role" data-m-hero-part="text">Enter what the incidents cost you in a year, what the control costs, and how much risk you assume it removes. The page returns payback, ROI, a sensitivity tornado and a 2,000-draw simulation for two accountings side by side: booked cost lines only, and booked plus the human-capital lines nobody invoices.</p>
+        <p class="hero-lede" data-m-hero-part="text">Everything runs in your browser. Nothing is uploaded and nothing is stored beyond your theme choice.</p>
+        <div class="hero-links" data-m-hero-part="text">
+          <a class="btn btn-primary" data-m-spring href="#calculator">Open the calculator</a>
+          <a class="btn btn-story" data-m-spring href="story.html">Read the story<span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
         </div>
       </div>
-      <div class="hero-demo" data-st-reveal>
+      <div class="hero-demo" data-m-hero-part="visual">
         <span class="label">What it shows, on the loaded example</span>
         <div class="hero-demo-nums">
-          <span class="hero-demo-n"><b>3.41</b><small>Years payback<br>Booked cost lines only</small></span>
+          <span class="hero-demo-n"><b data-m-count>3.41</b><small>Years payback<br>Booked cost lines only</small></span>
           <span class="hero-demo-arrow" aria-hidden="true">&rarr;</span>
-          <span class="hero-demo-n accent"><b>1.59</b><small>Years payback<br>Human-capital lines priced</small></span>
+          <span class="hero-demo-n accent"><b data-m-count>1.59</b><small>Years payback<br>Human-capital lines priced</small></span>
         </div>
         <p class="hero-demo-note">The same $150,000 loading-station control against a 3-year hurdle. It fails on the left count and clears on the right. Nothing about the equipment changed.</p>
         <p class="hero-demo-src">Worked example from Brandon (2025), loaded in the calculator below</p>
       </div>
     </div>
 
-    <nav class="doors" aria-label="Three ways in" data-st-reveal>
-      <a data-st-spotlight class="door" href="story.html">
+    <nav class="doors" aria-label="Three ways in" data-m-reveal data-m-stagger="0.1">
+      <a data-st-spotlight data-m-spring class="door" href="story.html">
         <span class="door-k">Story</span>
         <span class="door-t">The capital case</span>
         <span class="door-s">Eleven findings, scene by scene, with the figures that make the argument. Start here if you want the case before the controls.</span>
         <span class="door-go mono">Read it &rarr;</span>
       </a>
-      <a data-st-spotlight class="door door-here" href="#calculator" aria-current="page">
+      <a data-st-spotlight data-m-spring class="door door-here" href="#calculator" aria-current="page">
         <span class="door-k">You are here</span>
         <span class="door-t">The calculator</span>
         <span class="door-s">Your own cost lines, your own risk reduction, your own hurdle. Payback, ROI, tornado and Monte Carlo, recomputed as you type.</span>
         <span class="door-go mono">Open it &darr;</span>
       </a>
-      <a data-st-spotlight class="door" href="https://github.com/priyatham9/ehs-capitals-calculator">
+      <a data-st-spotlight data-m-spring class="door" href="https://github.com/priyatham9/ehs-capitals-calculator">
         <span class="door-k">Repository</span>
         <span class="door-t">The model, in Python</span>
         <span class="door-s">Four lines of arithmetic in src/capitals.py, the seeded simulation in src/montecarlo.py, and the tests that hold this page to them.</span>
@@ -1539,7 +1557,7 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
       </a>
     </nav>
 
-    <div class="status">
+    <div class="status" data-m-reveal data-m-stagger="0.08">
       <div class="st-cell"><span class="st-k">Model</span><span class="st-v" data-st-count>4 lines</span></div>
       <div class="st-cell"><span class="st-k">Discounting</span><span class="st-v">None</span></div>
       <div class="st-cell"><span class="st-k">Risk reduction</span><span class="st-v">Your input</span></div>
@@ -1552,22 +1570,22 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
 
 <section class="section" id="story">
   <div class="wrap">
-    <div class="rail-head"><span class="rail-num">01</span><h2 class="display">Walk through one incident</h2></div>
+    <div class="rail-head"><span class="rail-num">01</span><h2 class="display" data-m-split="words">Walk through one incident</h2></div>
     <p class="story-lede">Three steps, one set of numbers. Pick a scenario, watch what the two accountings book, then see whether the control pays for itself under each.</p>
 
     <div class="story-steps">
-      <div class="story-step" id="story-step1">
+      <div class="story-step" id="story-step1" data-m-reveal data-m-from="up">
         <div class="story-step-head"><span class="story-step-num">Step 1</span><h3>One incident</h3></div>
         <p class="story-step-sub">Start from the published example or an illustrative site, or edit the numbers yourself in the calculator below.</p>
         <div class="story-scenarios" role="group" aria-label="Scenario">
-          <button class="story-scenario" type="button" data-preset="published" aria-pressed="true">Loading-station example</button>
-          <button class="story-scenario" type="button" data-preset="small">Small site, cheap control</button>
-          <button class="story-scenario" type="button" data-preset="large">Large site, costly control</button>
+          <button class="story-scenario" data-m-spring type="button" data-preset="published" aria-pressed="true">Loading-station example</button>
+          <button class="story-scenario" data-m-spring type="button" data-preset="small">Small site, cheap control</button>
+          <button class="story-scenario" data-m-spring type="button" data-preset="large">Large site, costly control</button>
           <a class="story-scenario story-scenario-own" href="#calculator">Enter your own &rarr;</a>
         </div>
       </div>
 
-      <div class="story-step" id="story-step2">
+      <div class="story-step" id="story-step2" data-m-reveal data-m-from="right">
         <div class="story-step-head"><span class="story-step-num">Step 2</span><h3>What gets booked, versus what it actually cost</h3></div>
         <p class="story-step-sub">Same incident, two ledgers. The traditional bar counts only the line items a ledger tracks; the human-capital bar adds the cost that does not get an invoice.</p>
         <div class="story-bars" aria-hidden="false">
@@ -1585,7 +1603,7 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
         <p class="story-bar-note" id="story-bar-note">-</p>
       </div>
 
-      <div class="story-step" id="story-step3">
+      <div class="story-step" id="story-step3" data-m-reveal data-m-from="scale">
         <div class="story-step-head"><span class="story-step-num">Step 3</span><h3>The investment</h3></div>
         <p class="story-step-sub">Same capital cost, same risk reduction, same horizon. Only the cost side changes.</p>
         <div class="story-roi">
@@ -1612,7 +1630,7 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
 
 <section class="section" id="calculator">
   <div class="wrap">
-    <div class="rail-head"><span class="rail-num">02</span><h2 class="display">The calculator</h2></div>
+    <div class="rail-head"><span class="rail-num">02</span><h2 class="display" data-m-split="words">The calculator</h2></div>
     <p class="sec-lede">Enter <strong>annual</strong> incident cost in a typical year without the control. Left is input, right is arithmetic.</p>
 
     <div class="layout">
@@ -1621,15 +1639,15 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
         <div class="example-box">
           <span class="label" style="display:block;margin-bottom:8px">Start from a preset</span>
           <div class="presets" role="group" aria-label="Input presets">
-            <button class="primary preset" type="button" data-preset="published" aria-pressed="true">
+            <button class="primary preset" data-m-spring="0.5" type="button" data-preset="published" aria-pressed="true">
               <span class="preset-t">Published worked example</span>
               <span class="preset-s">Loading-station figures from Brandon (2025). Reproduces 3.41 / 1.59 year payback.</span>
             </button>
-            <button class="preset" type="button" data-preset="small" aria-pressed="false">
+            <button class="preset" data-m-spring="0.5" type="button" data-preset="small" aria-pressed="false">
               <span class="preset-t">Illustrative: small site, cheap control</span>
               <span class="preset-s">Made-up inputs to explore the arithmetic. Not a finding.</span>
             </button>
-            <button class="preset" type="button" data-preset="large" aria-pressed="false">
+            <button class="preset" data-m-spring="0.5" type="button" data-preset="large" aria-pressed="false">
               <span class="preset-t">Illustrative: large site, costly control</span>
               <span class="preset-s">Made-up inputs to explore the arithmetic. Not a finding.</span>
             </button>
@@ -1705,16 +1723,16 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
         <h2 class="sub-h">Side by side</h2>
         <p class="verdict-line" id="verdict-line" aria-live="polite">-</p>
         <div class="c7-bar" role="group" aria-label="Scenario tools">
-          <button type="button" class="c7-btn" id="pin-scenario" aria-pressed="false">Pin to compare</button>
-          <button type="button" class="c7-btn" id="copy-memo">Copy decision memo</button>
-          <button type="button" class="c7-btn" id="copy-link-out">Copy link</button>
-          <button type="button" class="c7-btn ghostish" id="reset-example">Reset</button>
+          <button type="button" data-m-spring class="c7-btn" id="pin-scenario" aria-pressed="false">Pin to compare</button>
+          <button type="button" data-m-spring class="c7-btn" id="copy-memo">Copy decision memo</button>
+          <button type="button" data-m-spring class="c7-btn" id="copy-link-out">Copy link</button>
+          <button type="button" data-m-spring class="c7-btn ghostish" id="reset-example">Reset</button>
           <span class="c7-note" id="c7-note" role="status" aria-live="polite"></span>
         </div>
         <div class="c7-pin" id="pin-compare" hidden>
           <span class="label">Pinned vs now</span>
           <div class="c7-pin-rows" id="pin-rows"></div>
-          <button type="button" class="c7-btn" id="pin-restore">Restore pinned</button>
+          <button type="button" data-m-spring class="c7-btn" id="pin-restore">Restore pinned</button>
         </div>
         <textarea class="c7-memo" id="memo-fallback" readonly hidden aria-label="Decision memo text"></textarea>
         <div class="results">
@@ -1772,15 +1790,15 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
 
 <section class="section" id="sensitivity">
   <div class="wrap">
-    <div class="rail-head"><span class="rail-num">03</span><h2 class="display">How much the answer moves</h2></div>
+    <div class="rail-head"><span class="rail-num">03</span><h2 class="display" data-m-split="words">How much the answer moves</h2></div>
     <p class="sec-lede">Three views of the same arithmetic. Each shows how far the verdict travels when one number changes.</p>
 
-    <div class="panel">
+    <div class="panel" data-m-flip="[role=tabpanel]">
       <div class="tabs" role="tablist">
-        <button class="tab" role="tab" aria-selected="true"  data-panel="p-tornado">What moves the answer</button>
-        <button class="tab" role="tab" aria-selected="false" data-panel="p-grid">Risk reduction &times; capex</button>
-        <button class="tab" role="tab" aria-selected="false" data-panel="p-break">Breakeven points</button>
-        <button class="tab" role="tab" aria-selected="false" data-panel="p-mc">Monte Carlo</button>
+        <button class="tab" data-m-spring="0.6" role="tab" aria-selected="true"  data-panel="p-tornado">What moves the answer</button>
+        <button class="tab" data-m-spring="0.6" role="tab" aria-selected="false" data-panel="p-grid">Risk reduction &times; capex</button>
+        <button class="tab" data-m-spring="0.6" role="tab" aria-selected="false" data-panel="p-break">Breakeven points</button>
+        <button class="tab" data-m-spring="0.6" role="tab" aria-selected="false" data-panel="p-mc">Monte Carlo</button>
       </div>
 
       <div class="panel-body">
@@ -1847,7 +1865,7 @@ canvas.st-particles{display:block;max-width:100%;touch-action:pan-y}
 
 <section class="section" id="method">
   <div class="wrap">
-    <div class="rail-head"><span class="rail-num">04</span><h2 class="display">Method, and what this does not do</h2></div>
+    <div class="rail-head"><span class="rail-num">04</span><h2 class="display" data-m-split="words">Method, and what this does not do</h2></div>
     <p class="sec-lede">Four lines of arithmetic. No discounting, degradation, maintenance or residual value: <strong>absent</strong>, not hidden.</p>
 
     <details class="notes">
@@ -3059,6 +3077,19 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
         var target = parseFloat(e.textContent);
         if (isFinite(before[i]) && isFinite(target)) spring(e, before[i], target, function (n) { return n.toFixed(p[1]); });
       });
+      var G = window.gsap;
+      if (G && !RM) {
+        var moved = false;
+        SPRUNG.forEach(function (p, i) {
+          var e = g(p[0]); if (!e) return;
+          var target = parseFloat(e.textContent);
+          if (isFinite(before[i]) && isFinite(target) && Math.abs(before[i] - target) > 0.004) {
+            moved = true;
+            G.fromTo(e, { scale: target < before[i] ? 1.14 : 0.9, y: target < before[i] ? -4 : 4 }, { scale: 1, y: 0, duration: 0.9, ease: "elastic.out(1.1,0.45)", overwrite: "auto" });
+          }
+        });
+        if (moved) G.fromTo(".pb-fill", { scaleY: 0.6 }, { scaleY: 1, duration: 0.7, ease: "elastic.out(1,0.5)", overwrite: "auto" });
+      }
       VERD.forEach(function (id, i) {
         var e = g(id); if (!e || RM) return;
         if (vb[i] && vb[i] !== e.className) { e.classList.remove("c7-flip"); void e.offsetWidth; e.classList.add("c7-flip"); }
@@ -3279,11 +3310,48 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
  pad();frame();
 })();
 </script>
+<script id="gsap-gsap" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+<script id="gsap-scrolltrigger" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script id="gsap-splittext" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/SplitText.min.js"></script>
+<script id="gsap-flip" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/Flip.min.js"></script>
 <script id="story-js">/*STORY_JS_START*/
 /* ============================================================
    story.js  -  shared storytelling engine (stdlib only, no deps)
    Exposes one global: Story
    Pairs with tools/story.css and the tokens in tools/shared.css.
+
+   MOTION ATTRIBUTE API (v2.0, section 9)
+   Needs GSAP 3.15 core + ScrollTrigger + SplitText (+ Flip, optional) from
+   cdnjs, loaded before this script (tools/inline_story.py and
+   tools/build_sites.py add the tags). Without them, or under reduced motion
+   (OS setting, ?reduced=1, print), every element simply shows its final state.
+   Desktop (>= 900px) gets pins and scrub; phones get one-shot reveals only.
+
+   data-m-hero                 section: cinematic entrance timeline for its
+     data-m-hero-part="text|visual|rule"  parts, in DOM order
+     data-m-hero-copy          block that rises and fades as the hero leaves
+   data-m-split="chars|words|lines"  SplitText masked reveal on enter
+                               (chars fall back to words on phones);
+                               data-m-delay="0.3" offsets it
+   data-m-pin="220%"           section pins at the top for that much scroll
+                               and scrubs its [data-m-step] children
+     data-m-step="0|1|2.5"     order / timeline position inside the pin
+     data-m-from="up|down|left|right|scale|blur|clip" (combine with spaces)
+     data-m-dim                dims the previous step when this one lands
+     data-m-progress           element whose scaleX tracks the pin's progress
+     data-m-at="1.5"           position of a nested draw/bars/count in the pin
+   data-m-draw[="selector"]    stroke draw of paths/lines, scrubbed to scroll
+   data-m-bars="y|x"           bars grow from their baseline, scrubbed
+     data-m-bar="selector"     which children are bars (default rect / > *)
+   data-m-count[="12,345.6%"]  counter from 0 to the element's own text
+   data-m-reveal [data-m-stagger="0.08"]  one-shot fade-up (of children)
+   data-m-start="top 70%"      custom ScrollTrigger start for draw/reveal
+   data-m-parallax="-12"       yPercent drift across the viewport (desktop)
+   data-m-spring[="1.5"]       spring hover lift + press squash (elastic)
+   data-m-flip[="selector"]    Flip layout transition when a button inside
+                               filters or re-orders the children
+   Aliases: data-st-kinetic -> data-m-split="words" when GSAP is present.
+   JS: Story.motion.scan(root) re-applies after DOM changes; Story.motion.kill().
    ============================================================ */
 (function (global) {
   "use strict";
@@ -3570,6 +3638,10 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
     if (!root || root.nodeType === 9) root = document.body;
     var nodes = isEl(root) ? (root.matches && root.matches(sel) ? [root] : els(sel, root)) : Array.prototype.slice.call(root);
     var step = opts.stagger == null ? 60 : opts.stagger;
+    // one API: nodes the GSAP layer animates (section 9) are left to it
+    if (gsapOK()) nodes = nodes.filter(function (n) {
+      return !(n.matches("[data-m-hero-part],[data-m-split],[data-m-reveal],[data-m-step],[data-m-hero-copy]") || n.closest("[data-m-reveal],[data-m-pin],[data-m-hero-part]"));
+    });
     nodes.forEach(function (n) { n.classList.add("st-reveal"); });
     var groups = new Map();
     nodes.forEach(function (n) {
@@ -5746,6 +5818,7 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
   function words(node) {
     node = isEl(node) ? node : el(node);
     if (!node || node.__stWords) return null;
+    if (node.hasAttribute("data-m-split") && gsapOK()) return null; // SplitText owns it
     var full = (node.textContent || "").replace(/\s+/g, " ").trim();
     if (!full || full.length > 400) return null;
     node.__stWords = 1;
@@ -6063,6 +6136,7 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
     if (printSaved) return;
     if (presentState) presentState.exit(); // presenter layout and handout layout must never combine
     printing = true;
+    try { motionKill(); } catch (e) { } // pins and split text never reach paper
     glossHide();
     document.documentElement.classList.add("st-printing");
     printSaved = [];
@@ -6269,6 +6343,7 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
   function boot() {
     autoChapters(); autoFindings();
     try { autoGloss(); } catch (e) { if (global.console) console.error(e); }
+    try { autoGsap(); } catch (e) { if (global.console) console.error(e); }
     try { autoWords(); } catch (e) { if (global.console) console.error(e); }
     try { autoKinetic(); } catch (e) { if (global.console) console.error(e); }
     autoWayfinder();
@@ -6648,6 +6723,7 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
     return node;
   }
   function autoKinetic() {
+    if (gsapOK()) return; // SplitText owns these headlines (see section 9)
     els("[data-st-kinetic]").forEach(function (n) { try { kinetic(n); } catch (e) { if (global.console) console.error(e); } });
   }
 
@@ -6667,6 +6743,314 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
   /* ---------------------------------------------------------
      9. export
      --------------------------------------------------------- */
+  /* ---------------------------------------------------------
+     9. Story.motion  -  GSAP + ScrollTrigger + SplitText layer (v2.0)
+     The attribute API is documented at the top of this file. Three tiers,
+     chosen once per breakpoint by gsap.matchMedia:
+       desktop  (>= 900px, motion allowed): pins, scrub, SplitText, springs
+       phone    (< 900px, motion allowed):  no pins, no scrub; one-shot reveals
+       reduced  (OS setting, ?reduced=1, print, or no GSAP): final state, no motion
+     Nothing here animates layout properties: transforms, opacity, clip-path
+     and stroke-dashoffset only.
+     --------------------------------------------------------- */
+  var M = { ready: false, mm: null, scanned: [] };
+  var M_EASE = { out: "expo.out", soft: "power3.out", io: "power2.inOut", back: "back.out(1.6)" };
+  function gsapOK() {
+    var g = global.gsap;
+    return !!(g && global.ScrollTrigger);
+  }
+  function mNum(v, d) { var n = parseFloat(v); return isNaN(n) ? d : n; }
+  function mSel(root, sel) {
+    var out = els(sel, root);
+    if (root && root.matches && root.matches(sel)) out.unshift(root);
+    return out;
+  }
+  // "12,345.6 %" -> {pre, value, dec, suf, sep}
+  function mParseNum(txt) {
+    var m = /^([^\d\-]*)(-?[\d,]*\.?\d+)(.*)$/.exec((txt || "").trim());
+    if (!m) return null;
+    var raw = m[2];
+    return { pre: m[1], value: parseFloat(raw.replace(/,/g, "")), dec: (raw.split(".")[1] || "").length, sep: raw.indexOf(",") >= 0, suf: m[3] };
+  }
+  function mFmtNum(p, v) {
+    var s = v.toFixed(p.dec);
+    if (p.sep) { var parts = s.split("."); parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); s = parts.join("."); }
+    return p.pre + s + p.suf;
+  }
+  function mFrom(n) {
+    var v = (n.getAttribute("data-m-from") || "up").split(/\s+/);
+    var o = { autoAlpha: 0 };
+    v.forEach(function (w) {
+      if (w === "up") o.y = 40; else if (w === "down") o.y = -40;
+      else if (w === "left") o.x = -48; else if (w === "right") o.x = 48;
+      else if (w === "scale") o.scale = 0.92; else if (w === "blur") o.filter = "blur(10px)";
+      else if (w === "clip") { o.clipPath = "inset(0 0 100% 0)"; o.autoAlpha = 1; }
+    });
+    // phones: never slide sideways (an off-screen start widens the page)
+    if (o.x && document.documentElement.classList.contains("m-phone")) { delete o.x; o.y = 24; }
+    return o;
+  }
+
+  // --- SplitText reveal (desktop and phone; reduced skips) ---
+  function mSplit(n, phone) {
+    if (!global.SplitText || n.__mSplit) return;
+    n.__mSplit = 1;
+    // soft hyphens do not survive a split (the word breaks mid-line): reveal the block whole
+    if ((n.textContent || "").indexOf("\u00AD") >= 0) {
+      global.gsap.from(n, { autoAlpha: 0, y: 40, duration: 1, ease: M_EASE.out, delay: n.closest("[data-m-hero]") ? 0.15 : 0,
+        scrollTrigger: n.closest("[data-m-hero]") ? null : { trigger: n, start: "top 88%", once: true } });
+      return;
+    }
+    var type = n.getAttribute("data-m-split") || "words";
+    if (!/^(chars|words|lines)$/.test(type)) type = "words";
+    if (phone && type === "chars") type = "words";
+    var st = global.SplitText.create(n, {
+      type: type === "lines" ? "lines" : type === "chars" ? "words,chars" : "words",
+      mask: type === "chars" ? "words" : type,
+      aria: "auto",
+      autoSplit: type === "lines",
+      onSplit: function (self) {
+        var parts = self[type];
+        var hero = n.closest("[data-m-hero]");
+        var t = global.gsap.from(parts, {
+          yPercent: 110, autoAlpha: type === "chars" ? 1 : 0, rotate: type === "chars" && !phone ? 6 : 0,
+          duration: type === "chars" ? 0.9 : 0.8, ease: M_EASE.out,
+          stagger: type === "chars" ? 0.022 : type === "words" ? 0.045 : 0.1,
+          delay: mNum(n.getAttribute("data-m-delay"), hero ? 0.15 : 0),
+          scrollTrigger: hero ? null : { trigger: n, start: "top 88%", once: true }
+        });
+        return t;
+      }
+    });
+    return st;
+  }
+
+  // --- pinned chapter: children with [data-m-step] play in order, scrubbed ---
+  function mPin(sec) {
+    var g = global.gsap;
+    var steps = els("[data-m-step]", sec);
+    // a chapter taller than the screen cannot pin without hiding its end: reveal its steps instead
+    if (sec.getBoundingClientRect().height > innerHeight * 1.02) {
+      mStepsOnce(steps);
+      mSel(sec, "[data-m-draw]").forEach(function (d) { mDraw(d); });
+      mSel(sec, "[data-m-bars]").forEach(function (b) { mBars(b); });
+      mSel(sec, "[data-m-count]").forEach(function (c) { mCount(c); });
+      return null;
+    }
+    var len = sec.getAttribute("data-m-pin") || (100 + steps.length * 60) + "%";
+    var tl = g.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: sec, start: "top top", end: "+=" + len, pin: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true }
+    });
+    steps.sort(function (a, b) { return mNum(a.getAttribute("data-m-step"), 0) - mNum(b.getAttribute("data-m-step"), 0); });
+    steps.forEach(function (s, i) {
+      var at = s.getAttribute("data-m-step");
+      var pos = at && !isNaN(parseFloat(at)) ? parseFloat(at) : i;
+      tl.fromTo(s, mFrom(s), { autoAlpha: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", clipPath: "inset(0 0 0% 0)", duration: 0.6, ease: M_EASE.soft }, pos);
+      // a step can dim the one before it, so the eye follows the newest line
+      if (s.hasAttribute("data-m-dim") && steps[i - 1]) tl.to(steps[i - 1], { opacity: 0.35, duration: 0.4 }, pos);
+    });
+    // scrubbed builds nested in a pinned chapter ride its timeline, not their own trigger
+    mSel(sec, "[data-m-draw]").forEach(function (d) { mDraw(d, tl, mNum(d.getAttribute("data-m-at"), 0)); });
+    mSel(sec, "[data-m-bars]").forEach(function (b) { mBars(b, tl, mNum(b.getAttribute("data-m-at"), 0)); });
+    mSel(sec, "[data-m-count]").forEach(function (c) { mCount(c, tl, mNum(c.getAttribute("data-m-at"), 0)); });
+    var prog = el("[data-m-progress]", sec);
+    if (prog) tl.fromTo(prog, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: tl.duration() || 1 }, 0);
+    return tl;
+  }
+
+  // phone (or an over-tall chapter): the chapter scrolls normally and each step reveals once
+  function mStepsOnce(steps) {
+    steps.forEach(function (s) {
+      global.gsap.from(s, { autoAlpha: 0, y: 24, duration: 0.7, ease: M_EASE.out, scrollTrigger: { trigger: s, start: "top 88%", once: true } });
+    });
+  }
+
+  // --- stroke draw for every path/line/polyline/circle inside (or the node itself) ---
+  function mDrawables(n) {
+    var sel = "path,line,polyline,polygon,circle,ellipse,rect";
+    var only = n.getAttribute("data-m-draw");
+    if (only && only !== "" && only !== "all" && only !== "true") sel = only;
+    return mSel(n, sel).filter(function (p) {
+      if (typeof p.getTotalLength !== "function") return false;
+      var cs = getComputedStyle(p);
+      if (!cs.stroke || cs.stroke === "none" || !(parseFloat(cs.strokeWidth) > 0)) return false;
+      if (cs.strokeDasharray && cs.strokeDasharray !== "none") return false; // dashed on purpose: leave it
+      var tag = p.tagName.toLowerCase();
+      return tag === "line" || tag === "polyline" || cs.fill === "none" || p.hasAttribute("data-m-line");
+    });
+  }
+  function mDraw(n, tl, at) {
+    if (n.__mDraw) return; n.__mDraw = 1;
+    var g = global.gsap, paths = mDrawables(n);
+    if (!paths.length) return;
+    paths.forEach(function (p) {
+      var L = 0; try { L = p.getTotalLength(); } catch (e) { L = 0; }
+      if (!L) return;
+      p.style.strokeDasharray = L + " " + L;
+      p.__mLen = L;
+    });
+    var live = paths.filter(function (p) { return p.__mLen; });
+    var vars = { strokeDashoffset: 0, duration: 1, ease: "none", stagger: 0.08 };
+    var from = { strokeDashoffset: function (i, p) { return p.__mLen; } };
+    if (tl) { tl.fromTo(live, from, vars, at || 0); return; }
+    vars.scrollTrigger = { trigger: n, start: n.getAttribute("data-m-start") || "top 80%", end: n.getAttribute("data-m-end") || "bottom 45%", scrub: 0.6 };
+    g.fromTo(live, from, vars);
+  }
+  // --- bars grow from their baseline: data-m-bars="y" (default) or "x" ---
+  function mBars(n, tl, at) {
+    if (n.__mBars) return; n.__mBars = 1;
+    var g = global.gsap, axis = n.getAttribute("data-m-bars") === "x" ? "x" : "y";
+    var sel = n.getAttribute("data-m-bar") || (n.tagName.toLowerCase() === "svg" || n instanceof SVGElement ? "rect" : ":scope > *");
+    var bars = els(sel, n).filter(function (b) {
+      if (b.tagName.toLowerCase() !== "rect") return true;
+      var bb; try { bb = b.getBBox(); } catch (e) { return false; }
+      return bb.width > 0 && bb.height > 0 && !(bb.width > 400 && bb.height > 200);
+    });
+    if (!bars.length) return;
+    var from = axis === "y" ? { scaleY: 0, transformOrigin: "50% 100%" } : { scaleX: 0, transformOrigin: "0% 50%" };
+    var to = { scaleY: 1, scaleX: 1, duration: 0.8, ease: M_EASE.soft, stagger: 0.06 };
+    bars.forEach(function (b) { if (b instanceof SVGElement) b.style.transformBox = "fill-box"; });
+    if (tl) { tl.fromTo(bars, from, to, at || 0); return; }
+    to.scrollTrigger = { trigger: n, start: "top 82%", end: "bottom 50%", scrub: 0.6 };
+    g.fromTo(bars, from, to);
+  }
+  // --- counters: the element's own text is the final value ---
+  function mCount(n, tl, at) {
+    if (n.__mCount) return; n.__mCount = 1;
+    var p = mParseNum(n.getAttribute("data-m-count") || n.textContent);
+    if (!p) return;
+    var final = n.textContent;
+    var o = { v: 0 };
+    n.setAttribute("aria-label", final.trim());
+    function upd() { n.textContent = mFmtNum(p, o.v); }
+    var vars = { v: p.value, duration: 1.6, ease: "power2.out", onUpdate: upd, onComplete: function () { n.textContent = final; } };
+    upd();
+    if (tl) { vars.duration = 1; vars.ease = "none"; tl.to(o, vars, at || 0); return; }
+    vars.scrollTrigger = { trigger: n, start: "top 88%", once: true };
+    global.gsap.to(o, vars);
+  }
+  // --- one-shot reveal of an element or of its children ---
+  function mReveal(n) {
+    if (n.__mRev) return; n.__mRev = 1;
+    var kids = n.hasAttribute("data-m-stagger") ? Array.prototype.slice.call(n.children) : [n];
+    var from = mFrom(n); from.duration = 0.9; from.ease = M_EASE.out;
+    from.stagger = mNum(n.getAttribute("data-m-stagger"), 0.08) || 0.08;
+    from.scrollTrigger = { trigger: n, start: n.getAttribute("data-m-start") || "top 85%", once: true };
+    global.gsap.from(kids, from);
+  }
+  // --- parallax drift: data-m-parallax="-12" = yPercent at the end of the pass ---
+  function mParallax(n) {
+    var v = mNum(n.getAttribute("data-m-parallax"), -10);
+    global.gsap.fromTo(n, { yPercent: -v / 2 }, { yPercent: v / 2, ease: "none", scrollTrigger: { trigger: n.parentElement || n, start: "top bottom", end: "bottom top", scrub: true } });
+  }
+  // --- spring hover and press (elastic settle, no layout properties) ---
+  function mSpring(n) {
+    if (n.__mSpring) return; n.__mSpring = 1;
+    var g = global.gsap, amt = mNum(n.getAttribute("data-m-spring"), 1) || 1;
+    var qs = g.quickTo(n, "scale", { duration: 0.55, ease: "elastic.out(1.1,0.5)" });
+    var qy = g.quickTo(n, "y", { duration: 0.55, ease: "elastic.out(1.1,0.5)" });
+    function on(e) { if (e.pointerType === "touch") return; qs(1 + 0.035 * amt); qy(-3 * amt); }
+    function off() { qs(1); qy(0); }
+    n.addEventListener("pointerenter", on);
+    n.addEventListener("pointerleave", off);
+    n.addEventListener("pointerdown", function () { qs(1 - 0.04 * amt); });
+    n.addEventListener("pointerup", function (e) { if (e.pointerType === "touch") off(); else on(e); });
+    n.addEventListener("focus", function () { qs(1 + 0.02 * amt); });
+    n.addEventListener("blur", off);
+    return function () { g.set(n, { clearProps: "transform" }); };
+  }
+  // --- layout transition for filters and tabs: record before the click handler runs ---
+  function mFlip(box) {
+    if (box.__mFlip || !global.Flip) return; box.__mFlip = 1;
+    var sel = box.getAttribute("data-m-flip") || ":scope > *";
+    function targets() { return els(sel, box); }
+    box.addEventListener("click", function (e) {
+      if (!e.target.closest("button,[role=tab],a[href^='#'],input,label")) return;
+      if (reduced()) return;
+      var state = global.Flip.getState(targets());
+      requestAnimationFrame(function () {
+        global.Flip.from(state, { duration: 0.6, ease: M_EASE.out, absolute: false, nested: true, prune: true,
+          onEnter: function (els2) { return global.gsap.fromTo(els2, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.5 }); },
+          onLeave: function (els2) { return global.gsap.to(els2, { autoAlpha: 0, scale: 0.94, duration: 0.3 }); } });
+      });
+    }, true);
+  }
+  // --- cinematic hero: headline chars, then lede, actions and visual ---
+  function mHero(h, phone) {
+    var g = global.gsap, tl = g.timeline({ defaults: { ease: M_EASE.out } });
+    var parts = els("[data-m-hero-part]", h);
+    if (!parts.length) return tl;
+    parts.forEach(function (p, i) {
+      var kind = p.getAttribute("data-m-hero-part");
+      var at = i === 0 ? 0.1 : "-=0.55";
+      if (kind === "visual") tl.from(p, { autoAlpha: 0, scale: phone ? 0.96 : 0.82, rotate: phone ? 0 : -8, duration: 1.4, ease: "expo.out" }, i === 0 ? 0 : "-=1.0");
+      else if (kind === "rule") tl.from(p, { scaleX: 0, transformOrigin: "0 50%", duration: 1.1, ease: "expo.inOut" }, at);
+      else tl.from(p, { autoAlpha: 0, y: 28, duration: 0.9 }, at);
+    });
+    if (!phone) {
+      // the hero drifts apart as it leaves: copy rises, visual sinks
+      var copy = el("[data-m-hero-copy]", h), vis = el("[data-m-hero-part=visual]", h);
+      var exit = { trigger: h, start: "top top", end: "bottom top", scrub: true };
+      if (copy) g.to(copy, { yPercent: -18, autoAlpha: 0.2, ease: "none", scrollTrigger: exit });
+      if (vis) g.to(vis, { yPercent: 14, scale: 0.94, ease: "none", scrollTrigger: exit });
+    }
+    return tl;
+  }
+
+  function motionScan(root) {
+    root = root || document;
+    if (!gsapOK() || !M.mm) return false;
+    M.scanned.push(root);
+    return true;
+  }
+  function motionSetup(root) {
+    var g = global.gsap;
+    root = root || document;
+    var desk = "(min-width: 900px) and (prefers-reduced-motion: no-preference)";
+    var phone = "(max-width: 899.98px) and (prefers-reduced-motion: no-preference)";
+    M.mm = g.matchMedia();
+    M.mm.add({ desk: desk, phone: phone }, function (ctx) {
+      if (forceReduced || printing) return;
+      var isPhone = !!ctx.conditions.phone;
+      document.documentElement.classList.add("m-on", isPhone ? "m-phone" : "m-desk");
+      mSel(root, "[data-m-hero]").forEach(function (h) { mHero(h, isPhone); });
+      mSel(root, "[data-m-split]").forEach(function (n) { mSplit(n, isPhone); });
+      if (!isPhone) mSel(root, "[data-m-pin]").forEach(mPin);
+      else mStepsOnce(mSel(root, "[data-m-pin] [data-m-step]"));
+      var loose = function (n) { return isPhone || !n.closest("[data-m-pin]"); };
+      mSel(root, "[data-m-draw]").filter(loose).forEach(function (n) { mDraw(n); });
+      mSel(root, "[data-m-bars]").filter(loose).forEach(function (n) { mBars(n); });
+      mSel(root, "[data-m-count]").filter(loose).forEach(function (n) { mCount(n); });
+      mSel(root, "[data-m-reveal]").forEach(mReveal);
+      if (!isPhone) mSel(root, "[data-m-parallax]").forEach(mParallax);
+      mSel(root, "[data-m-spring]").forEach(mSpring);
+      mSel(root, "[data-m-flip]").forEach(mFlip);
+      return function () {
+        // leaving a breakpoint: gsap.matchMedia reverts tweens; clear our guards so the next tier rebuilds
+        mSel(root, "[data-m-split],[data-m-draw],[data-m-bars],[data-m-count],[data-m-reveal],[data-m-spring],[data-m-flip]").forEach(function (n) {
+          n.__mSplit = n.__mDraw = n.__mBars = n.__mCount = n.__mRev = n.__mSpring = n.__mFlip = 0;
+        });
+        document.documentElement.classList.remove("m-on", "m-phone", "m-desk");
+      };
+    });
+    // late fonts and images change heights: re-measure pins once everything has settled
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { global.ScrollTrigger.refresh(); }, function () { });
+    addEventListener("load", function () { global.ScrollTrigger.refresh(); });
+  }
+  function autoGsap() {
+    if (!gsapOK()) { document.documentElement.classList.add("m-off"); return; }
+    var plugins = [global.ScrollTrigger];
+    if (global.SplitText) plugins.push(global.SplitText);
+    if (global.Flip) plugins.push(global.Flip);
+    global.gsap.registerPlugin.apply(global.gsap, plugins);
+    // legacy aliases: one API. v1.4 kinetic headlines become SplitText word reveals.
+    els("[data-st-kinetic]").forEach(function (n) { if (!n.hasAttribute("data-m-split")) n.setAttribute("data-m-split", "words"); });
+    motionSetup(document);
+    M.ready = true;
+  }
+  function motionKill() { if (M.mm) M.mm.revert(); M.mm = null; }
+
   var Story = {
     version: "1.4.0",
     orb: orb,
@@ -6699,6 +7083,12 @@ html.st-printing .c7-bar,html.st-printing .c7-memo,html.st-printing .c7-pin .c7-
     marks: marks,
     kinetic: kinetic,
     viewTransition: viewTransition,
+    motion: { scan: function (r) { motionKill(); motionSetup(r || document); }, kill: motionKill, get on() { return M.ready; } },
+    stagger: stagger,
+    trail: trail,
+    draw: draw,
+    scrub: scrub,
+    hover: hover,
     print: printHandout,
     _printPrepare: printPrepare,
     _printRestore: printRestore,

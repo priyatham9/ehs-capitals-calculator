@@ -51,10 +51,17 @@ class TestDocsPageStructure(unittest.TestCase):
         self.assertNotIn("—", self.html)
 
     def test_no_external_script(self):
-        # A <script src="..."> pulling code from anywhere would break the
-        # "no build step, nothing but Google Fonts" promise the page makes.
+        # No build step and no third-party code, with one exception: the
+        # optional motion layer loads GSAP from cdnjs at a pinned version.
+        # The page works without it (every element has a final static state).
+        allowed = re.compile(
+            r'src="https://cdnjs\.cloudflare\.com/ajax/libs/gsap/\d+\.\d+\.\d+/'
+            r'(gsap|ScrollTrigger|SplitText|Flip)\.min\.js"'
+        )
         for match in re.finditer(r"<script\b[^>]*>", self.html, flags=re.IGNORECASE):
-            self.assertNotIn("src=", match.group(0).lower())
+            tag = match.group(0)
+            if "src=" in tag.lower():
+                self.assertRegex(tag, allowed)
 
     def test_only_google_fonts_is_an_external_stylesheet(self):
         hrefs = re.findall(
