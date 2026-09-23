@@ -1540,7 +1540,7 @@ html:not(.m-desk) [data-m-progress]{transform:none}
       <a data-st-spotlight data-m-spring class="door" href="story.html">
         <span class="door-k">Story</span>
         <span class="door-t">The capital case</span>
-        <span class="door-s">Eleven findings, scene by scene, with the figures that make the argument. Start here if you want the case before the controls.</span>
+        <span class="door-s">Three findings in eleven scroll steps, with the figures that make the argument. Start here if you want the case before the controls.</span>
         <span class="door-go mono">Read it &rarr;</span>
       </a>
       <a data-st-spotlight data-m-spring class="door door-here" href="#calculator" aria-current="page">
@@ -2859,8 +2859,8 @@ function renderStory(inp, t, h) {
     el.className = "verdict " + (pass ? "pass" : "fail");
   });
   $("story-verdict").textContent = "Counting only booked costs this investment "
-    + (tPass ? "does" : "does not") + " pay back; counting human-capital costs it "
-    + (hPass ? "does" : "does not") + ".";
+    + (tPass ? "clears" : "misses") + " the " + inp.hurdle + "-year hurdle; counting human-capital costs it "
+    + (hPass ? "clears" : "misses") + " it.";
 }
 
 /* ===========================================================================

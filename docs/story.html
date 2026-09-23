@@ -1656,7 +1656,7 @@ html:not(.m-desk) .arc-prog{display:none}
 </section>
 
 <section class="st-chapter" data-num="02" data-key="1.00 yr" data-orb="solving" aria-label="Finding two">
-  <h2 class="st-chapter-title display" data-m-split="words">Risk reduction swings the payback 1.00 year, more than all seven cost lines together</h2>
+  <h2 class="st-chapter-title display" data-m-split="words">Risk reduction swings the payback 1.00 year, more than the seven cost-line swings added up</h2>
   <p>The input that decides the case is typed in by the person making the case. Say so out loud, in the same sentence as the payback.</p>
 </section>
 
@@ -1665,7 +1665,7 @@ html:not(.m-desk) .arc-prog{display:none}
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
       <span class="label">Scene two</span>
-      <h2 class="display">Risk reduction swings the payback 1.00 year, more than all seven cost lines together</h2>
+      <h2 class="display">Risk reduction swings the payback 1.00 year, more than the seven cost-line swings added up</h2>
       <p>A payback of 1.59 years rests on nine inputs. Move each one by 30% on its own, hold the other eight, and the bars sort themselves by how far the answer travels.</p>
       <details class="data-table" id="tor-table"></details>
     </div>
@@ -1731,7 +1731,7 @@ html:not(.m-desk) .arc-prog{display:none}
             <div class="st-bignum-row stage-nums"><span class="st-bignum" id="mc-big">99.9%<small>Draws that clear the 3-year hurdle</small></span></div>
             <div id="mc"></div>
             <div class="legend"><span id="mc-legend-a"><i class="sw" style="background:var(--accent)"></i>Clears the 3-year hurdle</span><span id="mc-legend-b"><i class="sw" style="background:var(--surface-2);border:1px solid var(--rule-soft)"></i>Misses it</span><span><i class="sw" style="background:var(--accent);opacity:.25"></i>Middle 90% of draws</span><span><i class="sw" style="background:var(--ink);height:3px"></i>Median draw</span></div>
-            <p class="stage-src">Seed 1904, 2,000 draws, mulberry32 - identical to docs/index.html and src/montecarlo.py</p>
+            <p class="stage-src">Seed 1904, 2,000 uniform draws, mulberry32, identical to the calculator page. The Python reference (src/montecarlo.py) uses shaped distributions and gives 99.9% and 15.6%: the gap between counts holds either way.</p>
           </div>
         </div>
       </div>
@@ -1814,7 +1814,7 @@ html:not(.m-desk) .arc-prog{display:none}
         </div>
         <p class="try-key"><span style="display:inline-block;width:10px;height:2px;background:var(--warn);vertical-align:middle;margin-right:5px"></span>3-year hurdle &middot; bars run to 8 years</p>
         <p class="try-sentence" id="try-sentence">The two counts disagree: the booked ledger rejects the control and the human-capital ledger approves it.</p>
-        <p class="try-be" id="try-be">At this capital cost the booked case needs at least <b>90.9%</b> risk reduction to clear 3 years; the human-capital case needs <b>42.4%</b>.</p>
+        <p class="try-be" id="try-be">At this capital cost the booked case needs at least <b>91.0%</b> risk reduction to clear 3 years; the human-capital case needs <b>42.4%</b>.</p>
       </div>
     </div>
   </div>
@@ -5947,7 +5947,7 @@ function drawTornadoPhone(rows, highlightTop) {
   svg.appendChild(svgEl("text", { x: PAD, y: H - 6 }, lo.toFixed(2)));
   svg.appendChild(svgEl("text", { x: W - PAD, y: H - 6, "text-anchor": "end" }, hi.toFixed(2) + " yr"));
   svg.appendChild(svgEl("text", { class: "callout-t", x: PAD, y: 18 },
-    highlightTop ? "Widest two: typed in, not invoiced" : "Payback, years"));
+    highlightTop ? "Widest two: an assumption and a quote" : "Payback, years"));
   host.appendChild(svg);
 }
 function drawTornado(rows, highlightTop) {
@@ -5988,7 +5988,7 @@ function drawTornado(rows, highlightTop) {
     svg.appendChild(svgEl("path", {
       class: "callout-lead", d: "M" + cx + " " + (T - 2) + " L" + cx + " " + (T - 18)
     }));
-    svg.appendChild(svgEl("text", { class: "callout-t", x: cx, y: T - 24, "text-anchor": "end" }, "typed in, not invoiced"));
+    svg.appendChild(svgEl("text", { class: "callout-t", x: cx, y: T - 24, "text-anchor": "end" }, "an assumption and a quote"));
   }
   host.appendChild(svg);
 }
@@ -6007,7 +6007,7 @@ function tornadoState(step) {
     take.innerHTML = 'Sorted by swing: risk reduction moves the payback <span class="num">' + TOR_SORTED[0].swing.toFixed(2) + ' yr</span>.';
   } else {
     drawTornado(TOR_SORTED, true);
-    take.innerHTML = 'The two widest bars are the two numbers you supply, not the ones you invoice.';
+    take.innerHTML = 'The two widest bars are the risk reduction you assume and the capital quote, not any invoiced line.';
   }
 }
 dataTable($("tor-table"), "Tornado values (payback in years)",
@@ -6265,7 +6265,7 @@ const beRR = (cost, capex, hurdle) => capex / (hurdle * cost);
     else msg = 'Neither count clears the hurdle. Counting more cost lines cannot rescue this request at these assumptions.';
     $("try-sentence").innerHTML = msg;
     const bt = beRR(INP.booked, capex, H), bh = beRR(totalH, capex, H);
-    const fmtBE = v => v > 1 ? "more than 100% (not possible)" : pct1(v);
+    const fmtBE = v => v > 1 ? "more than 100% (not possible)" : (Math.ceil(v * 1000) / 10).toFixed(1) + "%";
     $("try-be").innerHTML = "At " + money(capex) + " the booked case needs at least <b>" + fmtBE(bt) +
       "</b> risk reduction to clear 3 years; the human-capital case needs <b>" + fmtBE(bh) +
       "</b>. You have assumed <b>" + rr.value + "%</b>.";
