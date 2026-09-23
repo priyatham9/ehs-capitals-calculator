@@ -938,6 +938,8 @@ html{scroll-padding-top:16px}
 .nextcard,.sy-next{grid-template-columns:1fr!important}
 /* v1.2.2: companion orb sits top-right, small, never over a figure title; tall figures shrink to fit the stage */
 .st-companion{left:auto!important;right:0!important;top:0!important;align-items:flex-end!important;--st-comp:72px}
+/* QA: on phones and tablets the companion sits over figure labels and the step cards scrolling past it; the figure carries the state there */
+@media(max-width:800px){.st-companion{display:none!important}}
 @media(min-width:801px){
   body.st-story .st-stage{justify-content:center;overflow:visible}
   body.st-story .st-stage-inner svg,body.st-story .st-stage-inner canvas:not(.st-orb){max-height:calc(100vh - var(--st-way-h,60px) - 230px);max-height:calc(100svh - var(--st-way-h,60px) - 230px);width:auto;max-width:100%;margin-inline:auto}
@@ -1226,11 +1228,11 @@ body.st-has-way{padding-bottom:calc(var(--st-way-h,64px) + 22px)}
 
 /* ---------- 10. hero background ---------- */
 .st-hero{isolation:isolate}
-.st-hero::before{content:"";position:absolute;inset:-10% 0;z-index:-2;pointer-events:none;
+.st-hero::before{content:"";position:absolute;inset:-64px 0;z-index:-2;pointer-events:none;
   background-image:radial-gradient(var(--st-hair-c) 1px,transparent 1px);background-size:22px 22px;
   -webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 75%);
   mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent 75%)}
-.st-hero::after{content:"";position:absolute;right:6%;top:18%;width:46%;height:56%;z-index:-3;pointer-events:none;
+.st-hero::after{content:"";position:absolute;right:6%;top:120px;width:46%;height:56%;z-index:-3;pointer-events:none;
   background:radial-gradient(closest-side,var(--accent),transparent 70%);opacity:.12;filter:blur(28px);
   animation:st-aurora 18s ease-in-out infinite alternate}
 @keyframes st-aurora{from{transform:translate3d(-3%,2%,0) scale(1)}to{transform:translate3d(4%,-3%,0) scale(1.08)}}
@@ -1350,6 +1352,20 @@ html:not(.m-desk) [data-m-progress]{transform:none}
 .m-desk [data-m-hero]{overflow:clip}
 @media (prefers-reduced-motion: reduce){[data-m-step],[data-m-hero-part],[data-m-reveal]{opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;clip-path:none!important}}
 .st-reduced [data-m-step],.st-reduced [data-m-hero-part],.st-printing [data-m-step]{opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;clip-path:none!important}
+/* v2.1 motion polish: nothing flashes in its final or unsplit state before GSAP takes it.
+   html.m-ready is set by story.js once the layer is set up (or found missing / reduced);
+   the 2.5s failsafe shows everything even if the script never runs. */
+@keyframes m-failsafe{to{visibility:visible}}
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference){
+  html:not(.m-ready):not(.st-reduced):not(.st-printing) :is([data-m-split]:not([data-m-split-done]),[data-m-hero-part],[data-m-pin] [data-m-step],[data-m-reveal]){visibility:hidden;animation:m-failsafe 0s 2.5s forwards}
+}
+[data-m-count]{font-variant-numeric:tabular-nums}
+.m-on [data-m-split-done]{font-variant-ligatures:none}
+[data-m-split] .m-word{white-space:nowrap}
+
+/* QA: entrance tweens start elements up to 60px to the side; before they play (a pinned chapter not yet reached)
+   they must not widen the page. clip, not hidden, so sticky and pinned stages keep working. */
+html{overflow-x:clip}
 /*STORY_CSS_END*/
 </style>
 <script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
@@ -1975,6 +1991,20 @@ html:not(.m-desk) .arc-prog{display:none}
                                filters or re-orders the children
    Aliases: data-st-kinetic -> data-m-split="words" when GSAP is present.
    JS: Story.motion.scan(root) re-applies after DOM changes; Story.motion.kill().
+
+   Rules the engine enforces (v2.1):
+   - Until the layer is ready, split headlines, hero parts, pinned steps and
+     reveals are hidden by story.css (no flash of the unsplit/final state);
+     html gets .m-ready once set up. A 2.5s CSS failsafe shows them anyway.
+   - An element GSAP animates must not also carry a page CSS animation or a
+     CSS transition on transform/opacity/visibility/filter: the engine turns
+     those off inline on that element while motion runs (they fight GSAP and
+     can leave it stuck at opacity 0). Put page animations on a wrapper.
+   - One ease vocabulary (M_EASE) and one scrub lag (M_SCRUB = 0.8s).
+   - Pinned chapters shorter than the screen are centred in it (no dead strip).
+   - ScrollTrigger re-measures after fonts, images (load) and bfcache restore;
+     a #hash in the URL, or an in-page link into a pinned chapter, lands on
+     the chapter's pin start.
    ============================================================ */
 (function (global) {
   "use strict";
@@ -5357,7 +5387,12 @@ html:not(.m-desk) .arc-prog{display:none}
   function viewTransition(update) {
     var done = { finished: Promise.resolve(), ready: Promise.resolve(), updateCallbackDone: Promise.resolve(), skipTransition: function () { } };
     if (!reduced() && !printing && typeof document.startViewTransition === "function") {
-      try { return document.startViewTransition(update); } catch (e) { }
+      try {
+        var vt = document.startViewTransition(update);
+        // a newer transition skips this one and rejects its promises: that is expected, not an error
+        ["ready", "finished", "updateCallbackDone"].forEach(function (k) { if (vt[k] && vt[k].catch) vt[k].catch(function () { }); });
+        return vt;
+      } catch (e) { }
     }
     try { update(); } catch (e2) { if (global.console) console.error(e2); }
     return done;
@@ -5376,8 +5411,39 @@ html:not(.m-desk) .arc-prog{display:none}
      Nothing here animates layout properties: transforms, opacity, clip-path
      and stroke-dashoffset only.
      --------------------------------------------------------- */
-  var M = { ready: false, mm: null, scanned: [] };
-  var M_EASE = { out: "expo.out", soft: "power3.out", io: "power2.inOut", back: "back.out(1.6)" };
+  var M = { ready: false, mm: null, mms: [], scanned: [] };
+  var M_EASE = { out: "expo.out", soft: "power3.out", io: "power2.inOut", back: "back.out(1.6)", spring: "elastic.out(1.1,0.5)" };
+  var M_SCRUB = 0.8; // one catch-up lag for every scrubbed timeline
+  // an element GSAP drives must not also run a page CSS animation, or a CSS
+  // transition on the properties GSAP tweens: turn those off inline (restored on revert)
+  var M_TAMED = [];
+  function mTame(n) {
+    if (!n || n.__mTamed || !(n instanceof Element)) return;
+    var cs = getComputedStyle(n), fix = {};
+    if (cs.animationName && cs.animationName !== "none") fix.animation = "none";
+    var props = (cs.transitionProperty || "").split(/\s*,\s*/);
+    var durs = (cs.transitionDuration || "0s").split(/\s*,\s*/);
+    var live = props.filter(function (p, i) { return parseFloat(durs[i % durs.length]) > 0; });
+    if (live.some(function (p) { return /^(all|transform|translate|scale|rotate|opacity|visibility|filter)$/.test(p); })) {
+      var keep = live.filter(function (p) { return !/^(transform|translate|scale|rotate|opacity|visibility|filter)$/.test(p); });
+      if (keep.indexOf("all") >= 0) keep = keep.filter(function (p) { return p !== "all"; }).concat(["color", "background-color", "border-color", "box-shadow", "outline-color", "text-decoration-color"]);
+      fix.transitionProperty = keep.length ? keep.join(",") : "none";
+    }
+    if (!fix.animation && !fix.transitionProperty) return;
+    n.__mTamed = { animation: n.style.animation, transitionProperty: n.style.transitionProperty };
+    if (fix.animation) n.style.animation = "none";
+    if (fix.transitionProperty) n.style.transitionProperty = fix.transitionProperty;
+    M_TAMED.push(n);
+  }
+  function mUntameAll() {
+    M_TAMED.forEach(function (n) { var o = n.__mTamed; if (!o) return; n.style.animation = o.animation; n.style.transitionProperty = o.transitionProperty; n.__mTamed = null; });
+    M_TAMED = [];
+  }
+  function mTameAll(list) { list.forEach(mTame); return list; }
+  // one entrance per element: two .from() tweens on the same node (say a hero part
+  // that is also a reveal) capture each other's hidden start and leave it stuck
+  // half-shown. The first system to claim a node owns its entrance.
+  function mClaim(list) { return list.filter(function (n) { if (n.__mClaim) return false; n.__mClaim = 1; return true; }); }
   function gsapOK() {
     var g = global.gsap;
     return !!(g && global.ScrollTrigger);
@@ -5418,8 +5484,10 @@ html:not(.m-desk) .arc-prog{display:none}
   function mSplit(n, phone) {
     if (!global.SplitText || n.__mSplit) return;
     n.__mSplit = 1;
+    mTame(n);
     // soft hyphens do not survive a split (the word breaks mid-line): reveal the block whole
     if ((n.textContent || "").indexOf("\u00AD") >= 0) {
+      if (!mClaim([n]).length) return;
       global.gsap.from(n, { autoAlpha: 0, y: 40, duration: 1, ease: M_EASE.out, delay: n.closest("[data-m-hero]") ? 0.15 : 0,
         scrollTrigger: n.closest("[data-m-hero]") ? null : { trigger: n, start: "top 88%", once: true } });
       return;
@@ -5431,9 +5499,12 @@ html:not(.m-desk) .arc-prog{display:none}
       type: type === "lines" ? "lines" : type === "chars" ? "words,chars" : "words",
       mask: type === "chars" ? "words" : type,
       aria: "auto",
+      // chars stay inside a no-wrap word, so a line never breaks mid-word
+      wordsClass: "m-word", charsClass: "m-char", linesClass: "m-line",
       autoSplit: type === "lines",
       onSplit: function (self) {
         var parts = self[type];
+        n.setAttribute("data-m-split-done", "");
         var hero = n.closest("[data-m-hero]");
         var t = global.gsap.from(parts, {
           yPercent: 110, autoAlpha: type === "chars" ? 1 : 0, rotate: type === "chars" && !phone ? 6 : 0,
@@ -5460,30 +5531,57 @@ html:not(.m-desk) .arc-prog{display:none}
       mSel(sec, "[data-m-count]").forEach(function (c) { mCount(c); });
       return null;
     }
+    steps = mTameAll(mClaim(steps));
+    mCenterPin(sec);
     var len = sec.getAttribute("data-m-pin") || (100 + steps.length * 60) + "%";
-    var tl = g.timeline({
+    var tl = sec.__mTl = g.timeline({
       defaults: { ease: "none" },
-      scrollTrigger: { trigger: sec, start: "top top", end: "+=" + len, pin: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true }
+      scrollTrigger: { trigger: sec, start: "top top", end: "+=" + len, pin: true, scrub: M_SCRUB, anticipatePin: 1, invalidateOnRefresh: true,
+        onRefreshInit: function () { mCenterPin(sec); } }
     });
     steps.sort(function (a, b) { return mNum(a.getAttribute("data-m-step"), 0) - mNum(b.getAttribute("data-m-step"), 0); });
     steps.forEach(function (s, i) {
       var at = s.getAttribute("data-m-step");
       var pos = at && !isNaN(parseFloat(at)) ? parseFloat(at) : i;
       tl.fromTo(s, mFrom(s), { autoAlpha: 1, x: 0, y: 0, scale: 1, filter: "blur(0px)", clipPath: "inset(0 0 0% 0)", duration: 0.6, ease: M_EASE.soft }, pos);
-      // a step can dim the one before it, so the eye follows the newest line
-      if (s.hasAttribute("data-m-dim") && steps[i - 1]) tl.to(steps[i - 1], { opacity: 0.35, duration: 0.4 }, pos);
+      // data-m-dim used to fade the previous step to 0.35, which left explanatory text below
+      // AA contrast and read as a half-finished reveal. The newest line now leads by its
+      // entrance alone; earlier lines stay fully legible.
     });
     // scrubbed builds nested in a pinned chapter ride its timeline, not their own trigger
     mSel(sec, "[data-m-draw]").forEach(function (d) { mDraw(d, tl, mNum(d.getAttribute("data-m-at"), 0)); });
     mSel(sec, "[data-m-bars]").forEach(function (b) { mBars(b, tl, mNum(b.getAttribute("data-m-at"), 0)); });
     mSel(sec, "[data-m-count]").forEach(function (c) { mCount(c, tl, mNum(c.getAttribute("data-m-at"), 0)); });
+    // where the first step has fully landed: anchors into this chapter stop here, not on a blank frame
+    sec.__mFirstAt = steps.length ? Math.min.apply(null, steps.map(function (s, i) { var at = s.getAttribute("data-m-step"); return at && !isNaN(parseFloat(at)) ? parseFloat(at) : i; })) + 0.6 : 0;
     var prog = el("[data-m-progress]", sec);
     if (prog) tl.fromTo(prog, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0 50%", duration: tl.duration() || 1 }, 0);
     return tl;
   }
 
+  // a pinned chapter shorter than the screen would leave a dead strip under it:
+  // centre its content in a screen-tall box. Uses the section's own layout mode,
+  // set inline so page CSS cannot undo it; restored when motion is reverted.
+  function mCenterPin(sec) {
+    if (!sec.__mPinOrig) sec.__mPinOrig = { display: sec.style.display, fd: sec.style.flexDirection, jc: sec.style.justifyContent, ac: sec.style.alignContent, mh: sec.style.minHeight };
+    var o = sec.__mPinOrig;
+    sec.style.minHeight = o.mh; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.display = o.display; sec.style.flexDirection = o.fd;
+    var cs = getComputedStyle(sec), d = cs.display;
+    sec.style.minHeight = innerHeight + "px";
+    if (/grid/.test(d)) sec.style.alignContent = "center";
+    else if (/flex/.test(d)) { if (/column/.test(cs.flexDirection)) sec.style.justifyContent = "center"; else sec.style.alignItems = sec.style.alignItems || "center"; }
+    else { sec.style.display = "flex"; sec.style.flexDirection = "column"; sec.style.justifyContent = "center"; }
+  }
+  function mUncenterPins() {
+    els("[data-m-pin]").forEach(function (sec) {
+      var o = sec.__mPinOrig; if (!o) return;
+      sec.style.display = o.display; sec.style.flexDirection = o.fd; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.minHeight = o.mh;
+      sec.__mPinOrig = null;
+    });
+  }
   // phone (or an over-tall chapter): the chapter scrolls normally and each step reveals once
   function mStepsOnce(steps) {
+    steps = mTameAll(mClaim(steps));
     steps.forEach(function (s) {
       global.gsap.from(s, { autoAlpha: 0, y: 24, duration: 0.7, ease: M_EASE.out, scrollTrigger: { trigger: s, start: "top 88%", once: true } });
     });
@@ -5514,10 +5612,11 @@ html:not(.m-desk) .arc-prog{display:none}
       p.__mLen = L;
     });
     var live = paths.filter(function (p) { return p.__mLen; });
+    if (!live.length) return; // hidden or zero-length (e.g. a desktop-only SVG on a phone)
     var vars = { strokeDashoffset: 0, duration: 1, ease: "none", stagger: 0.08 };
     var from = { strokeDashoffset: function (i, p) { return p.__mLen; } };
     if (tl) { tl.fromTo(live, from, vars, at || 0); return; }
-    vars.scrollTrigger = { trigger: n, start: n.getAttribute("data-m-start") || "top 80%", end: n.getAttribute("data-m-end") || "bottom 45%", scrub: 0.6 };
+    vars.scrollTrigger = { trigger: n, start: n.getAttribute("data-m-start") || "top 80%", end: n.getAttribute("data-m-end") || "bottom 45%", scrub: M_SCRUB };
     g.fromTo(live, from, vars);
   }
   // --- bars grow from their baseline: data-m-bars="y" (default) or "x" ---
@@ -5535,7 +5634,8 @@ html:not(.m-desk) .arc-prog{display:none}
     var to = { scaleY: 1, scaleX: 1, duration: 0.8, ease: M_EASE.soft, stagger: 0.06 };
     bars.forEach(function (b) { if (b instanceof SVGElement) b.style.transformBox = "fill-box"; });
     if (tl) { tl.fromTo(bars, from, to, at || 0); return; }
-    to.scrollTrigger = { trigger: n, start: "top 82%", end: "bottom 50%", scrub: 0.6 };
+    mTameAll(bars.filter(function (b) { return !(b instanceof SVGElement); }));
+    to.scrollTrigger = { trigger: n, start: "top 82%", end: "bottom 50%", scrub: M_SCRUB };
     g.fromTo(bars, from, to);
   }
   // --- counters: the element's own text is the final value ---
@@ -5546,17 +5646,30 @@ html:not(.m-desk) .arc-prog{display:none}
     var final = n.textContent;
     var o = { v: 0 };
     n.setAttribute("aria-label", final.trim());
-    function upd() { n.textContent = mFmtNum(p, o.v); }
-    var vars = { v: p.value, duration: 1.6, ease: "power2.out", onUpdate: upd, onComplete: function () { n.textContent = final; } };
+    // land on the page's own text exactly (formatting, spaces, units), never a rounded neighbour
+    var step = Math.pow(10, -p.dec) / 2;
+    function upd() { n.textContent = Math.abs(p.value - o.v) < step ? final : mFmtNum(p, o.v); }
+    var vars = { v: p.value, duration: 1.6, ease: M_EASE.soft, onUpdate: upd, onComplete: function () { n.textContent = final; } };
     upd();
-    if (tl) { vars.duration = 1; vars.ease = "none"; tl.to(o, vars, at || 0); return; }
+    if (tl) {
+      // inside a pin the count plays in time once its moment is reached, then holds the
+      // exact figure: a scrubbed counter at rest mid-pin would show a number the data never said
+      var played = false;
+      tl.call(function () {
+        if (played) return; played = true;
+        global.gsap.to(o, { v: p.value, duration: 1.2, ease: M_EASE.soft, onUpdate: upd, onComplete: function () { n.textContent = final; } });
+      }, null, at || 0);
+      return;
+    }
     vars.scrollTrigger = { trigger: n, start: "top 88%", once: true };
     global.gsap.to(o, vars);
   }
   // --- one-shot reveal of an element or of its children ---
   function mReveal(n) {
     if (n.__mRev) return; n.__mRev = 1;
-    var kids = n.hasAttribute("data-m-stagger") ? Array.prototype.slice.call(n.children) : [n];
+    var kids = mClaim(n.hasAttribute("data-m-stagger") ? Array.prototype.slice.call(n.children) : [n]);
+    if (!kids.length) return;
+    mTameAll(kids);
     var from = mFrom(n); from.duration = 0.9; from.ease = M_EASE.out;
     from.stagger = mNum(n.getAttribute("data-m-stagger"), 0.08) || 0.08;
     from.scrollTrigger = { trigger: n, start: n.getAttribute("data-m-start") || "top 85%", once: true };
@@ -5571,8 +5684,9 @@ html:not(.m-desk) .arc-prog{display:none}
   function mSpring(n) {
     if (n.__mSpring) return; n.__mSpring = 1;
     var g = global.gsap, amt = mNum(n.getAttribute("data-m-spring"), 1) || 1;
-    var qs = g.quickTo(n, "scale", { duration: 0.55, ease: "elastic.out(1.1,0.5)" });
-    var qy = g.quickTo(n, "y", { duration: 0.55, ease: "elastic.out(1.1,0.5)" });
+    mTame(n);
+    var qs = g.quickTo(n, "scale", { duration: 0.55, ease: M_EASE.spring });
+    var qy = g.quickTo(n, "y", { duration: 0.55, ease: M_EASE.spring });
     function on(e) { if (e.pointerType === "touch") return; qs(1 + 0.035 * amt); qy(-3 * amt); }
     function off() { qs(1); qy(0); }
     n.addEventListener("pointerenter", on);
@@ -5602,13 +5716,13 @@ html:not(.m-desk) .arc-prog{display:none}
   // --- cinematic hero: headline chars, then lede, actions and visual ---
   function mHero(h, phone) {
     var g = global.gsap, tl = g.timeline({ defaults: { ease: M_EASE.out } });
-    var parts = els("[data-m-hero-part]", h);
+    var parts = mTameAll(mClaim(els("[data-m-hero-part]", h)));
     if (!parts.length) return tl;
     parts.forEach(function (p, i) {
       var kind = p.getAttribute("data-m-hero-part");
       var at = i === 0 ? 0.1 : "-=0.55";
-      if (kind === "visual") tl.from(p, { autoAlpha: 0, scale: phone ? 0.96 : 0.82, rotate: phone ? 0 : -8, duration: 1.4, ease: "expo.out" }, i === 0 ? 0 : "-=1.0");
-      else if (kind === "rule") tl.from(p, { scaleX: 0, transformOrigin: "0 50%", duration: 1.1, ease: "expo.inOut" }, at);
+      if (kind === "visual") tl.from(p, { autoAlpha: 0, scale: phone ? 0.96 : 0.82, rotate: phone ? 0 : -8, duration: 1.4, ease: M_EASE.out }, i === 0 ? 0 : "-=1.0");
+      else if (kind === "rule") tl.from(p, { scaleX: 0, transformOrigin: "0 50%", duration: 1.1, ease: M_EASE.io }, at);
       else tl.from(p, { autoAlpha: 0, y: 28, duration: 0.9 }, at);
     });
     if (!phone) {
@@ -5621,19 +5735,23 @@ html:not(.m-desk) .arc-prog{display:none}
     return tl;
   }
 
+  // set up a root added after boot (new DOM); elements already set up are skipped by their guards
   function motionScan(root) {
     root = root || document;
     if (!gsapOK() || !M.mm) return false;
     M.scanned.push(root);
+    motionSetup(root, true);
     return true;
   }
-  function motionSetup(root) {
+  function motionSetup(root, extra) {
     var g = global.gsap;
     root = root || document;
     var desk = "(min-width: 900px) and (prefers-reduced-motion: no-preference)";
     var phone = "(max-width: 899.98px) and (prefers-reduced-motion: no-preference)";
-    M.mm = g.matchMedia();
-    M.mm.add({ desk: desk, phone: phone }, function (ctx) {
+    var mm = g.matchMedia();
+    M.mms.push(mm);
+    if (!extra) M.mm = mm;
+    mm.add({ desk: desk, phone: phone }, function (ctx) {
       if (forceReduced || printing) return;
       var isPhone = !!ctx.conditions.phone;
       document.documentElement.classList.add("m-on", isPhone ? "m-phone" : "m-desk");
@@ -5649,20 +5767,108 @@ html:not(.m-desk) .arc-prog{display:none}
       if (!isPhone) mSel(root, "[data-m-parallax]").forEach(mParallax);
       mSel(root, "[data-m-spring]").forEach(mSpring);
       mSel(root, "[data-m-flip]").forEach(mFlip);
+      // triggers were created by kind, not in page order: order them by position so
+      // everything below a pin accounts for its spacer
+      global.ScrollTrigger.sort();
       return function () {
         // leaving a breakpoint: gsap.matchMedia reverts tweens; clear our guards so the next tier rebuilds
         mSel(root, "[data-m-split],[data-m-draw],[data-m-bars],[data-m-count],[data-m-reveal],[data-m-spring],[data-m-flip]").forEach(function (n) {
           n.__mSplit = n.__mDraw = n.__mBars = n.__mCount = n.__mRev = n.__mSpring = n.__mFlip = 0;
         });
+        mSel(root, "[data-m-hero-part],[data-m-step],[data-m-reveal],[data-m-reveal] > *,[data-m-split]").forEach(function (n) { n.__mClaim = 0; });
+        mUntameAll();
+        mUncenterPins();
         document.documentElement.classList.remove("m-on", "m-phone", "m-desk");
       };
     });
-    // late fonts and images change heights: re-measure pins once everything has settled
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { global.ScrollTrigger.refresh(); }, function () { });
-    addEventListener("load", function () { global.ScrollTrigger.refresh(); });
+    if (!extra) mSettle();
   }
+  // late fonts and images change heights: re-measure once each has settled, then
+  // land any #hash on its final position (pins add spacer height after first layout)
+  var mSettled = false, mUserScrolled = false;
+  function mSettle() {
+    if (mSettled) return; mSettled = true;
+    var ST = global.ScrollTrigger;
+    ST.config({ ignoreMobileResize: true });
+    ["wheel", "touchstart", "keydown", "pointerdown"].forEach(function (ev) {
+      addEventListener(ev, function () { mUserScrolled = true; }, { passive: true, once: true });
+    });
+    var fontsDone = !(document.fonts && document.fonts.ready), loadDone = document.readyState === "complete";
+    function settle() { if (!(fontsDone && loadDone)) return; ST.refresh(); mLandHash(); }
+    if (!fontsDone) document.fonts.ready.then(function () { fontsDone = true; ST.refresh(); settle(); }, function () { fontsDone = true; settle(); });
+    if (!loadDone) addEventListener("load", function () { loadDone = true; settle(); }, { once: true });
+    settle();
+    // content above a pin that grows later (charts drawn on idle, lazy images, late
+    // widgets) would leave every trigger below it stale: re-measure when the page
+    // height changes by itself, debounced, and ignore the change a refresh makes
+    if (global.ResizeObserver && document.body) {
+      var lastH = -1, tid = 0;
+      ST.addEventListener("refresh", function () { lastH = document.body.offsetHeight; });
+      new ResizeObserver(function () {
+        clearTimeout(tid);
+        tid = setTimeout(function () {
+          var h = document.body.offsetHeight;
+          if (lastH < 0 || Math.abs(h - lastH) < 2) return;
+          ST.refresh();
+        }, 180);
+      }).observe(document.body);
+    }
+    // back/forward cache: layout may have changed while the page was frozen
+    addEventListener("pageshow", function (e) { if (e.persisted) ST.refresh(); });
+    // in-page links whose target sits inside a pinned chapter go to the pin start
+    document.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest("a[href^='#']");
+      if (!a || a.getAttribute("href").length < 2) return;
+      var t = mHashTarget(a.getAttribute("href"));
+      if (!t || !mPinOf(t)) return;
+      e.preventDefault();
+      var smooth = !reduced() && getComputedStyle(document.documentElement).scrollBehavior === "smooth";
+      scrollTo({ top: mAnchorY(t), behavior: smooth ? "smooth" : "auto" });
+      if (!smooth) mSnapPin(t);
+      if (history.pushState) history.pushState(null, "", a.getAttribute("href"));
+      // the target may still be hidden by the chapter's first step: focus the chapter then
+      var f = getComputedStyle(t).visibility === "hidden" ? mPinOf(t).pin : t;
+      if (!f.hasAttribute("tabindex") && !/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(f.tagName)) f.setAttribute("tabindex", "-1");
+      try { f.focus({ preventScroll: true }); } catch (e2) { }
+    });
+  }
+  function mHashTarget(h) {
+    if (!h || h.length < 2) return null;
+    try { return document.getElementById(decodeURIComponent(h.slice(1))); } catch (e) { return null; }
+  }
+  function mPinOf(t) {
+    var hit = null;
+    global.ScrollTrigger.getAll().forEach(function (s) { if (!hit && s.pin && (s.pin === t || s.pin.contains(t))) hit = s; });
+    return hit;
+  }
+  function mAnchorY(t) {
+    var s = mPinOf(t);
+    if (s) {
+      var tl = s.pin.__mTl, d = tl && tl.duration();
+      var f = d ? Math.min(1, (s.pin.__mFirstAt || 0) / d) : 0;
+      return Math.ceil(s.start + (s.end - s.start) * f) + 1;
+    }
+    var sm = parseFloat(getComputedStyle(t).scrollMarginTop) || 0;
+    return Math.max(0, t.getBoundingClientRect().top + scrollY - sm);
+  }
+  function mLandHash() {
+    if (mUserScrolled) return;
+    var t = mHashTarget(location.hash);
+    if (!t) return;
+    var y = mAnchorY(t);
+    if (Math.abs(scrollY - y) > 2) scrollTo(0, y);
+    mSnapPin(t);
+  }
+  // after an instant jump, skip the scrub catch-up so the chapter is not replayed from blank
+  function mSnapPin(t) {
+    var s = mPinOf(t);
+    if (!s) return;
+    requestAnimationFrame(function () { var tw = s.getTween && s.getTween(); if (tw) tw.progress(1); });
+  }
+  function mReady() { document.documentElement.classList.add("m-ready"); }
   function autoGsap() {
-    if (!gsapOK()) { document.documentElement.classList.add("m-off"); return; }
+    if (!gsapOK()) { document.documentElement.classList.add("m-off"); mReady(); return; }
     var plugins = [global.ScrollTrigger];
     if (global.SplitText) plugins.push(global.SplitText);
     if (global.Flip) plugins.push(global.Flip);
@@ -5671,11 +5877,12 @@ html:not(.m-desk) .arc-prog{display:none}
     els("[data-st-kinetic]").forEach(function (n) { if (!n.hasAttribute("data-m-split")) n.setAttribute("data-m-split", "words"); });
     motionSetup(document);
     M.ready = true;
+    mReady();
   }
-  function motionKill() { if (M.mm) M.mm.revert(); M.mm = null; }
+  function motionKill() { M.mms.forEach(function (mm) { mm.revert(); }); M.mms = []; M.mm = null; mUntameAll(); mUncenterPins(); }
 
   var Story = {
-    version: "1.4.0",
+    version: "2.1.0",
     orb: orb,
     orbInline: orbInline,
     companion: companion,
@@ -5706,7 +5913,7 @@ html:not(.m-desk) .arc-prog{display:none}
     marks: marks,
     kinetic: kinetic,
     viewTransition: viewTransition,
-    motion: { scan: function (r) { motionKill(); motionSetup(r || document); }, kill: motionKill, get on() { return M.ready; } },
+    motion: { scan: function (r) { if (r && r !== document && M.mm) { motionScan(r); return; } motionKill(); motionSetup(document); }, kill: motionKill, refresh: function () { if (gsapOK()) global.ScrollTrigger.refresh(); }, get on() { return M.ready; } },
     stagger: stagger,
     trail: trail,
     draw: draw,
