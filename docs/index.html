@@ -722,113 +722,7 @@ html.st-printing .notes-body code{background:none!important;color:#000!important
 html.st-printing .sec-lede,html.st-printing .story-lede,html.st-printing .story-step-sub,html.st-printing .small,html.st-printing .muted,html.st-printing .tiny{color:#000!important}
 html.st-printing .rail-head h2{font-size:13pt!important}
 </style>
-<script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">
-.rs-header{
- --rs-paper:var(--paper,#F7F7F3);--rs-surface:var(--surface,#FFFFFF);--rs-surface-2:var(--surface-2,#EFEFE9);
- --rs-ink:var(--ink,#101311);--rs-muted:var(--muted,var(--ink-2,#5E655F));--rs-rule:var(--rule,#101311);
- --rs-rule-soft:var(--rule-soft,#D6D7CE);--rs-accent:var(--accent,#1E40AF);
- --rs-mono:var(--font-mono,"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace);
- --rs-sans:var(--font-sans,"Archivo",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif);
-}
-:root[data-theme="dark"] .rs-header{
- --rs-paper:var(--paper,#0A0C10);--rs-surface:var(--surface,#12151C);--rs-surface-2:var(--surface-2,#171B24);
- --rs-ink:var(--ink,#EAECF2);--rs-muted:var(--muted,var(--ink-2,#959CAB));--rs-rule:var(--rule,#EAECF2);
- --rs-rule-soft:var(--rule-soft,#2C3240);--rs-accent:var(--accent,#7C9EFF);
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme]) .rs-header{
- --rs-paper:var(--paper,#0A0C10);--rs-surface:var(--surface,#12151C);--rs-surface-2:var(--surface-2,#171B24);
- --rs-ink:var(--ink,#EAECF2);--rs-muted:var(--muted,var(--ink-2,#959CAB));--rs-rule:var(--rule,#EAECF2);
- --rs-rule-soft:var(--rule-soft,#2C3240);--rs-accent:var(--accent,#7C9EFF);
-}}
-/* isolation: neutralise page element rules (header{}, nav a{}, button{} ...) */
-.rs-header :where(a,button,nav,div,span,summary,details,b,i){all:revert;box-sizing:border-box}
-.rs-header [hidden]{display:none!important}
-.rs-header svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor}
-.rs-header{all:revert;display:block;position:sticky;top:0;z-index:1000;margin:0;padding:0;width:auto;max-width:none;float:none;transform:none;
- box-sizing:border-box;background:var(--rs-paper);color:var(--rs-ink);border:0;box-shadow:none;font:400 14px/1.3 var(--rs-sans);text-align:left}
-.rs-header .rs-bar{border-bottom:2px solid var(--rs-rule);background:var(--rs-paper)}
-.rs-header .rs-row{display:flex;align-items:center;max-width:1180px;height:56px;margin:0 auto;padding:0 24px}
-.rs-header .rs-brand{display:flex;align-items:center;gap:10px;height:56px;padding:0 16px 0 0;font:700 13px/1 var(--rs-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--rs-ink);text-decoration:none;white-space:nowrap}
-.rs-header .rs-mark{display:block;width:14px;height:14px;background:var(--rs-accent);flex:none}
-.rs-header .rs-author{display:flex;align-items:center;height:24px;padding:0 0 0 16px;border-left:2px solid var(--rs-rule-soft);font:500 11px/1 var(--rs-mono);letter-spacing:.06em;color:var(--rs-muted);text-decoration:none;white-space:nowrap}
-.rs-header .rs-author:hover{color:var(--rs-accent)}
-.rs-header .rs-nav{display:flex;align-items:center;height:56px;margin:0 0 0 auto;padding:0}
-.rs-header .rs-menu{display:flex;align-items:center;position:relative;height:56px;margin:0;padding:0}
-.rs-header .rs-item{display:flex;align-items:center;gap:6px;height:56px;margin:0;padding:0 14px;font:600 12px/1 var(--rs-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rs-muted);text-decoration:none;white-space:nowrap;cursor:pointer;list-style:none;background:transparent;border:0}
-.rs-header .rs-item::-webkit-details-marker{display:none}
-.rs-header .rs-item::marker{content:""}
-.rs-header .rs-item:hover,.rs-header .rs-menu[open]>.rs-item{background:var(--rs-surface-2);color:var(--rs-ink)}
-.rs-header .rs-item[aria-current="page"],.rs-header .rs-menu[data-current]>.rs-item{color:var(--rs-ink);box-shadow:inset 0 -3px 0 var(--rs-accent)}
-.rs-header .rs-story{color:var(--rs-accent);font-weight:700;box-shadow:inset 0 -3px 0 var(--rs-accent)}
-.rs-header .rs-story::before{content:"";display:block;width:7px;height:7px;background:var(--rs-accent);flex:none}
-.rs-header .rs-story:hover{background:var(--rs-accent);color:var(--rs-paper)}
-.rs-header .rs-story:hover::before{background:var(--rs-paper)}
-.rs-header .rs-caret{display:block;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;transition:transform .15s}
-.rs-header .rs-menu[open] .rs-caret{transform:rotate(180deg)}
-.rs-header .rs-panel{display:block;position:absolute;top:calc(100% + 2px);right:0;width:340px;max-width:calc(100vw - 32px);margin:0;padding:0;background:var(--rs-surface);border:2px solid var(--rs-rule);box-shadow:6px 6px 0 var(--rs-rule);z-index:1}
-.rs-header .rs-opt{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:44px;padding:9px 14px;border-bottom:1px solid var(--rs-rule-soft);color:var(--rs-ink);text-decoration:none}
-.rs-header .rs-opt:last-child{border-bottom:0}
-.rs-header .rs-opt:hover{background:var(--rs-surface-2)}
-.rs-header .rs-opt[aria-current="page"]{box-shadow:inset 4px 0 0 var(--rs-accent);background:var(--rs-surface-2)}
-.rs-header .rs-t{display:block;font:500 14px/1.25 var(--rs-sans);color:var(--rs-ink)}
-.rs-header .rs-n{display:block;font:400 11px/1.2 var(--rs-mono);letter-spacing:.04em;color:var(--rs-muted)}
-.rs-header .rs-opt[aria-current="page"] .rs-n::after{content:" \00B7  you are here";color:var(--rs-accent)}
-.rs-header .rs-sep{display:block;width:2px;height:24px;margin:0 12px 0 10px;background:var(--rs-rule-soft);flex:none}
-.rs-header .rs-btn{display:inline-flex;align-items:center;justify-content:center;flex:none;width:40px;height:40px;margin:0;padding:0;background:var(--rs-paper);color:var(--rs-ink);border:2px solid var(--rs-rule);border-radius:0;cursor:pointer;font:600 11px/1 var(--rs-mono)}
-.rs-header .rs-btn:hover{background:var(--rs-surface-2)}
-.rs-header .rs-moon{display:none}
-:root[data-theme="dark"] .rs-header .rs-sun{display:none}
-:root[data-theme="dark"] .rs-header .rs-moon{display:block}
-@media (prefers-color-scheme:dark){:root:not([data-theme]) .rs-header .rs-sun{display:none}:root:not([data-theme]) .rs-header .rs-moon{display:block}}
-.rs-header .rs-burger{display:none;width:44px;height:44px;margin-left:8px}
-.rs-header .rs-burger i{display:block;position:relative;width:18px;height:2px;background:currentColor;transition:background .15s}
-.rs-header .rs-burger i::before,.rs-header .rs-burger i::after{content:"";position:absolute;left:0;width:18px;height:2px;background:currentColor;transition:transform .15s}
-.rs-header .rs-burger i::before{top:-6px}.rs-header .rs-burger i::after{top:6px}
-.rs-header .rs-burger[aria-expanded="true"] i{background:transparent}
-.rs-header .rs-burger[aria-expanded="true"] i::before{transform:translateY(6px) rotate(45deg)}
-.rs-header .rs-burger[aria-expanded="true"] i::after{transform:translateY(-6px) rotate(-45deg)}
-.rs-header :focus-visible{outline:2px solid var(--rs-accent);outline-offset:-2px}
-/* row 2 */
-.rs-header .rs-sub{position:relative;border-bottom:2px solid var(--rs-rule-soft);background:var(--rs-paper)}
-.rs-header .rs-subrow{height:44px}
-.rs-header .rs-sublabel{display:block;flex:none;padding:0 12px 0 0;font:500 11px/1 var(--rs-mono);letter-spacing:.06em;color:var(--rs-muted);white-space:nowrap}
-.rs-header .rs-sections{display:flex;align-items:center;position:relative;flex:1 1 auto;min-width:0;height:44px;margin:0;padding:0;overflow-x:auto;scrollbar-width:none}
-.rs-header .rs-sections::-webkit-scrollbar{display:none}
-.rs-header .rs-sections.rs-fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 32px);mask-image:linear-gradient(90deg,transparent,#000 32px)}
-.rs-header .rs-sections.rs-fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent)}
-.rs-header .rs-sections.rs-fl.rs-fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent)}
-.rs-header .rs-sec{display:flex;align-items:center;flex:none;height:44px;padding:0 10px;font:600 11px/1 var(--rs-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rs-muted);text-decoration:none;white-space:nowrap}
-.rs-header .rs-sec:hover{color:var(--rs-ink)}
-.rs-header .rs-sec.rs-active{color:var(--rs-accent);box-shadow:inset 0 -2px 0 var(--rs-accent)}
-.rs-header .rs-subbtn{display:none;align-items:center;gap:8px;width:100%;height:44px;margin:0;padding:0;background:transparent;border:0;color:var(--rs-muted);font:500 11px/1 var(--rs-mono);letter-spacing:.06em;cursor:pointer;text-align:left}
-.rs-header .rs-subbtn b{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--rs-ink);font-weight:600;text-transform:uppercase}
-.rs-header .rs-subbtn[aria-expanded="true"] .rs-caret{transform:rotate(180deg)}
-.rs-header .rs-sublist{position:absolute;top:calc(100% + 2px);left:0;right:0;max-height:60vh;overflow-y:auto;margin:0;padding:0;background:var(--rs-surface);border-top:2px solid var(--rs-rule);border-bottom:2px solid var(--rs-rule);box-shadow:0 6px 0 var(--rs-rule)}
-.rs-header .rs-sublist .rs-sec{height:auto;min-height:44px;padding:0 16px;border-bottom:1px solid var(--rs-rule-soft)}
-.rs-header .rs-sublist .rs-sec.rs-active{box-shadow:inset 4px 0 0 var(--rs-accent)}
-.rs-header .rs-progress{display:block;position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--rs-accent);transform:scaleX(0);transform-origin:0 50%;pointer-events:none}
-.rs-header .rs-sheet{position:fixed;top:58px;left:0;right:0;bottom:0;overflow-y:auto;margin:0;padding:8px 16px 32px;background:var(--rs-paper);border-top:0;z-index:2}
-.rs-header .rs-sheet a{display:flex;align-items:center;min-height:48px;padding:0 4px;border-bottom:1px solid var(--rs-rule-soft);color:var(--rs-ink);text-decoration:none;font:600 13px/1.2 var(--rs-mono);letter-spacing:.06em;text-transform:uppercase}
-.rs-header .rs-sheet a[aria-current="page"]{color:var(--rs-accent);box-shadow:inset 4px 0 0 var(--rs-accent);padding-left:14px}
-.rs-header .rs-sheet .rs-opt{align-items:flex-start;font:inherit;text-transform:none;letter-spacing:0;padding:8px 4px}
-.rs-header .rs-sheet .rs-opt[aria-current="page"]{padding-left:14px}
-.rs-header .rs-group{display:block;margin:24px 0 4px;font:500 11px/1 var(--rs-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rs-muted)}
-.rs-header .rs-sheet a.rs-sheet-author{margin-top:24px;border-top:2px solid var(--rs-rule);border-bottom:0;color:var(--rs-muted);text-transform:none;font-weight:500}
-html.rs-lock,html.rs-lock body{overflow:hidden}
-@media (max-width:1040px){.rs-header .rs-author{display:none}.rs-header .rs-item{padding:0 11px}}
-@media (max-width:860px){
- .rs-header .rs-row{padding:0 16px}
- .rs-header.rs-js .rs-nav,.rs-header.rs-js .rs-sep,.rs-header .rs-author{display:none}
- .rs-header.rs-js .rs-burger{display:inline-flex}
- .rs-header .rs-brand{margin-right:auto}
- .rs-header:not(.rs-js) .rs-nav{overflow-x:auto;margin-left:0}
- .rs-header.rs-js .rs-sublabel,.rs-header.rs-js .rs-subrow>.rs-sections{display:none}
- .rs-header.rs-js .rs-subbtn{display:flex}
-}
-@media (min-width:861px){.rs-header .rs-sheet,.rs-header .rs-sublist{display:none}}
-@media (prefers-reduced-motion:reduce){.rs-header *,.rs-header *::before,.rs-header *::after{transition:none!important}}
-@media print{.rs-header{display:none!important}}
-</style>
+
 <style id="story-css">/*STORY_CSS_START*/
 /* ============================================================
    story.css  -  shared storytelling engine styles  (v1.4)
@@ -858,7 +752,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 .st-stage-inner > .st-figure{margin:0;width:100%}
 .st-stage-inner > .st-figure > svg,.st-stage-inner > .st-figure > canvas{display:block;width:100%;height:auto;max-height:66vh;max-height:66svh}
 .st-steps{min-width:0}
-.st-step{min-height:86vh;display:flex;flex-direction:column;justify-content:center;padding:34px 0;opacity:.34;transition:opacity .45s ease}
+.st-step{min-height:86vh;display:flex;flex-direction:column;justify-content:center;padding:34px 0;opacity:1;transition:opacity .45s ease}
 .st-step.is-active{opacity:1}
 .st-step:last-child{min-height:64vh}
 .st-step h3{font-size:clamp(1.6rem,2.6vw,2.4rem);margin-bottom:14px;letter-spacing:-.015em;line-height:1.08}
@@ -868,7 +762,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 
 /* big number beside or inside a visual */
 .st-bignum{display:block;font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:clamp(3rem,7.5vw,6rem);line-height:.92;letter-spacing:-.04em;color:var(--accent);font-weight:700}
-.st-bignum small{display:block;margin-top:.5em;font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;line-height:1.4}
+.st-bignum small{display:block;margin-top:.5em;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;line-height:1.4}
 .st-bignum-row{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
 
 /* staggered step entrance (only once .st-flow is set by the engine) */
@@ -892,7 +786,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 /* ---------- companion orb docked on the stage ---------- */
 .st-companion{position:absolute;left:0;top:0;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:6px;pointer-events:none}
 .st-companion .st-companion-orb{width:var(--st-comp,108px);height:var(--st-comp,108px);line-height:0}
-.st-companion .st-companion-cap{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:opacity .28s ease;padding-left:2px}
+.st-companion .st-companion-cap{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:opacity .28s ease;padding-left:2px}
 .st-companion .st-companion-cap.is-fading{opacity:0}
 .st-companion[data-state="wrong"] .st-companion-cap{color:var(--warn)}
 .st-companion[data-state="grounded"] .st-companion-cap,.st-companion[data-state="resolved"] .st-companion-cap{color:var(--accent)}
@@ -920,12 +814,12 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 .st-chart{display:block;width:100%;overflow:visible;font-family:var(--font-sans)}
 .st-chart.st-in-stage{height:min(66vh,720px);max-height:66vh}
 .st-chart text{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
-.st-chart text:not([fill]){fill:var(--muted)}
-.st-chart text:not([font-size]){font-size:14px}
+:where(.st-chart text:not([fill])){fill:var(--muted)}
+:where(.st-chart text:not([font-size])){font-size:14px}
 .st-chart .st-axis-line{stroke:var(--rule-soft);stroke-width:1.5}
 .st-chart .st-grid{stroke:var(--rule-soft);stroke-width:1;stroke-dasharray:2 4}
 .st-chart .st-label-direct{fill:var(--ink);font-weight:700}
-.st-chart .st-label-direct:not([font-size]){font-size:14px}
+:where(.st-chart .st-label-direct:not([font-size])){font-size:14px}
 .st-chart .st-caption{fill:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .st-chart .st-series-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .st-chart .st-gap{fill:var(--accent);opacity:.14}
@@ -953,7 +847,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 .st-chart .st-hit:focus-visible{outline:none;stroke:var(--accent);stroke-width:2}
 .st-canvas{display:block;width:100%}
 .st-figure{margin:0}
-.st-figure figcaption{margin-top:10px;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.st-figure figcaption{margin-top:10px;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 /* tooltip */
 .st-tiphost{position:relative}
 .st-tip{position:absolute;left:0;top:0;z-index:12;transform:translate(-50%,-128%);padding:7px 10px;background:var(--surface);border:2px solid var(--rule);color:var(--ink);font-family:var(--font-mono);font-size:.75rem;line-height:1.35;white-space:pre;pointer-events:none;opacity:0;transition:opacity .16s ease;max-width:280px}
@@ -975,7 +869,7 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 .st-present-dots{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px;z-index:70;padding:9px 13px;border:2px solid var(--rule);background:var(--surface)}
 .st-present-dots b{display:block;width:8px;height:8px;background:var(--rule-soft);border-radius:50%}
 .st-present-dots b.is-on{background:var(--accent)}
-.st-present-hint{position:fixed;right:18px;bottom:24px;z-index:70;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.st-present-hint{position:fixed;right:18px;bottom:24px;z-index:70;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
 /* ---------- wayfinder ---------- */
 body.st-has-way{padding-bottom:calc(var(--st-way-h,60px) + 10px)}
@@ -987,14 +881,14 @@ body.st-has-way .presbtn{bottom:calc(var(--st-way-h,60px) + 16px)}
 .st-way-seg i.is-done{background:var(--accent);opacity:.45}
 .st-way-seg i.is-now{background:var(--accent);opacity:1}
 .st-way-row{display:flex;align-items:center;gap:14px;padding:9px 16px;min-height:44px}
-.st-way-crumb{flex:1 1 auto;min-width:0;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-way-crumb{flex:1 1 auto;min-width:0;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .st-way-crumb b{color:var(--ink);font-weight:700}
 .st-way-btns{display:flex;gap:8px;flex:0 0 auto}
-.st-way a.st-way-btn,.st-way button.st-way-btn{display:inline-block;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);text-decoration:none;cursor:pointer;line-height:1.1}
+.st-way a.st-way-btn,.st-way button.st-way-btn{display:inline-block;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);text-decoration:none;cursor:pointer;line-height:1.1}
 .st-way a.st-way-btn:hover,.st-way button.st-way-btn:hover{border-color:var(--accent);color:var(--accent)}
 .st-way .st-way-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .st-way .st-way-btn[aria-disabled="true"]{opacity:.35;pointer-events:none}
-@media(max-width:820px){.st-way-crumb{font-size:.625rem;letter-spacing:.08em}.st-way a.st-way-btn,.st-way button.st-way-btn{padding:7px 9px}}
+@media(max-width:820px){.st-way-crumb{font-size:.75rem;letter-spacing:.08em}.st-way a.st-way-btn,.st-way button.st-way-btn{padding:7px 9px}}
 @media(max-width:620px){.st-way-site{display:none}}
 @media(max-width:460px){.st-way-title{display:none}.st-way-row{gap:8px;padding:8px 12px}.st-way a.st-way-btn,.st-way button.st-way-btn{padding:7px 7px;letter-spacing:.06em}}
 
@@ -1003,7 +897,7 @@ body.st-has-way .presbtn{bottom:calc(var(--st-way-h,60px) + 16px)}
 .st-way-map.is-open{display:block}
 .st-way-map .st-map-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:20px 24px 8px;flex-wrap:wrap}
 .st-way-map .st-map-head h2{font-size:clamp(1.3rem,3vw,2rem);margin:0;letter-spacing:-.02em}
-.st-way-map .st-map-hint{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.st-way-map .st-map-hint{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .st-map-wrap{position:relative;padding:0 24px 28px}
 .st-map-svg{display:block;width:100%;height:auto;max-height:64vh;overflow:visible}
 .st-map-svg text{font-family:var(--font-mono);font-size:13px;fill:var(--muted)}
@@ -1016,11 +910,11 @@ body.st-has-way .presbtn{bottom:calc(var(--st-way-h,60px) + 16px)}
 .st-map-card{border:2px solid var(--rule);background:var(--surface);padding:14px 15px}
 .st-map-card.is-now{border-color:var(--accent)}
 .st-map-card h3{font-size:.95rem;margin:0 0 3px;letter-spacing:-.01em}
-.st-map-card .st-map-sub{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.st-map-card .st-map-sub{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
 .st-map-card ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
 .st-map-card a{display:block;text-decoration:none;color:var(--ink);border-left:3px solid var(--rule-soft);padding-left:9px;font-size:.85rem}
 .st-map-card a:hover,.st-map-card a:focus-visible{border-left-color:var(--accent);color:var(--accent);outline:none}
-.st-map-card a span{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.st-map-card a span{display:block;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .st-map-card a:hover span{color:var(--ink-2)}
 .st-map-extra{display:flex;flex-wrap:wrap;gap:8px;padding:0 24px 40px}
 @media(max-width:800px){.st-map-wrap{display:none}}
@@ -1031,7 +925,7 @@ body.st-has-way .presbtn{bottom:calc(var(--st-way-h,60px) + 16px)}
   .st-scene[data-side="left"]{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
 }
 @media(max-width:900px){
-  .st-hero{grid-template-columns:1fr;gap:26px;min-height:0;padding:28px 0}
+  .st-hero{grid-template-columns:1fr;gap:26px;min-height:0;padding-top:28px;padding-bottom:28px}
   .st-hero .st-hero-orb{width:min(72vw,360px);order:-1}
   .st-chapter{grid-template-columns:1fr;gap:24px;text-align:left}
   .st-chapter .st-chapter-orb{width:min(60vw,240px);justify-self:start}
@@ -1048,7 +942,7 @@ body.st-has-way .presbtn{bottom:calc(var(--st-way-h,60px) + 16px)}
   .st-step p{font-size:1.0625rem}
   .st-scene-rail{display:none}
   .st-companion{--st-comp:64px}
-  .st-companion .st-companion-cap{font-size:.5625rem;letter-spacing:.12em}
+  .st-companion .st-companion-cap{font-size:.75rem;letter-spacing:.12em}
 }
 @media(max-width:420px){
   .st-companion{--st-comp:52px}
@@ -1088,7 +982,7 @@ body.st-story{--st-top:0px}
 body.st-story .st-scene .st-stage{top:0!important}
 @media(min-width:801px){body.st-story .st-scene .st-stage{height:calc(100vh - var(--st-way-h,60px))!important;height:calc(100svh - var(--st-way-h,60px))!important}}
 .st-presenting .st-findings{display:none}
-html{scroll-padding-top:16px}
+html:has(body.st-story){scroll-padding-top:16px}
 /* v1.2.1: closing Next cards carry no orb */
 .nextcard-orb,.nc-orb,.sy-nextorb,.nextcard .st-orb-wrap,[class*="next"] > canvas.st-orb{display:none!important}
 .nextcard,.sy-next{grid-template-columns:1fr!important}
@@ -1232,7 +1126,7 @@ html.st-printing .st-print-foot{display:block!important;margin-top:9pt;padding-t
 /* ---------- v1.3 speaker notes (presenter mode only) ---------- */
 .st-notes{position:fixed;left:22px;bottom:22px;z-index:78;max-width:46ch;padding:12px 15px 13px;background:var(--surface);border:2px solid var(--ink);color:var(--ink)}
 .st-notes.st-notes-right{left:auto;right:22px;bottom:54px}
-.st-notes-lab{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.2em;font-weight:700;color:var(--accent);margin-bottom:7px}
+.st-notes-lab{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.2em;font-weight:700;color:var(--accent);margin-bottom:7px}
 .st-notes-body{font-size:1rem;line-height:1.45;color:var(--ink)}
 html:not(.st-presenting) .st-notes{display:none!important}
 @media(max-width:800px){.st-notes{max-width:calc(100vw - 32px);left:16px;right:16px;bottom:16px}.st-notes.st-notes-right{left:16px;right:16px;bottom:16px}}
@@ -1294,7 +1188,7 @@ body.st-has-way{padding-bottom:calc(var(--st-way-h,64px) + 22px)}
 .st-way-lamp::after{content:"";position:absolute;left:50%;top:2px;width:150%;height:26px;transform:translateX(-50%);
   background:radial-gradient(60% 100% at 50% 0%,var(--accent),transparent 72%);opacity:.20;pointer-events:none}
 .st-way-row{padding:10px 8px 9px 18px;gap:10px;min-height:44px}
-.st-way-crumb{font-size:.6875rem;letter-spacing:.1em}
+.st-way-crumb{font-size:.75rem;letter-spacing:.1em}
 .st-way-btns{gap:4px}
 .st-way a.st-way-btn,.st-way button.st-way-btn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;
   border:var(--st-hair);background:transparent;padding:7px 12px;transition:transform .18s var(--st-ease),border-color .18s,color .18s,background .18s}
@@ -1326,7 +1220,7 @@ body.st-has-way{padding-bottom:calc(var(--st-way-h,64px) + 22px)}
 .st-findings a{padding:18px 20px 20px;position:relative}
 .st-findings a:hover{background:transparent}
 .st-findings a::before{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;
-  border:var(--st-hair);border-radius:999px;font-size:.6875rem;color:var(--accent);margin-bottom:12px}
+  border:var(--st-hair);border-radius:999px;font-size:.75rem;color:var(--accent);margin-bottom:12px}
 .st-findings b{font-size:1.2rem}
 .st-find-key{position:absolute;top:16px;right:18px;font-family:var(--font-mono);font-style:normal;font-weight:700;
   font-size:1.35rem;letter-spacing:-.02em;color:var(--accent);opacity:.9}
@@ -1423,7 +1317,7 @@ html.st-printing .st-tick-col{height:auto!important;overflow:visible!important}
 @media print{.st-tick-col{height:1em!important;overflow:hidden!important}}
 html.st-printing .st-tick-col{height:1em!important;overflow:hidden!important}
 .st-presenting .st-stage-inner.st-frame{border:0!important;background:none!important;padding:0!important;box-shadow:none!important}
-.st-way-map .st-way-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:var(--surface);color:var(--ink);text-decoration:none;cursor:pointer;line-height:1.1}
+.st-way-map .st-way-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;background:var(--surface);color:var(--ink);text-decoration:none;cursor:pointer;line-height:1.1}
 .st-way-map .st-way-btn:hover,.st-way-map .st-way-btn:focus-visible{color:var(--accent);border-color:var(--accent)}
 
 @media print{
@@ -1522,10 +1416,135 @@ html:not(.m-desk) [data-m-progress]{transform:none}
 /* QA: entrance tweens start elements up to 60px to the side; before they play (a pinned chapter not yet reached)
    they must not widen the page. clip, not hidden, so sticky and pinned stages keep working. */
 html{overflow-x:clip}
+/* ---------- v1.5 AA: dimmed steps and disabled dock via color, not low opacity ---------- */
+.st-step{opacity:1}
+.st-step:not(.is-active){color:var(--ink-2)}
+.st-step:not(.is-active) p{color:var(--ink-2)}
+.st-way .st-way-btn[aria-disabled="true"]{opacity:1;color:var(--muted);border-style:dashed}
+@media (max-width:640px){
+  .st-way a.st-way-btn,.st-way button.st-way-btn{min-height:44px;min-width:44px;justify-content:center}
+  .st-way-row{min-height:48px}
+}
+
+/* ============================================================
+   v2.2 reading layer (round 8): short-screen fit, one statement once,
+   copy links, data tables, readability floor, calmer entrances
+   ============================================================ */
+/* --- readability floor: no engine text under 12px; balanced headings, pretty paragraphs --- */
+.st-step h3,.st-chapter h2,.st-chapter .st-chapter-title,.st-findings b,.st-way-map h2,.st-map-card h3{text-wrap:balance}
+.st-step p,.st-chapter p,.st-findings span,.st-figure figcaption,.st-data caption{text-wrap:pretty}
+.st-step p{max-width:46ch}
+.st-gloss-tip{font-size:.875rem;line-height:1.45}
+.st-tip{font-size:.8125rem}
+
+/* --- pinned scenes on short screens ---
+   Cards hug their text (the page's step height becomes scroll room around the card,
+   set by story.js as --st-mt/--st-mb), and the stage content starts at the top of the
+   band when it cannot be centred, instead of spilling above and below it. */
+.st-scene.st-fit .st-steps{display:flex;flex-direction:column}
+.st-scene.st-fit .st-steps > .st-step{min-height:0;margin:var(--st-mt,0px) 0 var(--st-mb,0px)}
+.st-presenting .st-scene.st-fit .st-steps > .st-step,html.st-printing .st-scene.st-fit .st-steps > .st-step{margin:0!important}
+@media print{.st-scene.st-fit .st-steps > .st-step{margin:0!important}}
+.st-stage{justify-content:safe center}
+@media(min-width:801px){
+  /* the stage ends where the floating dock begins */
+  body.st-story.st-has-way .st-scene .st-stage{height:calc(100vh - var(--st-way-h,60px) - 20px)!important;height:calc(100svh - var(--st-way-h,60px) - 20px - env(safe-area-inset-bottom,0px))!important}
+  body.st-story .st-stage-inner{min-height:0}
+}
+svg.st-fitted,canvas.st-fitted{display:block}
+
+/* --- entrances: step text is readable within ~0.4s of arriving --- */
+.st-scene.st-flow .st-step > *{transform:translateY(12px);transition:opacity .32s cubic-bezier(.22,.7,.2,1),transform .32s cubic-bezier(.22,.7,.2,1)}
+.st-scene.st-flow .st-step.is-entered > :nth-child(2){transition-delay:.04s}
+.st-scene.st-flow .st-step.is-entered > :nth-child(3){transition-delay:.08s}
+.st-scene.st-flow .st-step.is-entered > :nth-child(4){transition-delay:.1s}
+.st-scene.st-flow .st-step.is-entered > :nth-child(n+5){transition-delay:.12s}
+.st-reveal{transition-duration:.45s,.45s}
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference){
+  html:not(.m-ready):not(.st-reduced):not(.st-printing) :is([data-m-split]:not([data-m-split-done]),[data-m-hero-part],[data-m-pin] [data-m-step],[data-m-reveal]){animation:m-failsafe 0s 1.2s forwards}
+}
+
+/* --- one statement once: a heading that repeats its chapter card (story.js dedupe) --- */
+.st-dup{display:none!important}
+
+/* --- copy link: small icon after a chapter / scene / finding heading, 44px hit area --- */
+.st-anchor{position:absolute;left:0;top:0;z-index:4;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;
+  margin:0;padding:0;border:0;border-radius:12px;background:transparent;color:var(--muted);cursor:pointer;
+  opacity:0;visibility:hidden;transition:opacity .15s ease,color .15s ease,background-color .15s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.st-anchor.is-placed{visibility:visible}
+.st-anchor svg{width:18px;height:18px;display:block;pointer-events:none}
+:hover > .st-anchor.is-placed,.st-anchor.is-placed:focus-visible{opacity:1}
+.st-anchor:hover{color:var(--accent);background:var(--accent-wash)}
+.st-anchor:focus-visible{outline:2px solid var(--accent);outline-offset:-4px;color:var(--accent)}
+@media (hover:none){.st-anchor.is-placed{opacity:.85}}
+.st-presenting .st-anchor{display:none!important}
+@media print{.st-anchor{display:none!important}}
+html.st-printing .st-anchor{display:none!important}
+/* anchored sections clear a sticky header when reached by link */
+.st-chapter,.st-scene,.finding,[data-st-anchor]{scroll-margin-top:16px}
+.st-toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:96;transform:translate(-50%,8px);
+  padding:10px 16px;border:var(--st-hair);border-radius:999px;background:var(--surface);color:var(--ink);box-shadow:var(--st-shadow);
+  font-family:var(--font-mono);font-size:.8125rem;letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;white-space:nowrap}
+body.st-has-way .st-toast{bottom:calc(var(--st-way-h,60px) + 30px + env(safe-area-inset-bottom,0px))}
+.st-toast.is-on{opacity:1;transform:translate(-50%,0)}
+.st-toast:empty{display:none}
+@media (prefers-reduced-motion: reduce){.st-toast,.st-anchor{transition:none}}
+.st-reduced .st-toast,.st-reduced .st-anchor{transition:none}
+
+/* --- data disclosure under a figure (Story.dataTable) --- */
+.st-data{margin:14px 0 0;border:var(--st-hair);border-radius:var(--st-radius-sm,10px);background:var(--surface);max-width:100%}
+.st-data > summary{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 14px;cursor:pointer;list-style:none;
+  font-family:var(--font-mono);font-size:.8125rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border-radius:inherit}
+.st-data > summary::-webkit-details-marker{display:none}
+.st-data > summary::before{content:"";width:7px;height:7px;flex:0 0 auto;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s ease;margin-right:2px}
+.st-data[open] > summary::before{transform:rotate(45deg)}
+.st-data > summary:hover{color:var(--accent)}
+.st-data > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.st-data .st-data-n{color:var(--muted);letter-spacing:.04em;text-transform:none}
+.st-data-scroll{overflow-x:auto;padding:0 14px 12px;-webkit-overflow-scrolling:touch}
+.st-data-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.st-data table{width:100%;border-collapse:collapse;font-size:.875rem;line-height:1.4;color:var(--ink)}
+.st-data caption{caption-side:top;text-align:left;padding:4px 0 8px;color:var(--ink-2);font-size:.875rem}
+.st-data th,.st-data td{padding:7px 14px 7px 0;border-bottom:1px solid var(--st-hair-c);text-align:left;vertical-align:top}
+.st-data thead th{font-family:var(--font-mono);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule-soft);white-space:nowrap}
+.st-data tbody th{font-weight:600}
+.st-data .st-num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.st-data tbody tr:last-child > *{border-bottom:0}
+.st-data .st-data-src{margin:0;padding:0 14px 12px;font-size:.8125rem;color:var(--muted);text-wrap:pretty}
+@media print{
+  details.st-data{display:block!important;border:.5pt solid #999!important;border-radius:0!important;break-inside:avoid;margin:4pt 0 8pt}
+  details.st-data > summary{min-height:0;padding:3pt 0;font-size:8.5pt;color:#000}
+  details.st-data > summary::before{display:none}
+  .st-data-scroll{overflow:visible!important;padding:0}
+  .st-data table{font-size:8.5pt;color:#000}
+  .st-data th,.st-data td{padding:2pt 6pt 2pt 0;border-color:#bbb!important;color:#000!important}
+  .st-data .st-data-src{padding:2pt 0 0;font-size:8pt;color:#333}
+}
+html.st-printing details.st-data{display:block!important}
+
+/* --- phone hero: headline, answer and first action come first; nothing touches the edge --- */
+@media(max-width:600px){
+  .st-hero{min-height:0;gap:18px}
+  .st-hero > .st-hero-orb,.st-hero > [data-m-hero-part="visual"]{order:2}
+  .st-hero .st-hero-orb{width:min(46vw,200px);justify-self:center}
+  .st-hero > .st-field{opacity:.6}
+}
+
+/* --- dock: 12px labels, 44px targets on touch --- */
+.st-way-crumb{font-size:.75rem}
+@media (hover:none) and (pointer:coarse){.st-way a.st-way-btn,.st-way button.st-way-btn{min-height:44px;min-width:44px;justify-content:center}}
+/* glossary terms: a 44px-tall touch target around the inline term, without moving the line */
+@media (pointer:coarse){abbr.st-gloss{position:relative}abbr.st-gloss::after{content:"";position:absolute;left:-2px;right:-2px;top:50%;height:44px;transform:translateY(-50%)}}
+.st-scene.st-measuring .st-stage-inner,.st-scene.st-measuring .st-stage-inner.st-frame{transform:none!important;transition:none!important}
+/* short laptop screens: a little less card padding so tall step cards fit above the dock */
+@media (min-width:801px) and (max-height:800px){.st-step{padding:16px 20px}}
+
+/* r8 lead: a page-level body{overflow-x:hidden} turns body into a scroll container and breaks sticky pins */
+html body{overflow-x:clip}
 /*STORY_CSS_END*/</style>
-</head>
+<script id="rs-theme-init">try{var t=localStorage.getItem("pc-theme")||localStorage.getItem("ehs-ai-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script><style id="rs-header-css">.rs-header,.rs-k{--rs-paper:var(--paper,#F7F7F3);--rs-surface:var(--surface,#FFFFFF);--rs-surface-2:var(--surface-2,#EFEFE9);--rs-ink:var(--ink,#101311);--rs-muted:var(--muted,var(--ink-2,#5E655F));--rs-rule:var(--rule,#101311);--rs-rule-soft:var(--rule-soft,#D6D7CE);--rs-accent:var(--accent,#1E40AF);--rs-mono:var(--font-mono,"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace);--rs-sans:var(--font-sans,"Archivo",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif);}:root[data-theme="dark"] .rs-header,:root[data-theme="dark"] .rs-k{--rs-paper:var(--paper,#0A0C10);--rs-surface:var(--surface,#12151C);--rs-surface-2:var(--surface-2,#171B24);--rs-ink:var(--ink,#EAECF2);--rs-muted:var(--muted,var(--ink-2,#959CAB));--rs-rule:var(--rule,#EAECF2);--rs-rule-soft:var(--rule-soft,#2C3240);--rs-accent:var(--accent,#7C9EFF);}@media (prefers-color-scheme:dark){:root:not([data-theme]) .rs-header,:root:not([data-theme]) .rs-k{--rs-paper:var(--paper,#0A0C10);--rs-surface:var(--surface,#12151C);--rs-surface-2:var(--surface-2,#171B24);--rs-ink:var(--ink,#EAECF2);--rs-muted:var(--muted,var(--ink-2,#959CAB));--rs-rule:var(--rule,#EAECF2);--rs-rule-soft:var(--rule-soft,#2C3240);--rs-accent:var(--accent,#7C9EFF);}}:root{--rs-header-h:58px}html{scroll-padding-top:calc(var(--rs-header-h) + 12px)}a.skip,a.skip-link{min-height:44px;box-sizing:border-box}.rs-header :where(a,button,nav,div,span,summary,details,b,i){all:revert;box-sizing:border-box}.rs-header [hidden]{display:none!important}.rs-header svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor}.rs-header{all:revert;display:block;position:sticky;top:0;z-index:1000;margin:0;padding:0;width:auto;max-width:none;float:none;transform:none;box-sizing:border-box;background:var(--rs-paper);color:var(--rs-ink);border:0;box-shadow:none;font:400 14px/1.3 var(--rs-sans);text-align:left}.rs-header .rs-bar{border-bottom:2px solid var(--rs-rule);background:var(--rs-paper)}.rs-header .rs-row{display:flex;align-items:center;max-width:1180px;height:56px;margin:0 auto;padding:0 24px}.rs-header .rs-brand{display:flex;align-items:center;gap:10px;height:56px;padding:0 16px 0 0;font:700 13px/1 var(--rs-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--rs-ink);text-decoration:none;white-space:nowrap}.rs-header .rs-mark{display:block;width:14px;height:14px;background:var(--rs-accent);flex:none}.rs-header .rs-author{display:flex;align-items:center;height:44px;padding:0 0 0 16px;background:linear-gradient(var(--rs-rule-soft),var(--rs-rule-soft)) 0 50%/2px 24px no-repeat;font:500 12px/1 var(--rs-mono);letter-spacing:.06em;color:var(--rs-muted);text-decoration:none;white-space:nowrap;margin-right:8px}.rs-header .rs-author:hover{color:var(--rs-accent)}.rs-header .rs-nav{display:flex;align-items:center;height:56px;margin:0 0 0 auto;padding:0}.rs-header .rs-menu{display:flex;align-items:center;position:relative;height:56px;margin:0;padding:0}.rs-header .rs-item{display:flex;align-items:center;gap:6px;height:56px;margin:0;padding:0 14px;font:600 12px/1 var(--rs-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rs-muted);text-decoration:none;white-space:nowrap;cursor:pointer;list-style:none;background:transparent;border:0}.rs-header .rs-item::-webkit-details-marker{display:none}.rs-header .rs-item::marker{content:""}.rs-header .rs-item:hover,.rs-header .rs-menu[open]>.rs-item{background:var(--rs-surface-2);color:var(--rs-ink)}.rs-header .rs-item[aria-current="page"],.rs-header .rs-menu[data-current]>.rs-item{color:var(--rs-ink);box-shadow:inset 0 -3px 0 var(--rs-accent)}.rs-header .rs-story{color:var(--rs-accent);font-weight:700;box-shadow:inset 0 -3px 0 var(--rs-accent)}.rs-header .rs-story::before{content:"";display:block;width:7px;height:7px;background:var(--rs-accent);flex:none}.rs-header .rs-story:hover{background:var(--rs-accent);color:var(--rs-paper)}.rs-header .rs-story:hover::before{background:var(--rs-paper)}.rs-header .rs-caret{display:block;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;transition:transform .15s}.rs-header .rs-menu[open] .rs-caret{transform:rotate(180deg)}.rs-header .rs-panel{display:block;position:absolute;top:calc(100% + 2px);right:0;width:340px;max-width:calc(100vw - 32px);margin:0;padding:0;background:var(--rs-surface);border:2px solid var(--rs-rule);box-shadow:6px 6px 0 var(--rs-rule);z-index:1}.rs-header .rs-opt{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:44px;padding:9px 14px;border-bottom:1px solid var(--rs-rule-soft);color:var(--rs-ink);text-decoration:none}.rs-header .rs-opt:last-child{border-bottom:0}.rs-header .rs-opt:hover{background:var(--rs-surface-2)}.rs-header .rs-opt[aria-current="page"]{box-shadow:inset 4px 0 0 var(--rs-accent);background:var(--rs-surface-2)}.rs-header .rs-t{display:block;font:500 14px/1.25 var(--rs-sans);color:var(--rs-ink)}.rs-header .rs-n{display:block;font:400 12px/1.25 var(--rs-mono);letter-spacing:.04em;color:var(--rs-muted)}.rs-header .rs-opt[aria-current="page"] .rs-n::after{content:" \00B7  you are here";color:var(--rs-accent)}.rs-header .rs-sep{display:block;width:2px;height:24px;margin:0 12px 0 10px;background:var(--rs-rule-soft);flex:none}.rs-header .rs-btn{display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;height:44px;margin:0;padding:0;background:var(--rs-paper);color:var(--rs-ink);border:2px solid var(--rs-rule);border-radius:0;cursor:pointer;font:600 12px/1 var(--rs-mono);touch-action:manipulation}.rs-header .rs-find{margin-right:8px;gap:8px}.rs-header .rs-find span{display:none}.rs-header:not(.rs-js) .rs-find{display:none}.rs-header .rs-btn:hover{background:var(--rs-surface-2)}.rs-header .rs-moon{display:none}:root[data-theme="dark"] .rs-header .rs-sun{display:none}:root[data-theme="dark"] .rs-header .rs-moon{display:block}@media (prefers-color-scheme:dark){:root:not([data-theme]) .rs-header .rs-sun{display:none}:root:not([data-theme]) .rs-header .rs-moon{display:block}}.rs-header .rs-burger{display:none;width:44px;height:44px;margin-left:8px}.rs-header .rs-burger i{display:block;position:relative;width:18px;height:2px;background:currentColor;transition:background .15s}.rs-header .rs-burger i::before,.rs-header .rs-burger i::after{content:"";position:absolute;left:0;width:18px;height:2px;background:currentColor;transition:transform .15s}.rs-header .rs-burger i::before{top:-6px}.rs-header .rs-burger i::after{top:6px}.rs-header .rs-burger[aria-expanded="true"] i{background:transparent}.rs-header .rs-burger[aria-expanded="true"] i::before{transform:translateY(6px) rotate(45deg)}.rs-header .rs-burger[aria-expanded="true"] i::after{transform:translateY(-6px) rotate(-45deg)}.rs-header :focus-visible{outline:2px solid var(--rs-accent);outline-offset:-2px}.rs-header .rs-sub{position:relative;border-bottom:2px solid var(--rs-rule-soft);background:var(--rs-paper)}.rs-header .rs-subrow{height:44px}.rs-header .rs-sublabel{display:block;flex:none;padding:0 12px 0 0;font:500 12px/1 var(--rs-mono);letter-spacing:.06em;color:var(--rs-muted);white-space:nowrap}.rs-header .rs-sections{display:flex;align-items:center;position:relative;flex:1 1 auto;min-width:0;height:44px;margin:0;padding:0;overflow-x:auto;scrollbar-width:none}.rs-header .rs-sections::-webkit-scrollbar{display:none}.rs-header .rs-sections.rs-fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 32px);mask-image:linear-gradient(90deg,transparent,#000 32px)}.rs-header .rs-sections.rs-fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent)}.rs-header .rs-sections.rs-fl.rs-fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent);mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent)}.rs-header .rs-sec{display:flex;align-items:center;flex:none;height:44px;padding:0 10px;font:600 12px/1 var(--rs-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--rs-muted);text-decoration:none;white-space:nowrap}.rs-header .rs-sec:hover{color:var(--rs-ink)}.rs-header .rs-sec.rs-active{color:var(--rs-accent);box-shadow:inset 0 -2px 0 var(--rs-accent)}.rs-header .rs-subbtn{display:none;align-items:center;gap:8px;width:100%;height:44px;margin:0;padding:0;background:transparent;border:0;color:var(--rs-muted);font:500 12px/1 var(--rs-mono);letter-spacing:.06em;cursor:pointer;text-align:left}.rs-header .rs-subbtn b{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--rs-ink);font-weight:600;text-transform:uppercase}.rs-header .rs-subbtn[aria-expanded="true"] .rs-caret{transform:rotate(180deg)}.rs-header .rs-sublist{position:absolute;top:calc(100% + 2px);left:0;right:0;max-height:60vh;overflow-y:auto;margin:0;padding:0;background:var(--rs-surface);border-top:2px solid var(--rs-rule);border-bottom:2px solid var(--rs-rule);box-shadow:0 6px 0 var(--rs-rule)}.rs-header .rs-sublist .rs-sec{height:auto;min-height:44px;padding:0 16px;border-bottom:1px solid var(--rs-rule-soft)}.rs-header .rs-sublist .rs-sec.rs-active{box-shadow:inset 4px 0 0 var(--rs-accent)}.rs-header .rs-progress{display:block;position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--rs-accent);transform:scaleX(0);transform-origin:0 50%;pointer-events:none}.rs-header .rs-sheet{position:fixed;top:58px;overscroll-behavior:contain;left:0;right:0;bottom:0;overflow-y:auto;margin:0;padding:8px 16px 32px;background:var(--rs-paper);border-top:0;z-index:2}.rs-header .rs-sheet a{display:flex;align-items:center;min-height:48px;padding:0 4px;border-bottom:1px solid var(--rs-rule-soft);color:var(--rs-ink);text-decoration:none;font:600 13px/1.2 var(--rs-mono);letter-spacing:.06em;text-transform:uppercase}.rs-header .rs-sheet a[aria-current="page"]{color:var(--rs-accent);box-shadow:inset 4px 0 0 var(--rs-accent);padding-left:14px}.rs-header .rs-sheet .rs-opt{align-items:flex-start;font:inherit;text-transform:none;letter-spacing:0;padding:8px 4px}.rs-header .rs-sheet .rs-opt[aria-current="page"]{padding-left:14px}.rs-header .rs-group{display:block;margin:24px 0 4px;font:500 12px/1 var(--rs-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rs-muted)}.rs-header .rs-sheet a.rs-sheet-author{margin-top:24px;border-top:2px solid var(--rs-rule);border-bottom:0;color:var(--rs-muted);text-transform:none;font-weight:500}html.rs-lock,html.rs-lock body{overflow:hidden}@media (max-width:1279.98px){.rs-header .rs-author{display:none}}@media (max-width:1100px){.rs-header .rs-item{padding:0 10px}}@media (min-width:1280px){.rs-header .rs-find{width:auto;padding:0 12px}.rs-header .rs-find span{display:block}.rs-header .rs-item{padding:0 12px}}@media (max-width:959.98px){.rs-header .rs-row{padding:0 16px}.rs-header.rs-js .rs-nav,.rs-header.rs-js .rs-sep,.rs-header .rs-author{display:none}.rs-header.rs-js .rs-burger{display:inline-flex}.rs-header .rs-brand{margin-right:auto}.rs-header:not(.rs-js) .rs-nav{overflow-x:auto;margin-left:0}.rs-header.rs-js .rs-sublabel,.rs-header.rs-js .rs-subrow>.rs-sections{display:none}.rs-header.rs-js .rs-subbtn{display:flex}}@media (min-width:960px){.rs-header .rs-sheet,.rs-header .rs-sublist{display:none}}.rs-k,.rs-k :where(div,span,a,button,input,p,mark,kbd,b,svg){all:revert;box-sizing:border-box}.rs-k{width:min(640px,100vw - 32px);max-width:none;max-height:min(76vh,680px);margin:10vh auto auto;padding:0;overflow:hidden;background:var(--rs-surface);color:var(--rs-ink);border:2px solid var(--rs-rule);box-shadow:8px 8px 0 var(--rs-rule);font:400 15px/1.4 var(--rs-sans)}.rs-k[open]{display:flex;flex-direction:column}.rs-k::backdrop{background:#0a0c108c}.rs-k svg{flex:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}.rs-k-top{display:flex;align-items:center;gap:10px;padding:0 8px 0 16px;border-bottom:2px solid var(--rs-rule);color:var(--rs-muted)}.rs-k-top:focus-within{box-shadow:inset 0 -2px var(--rs-accent)}.rs-k input{flex:1;min-width:0;height:56px;border:0;outline:0;background:none;color:var(--rs-ink);font:500 17px var(--rs-sans);appearance:none}.rs-k input::placeholder{color:var(--rs-muted)}.rs-k-x{min-width:44px;height:44px;padding:0 10px;background:none;color:var(--rs-muted);border:1px solid var(--rs-rule-soft);font:600 12px var(--rs-mono);text-transform:uppercase;cursor:pointer}#rs-k-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-bottom:8px}#rs-k-list:empty{display:none}.rs-k-g{padding:14px 16px 6px;font:600 12px var(--rs-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rs-muted)}.rs-k [role=option]{display:block;padding:9px 16px 9px 13px;border-left:3px solid transparent;color:var(--rs-ink);text-decoration:none}.rs-k [role=option]:hover,.rs-k [aria-selected=true]{background:var(--rs-surface-2);border-color:var(--rs-accent)}.rs-k-t{display:block;font-weight:500}.rs-k-c{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13px;color:var(--rs-muted)}.rs-k-c b{margin-right:6px;color:var(--rs-ink)}.rs-k mark{background:none;color:inherit;font-weight:700;text-decoration:underline 2px var(--rs-accent);text-underline-offset:2px}.rs-k-e{margin:0;padding:20px 16px;color:var(--rs-muted)}.rs-k-f{margin:0;padding:10px 16px;border-top:1px solid var(--rs-rule-soft);font:500 12px var(--rs-mono);color:var(--rs-muted);word-spacing:6px}.rs-k-f kbd{margin:0 4px 0 0;padding:2px 5px;border:1px solid var(--rs-rule-soft);font:inherit;word-spacing:0}.rs-k-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.rs-k :focus-visible{outline:2px solid var(--rs-accent);outline-offset:-2px}@media (max-width:640px){.rs-k{width:100%;height:100%;max-height:100%;margin:0;border:0;box-shadow:none}.rs-k-f{display:none}}@media (prefers-reduced-motion:reduce){.rs-header *,.rs-header *::before,.rs-header *::after{transition:none!important}}@media print{.rs-header,.rs-k{display:none!important}}</style></head>
 <body>
-<a class="skip" href="#main">Skip to content</a><header class="rs-header" id="rs-header"><div class="rs-bar"><div class="rs-row"><a class="rs-brand" href="https://priyatham9.github.io/grounded/" aria-label="Grounded research hub"><span class="rs-mark" aria-hidden="true"></span>Grounded</a><a class="rs-author" href="https://priyatham9.github.io/">Priyatham Chimmani&nbsp;&#8599;</a><nav class="rs-nav" aria-label="Research site"><a class="rs-item" href="https://priyatham9.github.io/grounded/">Overview</a><a class="rs-item" href="https://priyatham9.github.io/grounded/start.html">Start here</a><a class="rs-item" href="https://priyatham9.github.io/grounded/observatory.html">Observatory</a><details class="rs-menu" data-current="true"><summary class="rs-item" aria-haspopup="true">Projects<span class="rs-caret" aria-hidden="true"></span></summary><div class="rs-panel"><a class="rs-opt" href="https://priyatham9.github.io/ehs-osha-analysis/"><span class="rs-t">OSHA data quality</span><span class="rs-n">2.8M real filings</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="rs-t">Grounding benchmark</span><span class="rs-n">first baselines</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-human-factors-ontology/"><span class="rs-t">Human factors ontology</span><span class="rs-n">derivation traces</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-risk-sem/"><span class="rs-t">SEM for safety risk</span><span class="rs-n">simulation studies</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page"><span class="rs-t">Cost-benefit calculator</span><span class="rs-n">interactive tool</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-benchmarks/"><span class="rs-t">OSHA benchmarks</span><span class="rs-n">TRIR/DART library</span></a></div></details><details class="rs-menu"><summary class="rs-item" aria-haspopup="true">Papers<span class="rs-caret" aria-hidden="true"></span></summary><div class="rs-panel"><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper.html"><span class="rs-t">Grounded reasoning for safety-critical AI</span><span class="rs-n">bundled draft</span></a><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper-osha.html"><span class="rs-t">The hours denominator</span><span class="rs-n">standalone OSHA paper</span></a></div></details><a class="rs-item rs-story" href="story.html">Read the story</a></nav><span class="rs-sep" aria-hidden="true"></span><button class="rs-btn" id="rs-theme" type="button" aria-label="Dark theme" aria-pressed="false" title="Switch colour theme"><svg class="rs-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg><svg class="rs-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button><button class="rs-btn rs-burger" id="rs-menu-btn" type="button" aria-expanded="false" aria-controls="rs-sheet" aria-label="Open menu"><i></i></button></div></div><div class="rs-sub"><div class="rs-row rs-subrow"><span class="rs-sublabel">On this page</span><nav class="rs-sections" id="rs-sections" aria-label="On this page"><a class="rs-sec" href="#story">Story</a><a class="rs-sec" href="#calculator">Calculator</a><a class="rs-sec" href="#sensitivity">Sensitivity</a><a class="rs-sec" href="#method">Method</a></nav><button class="rs-subbtn" id="rs-subbtn" type="button" aria-expanded="false" aria-controls="rs-sublist">On this page:<b id="rs-now">Story</b><span class="rs-caret" aria-hidden="true"></span></button></div><nav class="rs-sublist" id="rs-sublist" aria-label="On this page (list)" hidden><a class="rs-sec" href="#story">Story</a><a class="rs-sec" href="#calculator">Calculator</a><a class="rs-sec" href="#sensitivity">Sensitivity</a><a class="rs-sec" href="#method">Method</a></nav></div><div class="rs-sheet" id="rs-sheet" hidden><a class="rs-item" href="https://priyatham9.github.io/grounded/">Overview</a><a class="rs-item" href="https://priyatham9.github.io/grounded/start.html">Start here</a><a class="rs-item" href="https://priyatham9.github.io/grounded/observatory.html">Observatory</a><a class="rs-item rs-story" href="story.html">Read the story</a><span class="rs-group">Projects</span><a class="rs-opt" href="https://priyatham9.github.io/ehs-osha-analysis/"><span class="rs-t">OSHA data quality</span><span class="rs-n">2.8M real filings</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="rs-t">Grounding benchmark</span><span class="rs-n">first baselines</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-human-factors-ontology/"><span class="rs-t">Human factors ontology</span><span class="rs-n">derivation traces</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-risk-sem/"><span class="rs-t">SEM for safety risk</span><span class="rs-n">simulation studies</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page"><span class="rs-t">Cost-benefit calculator</span><span class="rs-n">interactive tool</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-benchmarks/"><span class="rs-t">OSHA benchmarks</span><span class="rs-n">TRIR/DART library</span></a><span class="rs-group">Papers</span><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper.html"><span class="rs-t">Grounded reasoning for safety-critical AI</span><span class="rs-n">bundled draft</span></a><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper-osha.html"><span class="rs-t">The hours denominator</span><span class="rs-n">standalone OSHA paper</span></a><a class="rs-sheet-author" href="https://priyatham9.github.io/">Priyatham Chimmani&nbsp;&#8599;</a></div><span class="rs-progress" aria-hidden="true"></span></header>
+<a class="skip" href="#main">Skip to content</a><header class="rs-header" id="rs-header"><div class="rs-bar"><div class="rs-row"><a class="rs-brand" href="https://priyatham9.github.io/grounded/" aria-label="Grounded research hub"><span class="rs-mark" aria-hidden="true"></span>Grounded</a><a class="rs-author" href="https://priyatham9.github.io/">Priyatham Chimmani&nbsp;&#8599;</a><nav class="rs-nav" aria-label="Research site"><a class="rs-item" href="https://priyatham9.github.io/grounded/">Overview</a><a class="rs-item" href="https://priyatham9.github.io/grounded/start.html">Start here</a><a class="rs-item" href="https://priyatham9.github.io/grounded/observatory.html">Observatory</a><details class="rs-menu" data-current="true"><summary class="rs-item" aria-haspopup="true">Projects<span class="rs-caret" aria-hidden="true"></span></summary><div class="rs-panel"><a class="rs-opt" href="https://priyatham9.github.io/ehs-osha-analysis/"><span class="rs-t">OSHA data quality</span><span class="rs-n">2.8M real filings</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="rs-t">Grounding benchmark</span><span class="rs-n">first baselines</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-human-factors-ontology/"><span class="rs-t">Human factors ontology</span><span class="rs-n">derivation traces</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-risk-sem/"><span class="rs-t">SEM for safety risk</span><span class="rs-n">simulation studies</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page"><span class="rs-t">Cost-benefit calculator</span><span class="rs-n">interactive tool</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-benchmarks/"><span class="rs-t">OSHA benchmarks</span><span class="rs-n">TRIR/DART library</span></a></div></details><details class="rs-menu"><summary class="rs-item" aria-haspopup="true">Papers<span class="rs-caret" aria-hidden="true"></span></summary><div class="rs-panel"><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper.html"><span class="rs-t">Grounded reasoning for safety-critical AI</span><span class="rs-n">bundled draft</span></a><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper-osha.html"><span class="rs-t">The hours denominator</span><span class="rs-n">standalone OSHA paper</span></a></div></details><a class="rs-item rs-story" href="story.html">Read the story</a></nav><span class="rs-sep" aria-hidden="true"></span><button class="rs-btn rs-find" id="rs-find" type="button" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K /" aria-label="Search the research" title="Search (/ or Ctrl+K)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><span>Search</span></button><button class="rs-btn" id="rs-theme" type="button" aria-label="Dark theme" aria-pressed="false" title="Switch colour theme"><svg class="rs-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg><svg class="rs-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button><button class="rs-btn rs-burger" id="rs-menu-btn" type="button" aria-expanded="false" aria-controls="rs-sheet" aria-label="Open menu"><i></i></button></div></div><div class="rs-sub"><div class="rs-row rs-subrow"><span class="rs-sublabel">On this page</span><nav class="rs-sections" id="rs-sections" aria-label="On this page"><a class="rs-sec" href="#story">Story</a><a class="rs-sec" href="#calculator">Calculator</a><a class="rs-sec" href="#sensitivity">Sensitivity</a><a class="rs-sec" href="#method">Method</a></nav><button class="rs-subbtn" id="rs-subbtn" type="button" aria-expanded="false" aria-controls="rs-sublist">On this page:<b id="rs-now">Story</b><span class="rs-caret" aria-hidden="true"></span></button></div><nav class="rs-sublist" id="rs-sublist" aria-label="On this page (list)" hidden><a class="rs-sec" href="#story">Story</a><a class="rs-sec" href="#calculator">Calculator</a><a class="rs-sec" href="#sensitivity">Sensitivity</a><a class="rs-sec" href="#method">Method</a></nav></div><div class="rs-sheet" id="rs-sheet" hidden><a class="rs-item" href="https://priyatham9.github.io/grounded/">Overview</a><a class="rs-item" href="https://priyatham9.github.io/grounded/start.html">Start here</a><a class="rs-item" href="https://priyatham9.github.io/grounded/observatory.html">Observatory</a><a class="rs-item rs-story" href="story.html">Read the story</a><span class="rs-group">Projects</span><a class="rs-opt" href="https://priyatham9.github.io/ehs-osha-analysis/"><span class="rs-t">OSHA data quality</span><span class="rs-n">2.8M real filings</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-ai-grounding-eval/"><span class="rs-t">Grounding benchmark</span><span class="rs-n">first baselines</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-human-factors-ontology/"><span class="rs-t">Human factors ontology</span><span class="rs-n">derivation traces</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-risk-sem/"><span class="rs-t">SEM for safety risk</span><span class="rs-n">simulation studies</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-capitals-calculator/" aria-current="page"><span class="rs-t">Cost-benefit calculator</span><span class="rs-n">interactive tool</span></a><a class="rs-opt" href="https://priyatham9.github.io/ehs-benchmarks/"><span class="rs-t">OSHA benchmarks</span><span class="rs-n">TRIR/DART library</span></a><span class="rs-group">Papers</span><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper.html"><span class="rs-t">Grounded reasoning for safety-critical AI</span><span class="rs-n">bundled draft</span></a><a class="rs-opt" href="https://priyatham9.github.io/grounded/paper-osha.html"><span class="rs-t">The hours denominator</span><span class="rs-n">standalone OSHA paper</span></a><a class="rs-sheet-author" href="https://priyatham9.github.io/">Priyatham Chimmani&nbsp;&#8599;</a></div><span class="rs-progress" aria-hidden="true"></span></header>
 
 <section class="hero" id="top" data-m-hero>
   <div class="wrap">
@@ -3472,75 +3491,7 @@ html.st-printing .r8-now{display:none!important}
 
 })();
 </script>
-<script id="rs-header-js">
-(function(){
- var h=document.getElementById('rs-header');if(!h)return;
- var root=document.documentElement,doc=document;h.classList.add('rs-js');
- var mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):{matches:false};
- /* theme */
- var tb=doc.getElementById('rs-theme');
- function cur(){var t=root.getAttribute('data-theme');return t==='dark'||t==='light'?t:(mq.matches?'dark':'light');}
- /* a toggle button keeps one name ("Dark theme") and reports its state with aria-pressed;
-    the tooltip says the action. A changing name on a pressed toggle reads as a contradiction. */
- function sync(){var d=cur()==='dark';tb.setAttribute('aria-pressed',d?'true':'false');tb.setAttribute('aria-label','Dark theme');tb.title=d?'Switch to light theme':'Switch to dark theme';}
- if(tb){tb.addEventListener('click',function(){var n=cur()==='dark'?'light':'dark';root.setAttribute('data-theme',n);
-  try{localStorage.setItem('pc-theme',n);localStorage.setItem('ehs-ai-theme',n);}catch(e){}
-  sync();try{doc.dispatchEvent(new CustomEvent('rs-themechange',{detail:{theme:n}}));}catch(e){}});
-  sync();if(mq.addEventListener)mq.addEventListener('change',sync);
-  /* other code (the story engine's theme API, a page script) may set data-theme too */
-  if(window.MutationObserver)new MutationObserver(sync).observe(root,{attributes:true,attributeFilter:['data-theme']});}
- /* dropdowns */
- var menus=[].slice.call(h.querySelectorAll('.rs-menu'));
- function closeMenus(except){menus.forEach(function(m){if(m!==except&&m.open)m.open=false;});}
- menus.forEach(function(m){var s=m.querySelector('summary');s.setAttribute('aria-expanded','false');
-  s.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();m.open=!m.open;}});
-  m.addEventListener('toggle',function(){s.setAttribute('aria-expanded',m.open?'true':'false');if(m.open)closeMenus(m);});});
- /* mobile sheet */
- var mb=doc.getElementById('rs-menu-btn'),sheet=doc.getElementById('rs-sheet');
- function focusables(){return [mb].concat([].slice.call(sheet.querySelectorAll('a[href]')));}
- function setSheet(open){if(!sheet)return;sheet.hidden=!open;mb.setAttribute('aria-expanded',open?'true':'false');
-  mb.setAttribute('aria-label',open?'Close menu':'Open menu');root.classList.toggle('rs-lock',open);
-  if(open){var f=sheet.querySelector('a[href]');if(f)f.focus();}}
- if(mb&&sheet){mb.addEventListener('click',function(){setSheet(sheet.hidden);});
-  sheet.addEventListener('click',function(e){if(e.target.closest('a'))setSheet(false);});
-  window.addEventListener('resize',function(){if(!sheet.hidden&&innerWidth>860)setSheet(false);});}
- /* sections */
- var sb=doc.getElementById('rs-subbtn'),sl=doc.getElementById('rs-sublist'),nav=doc.getElementById('rs-sections');
- function setSub(open){if(!sb)return;sl.hidden=!open;sb.setAttribute('aria-expanded',open?'true':'false');}
- if(sb){sb.addEventListener('click',function(){setSub(sl.hidden);});sl.addEventListener('click',function(e){if(e.target.closest('a'))setSub(false);});}
- doc.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
-  if(!t.closest('.rs-menu'))closeMenus();if(sb&&!sl.hidden&&!t.closest('.rs-sub'))setSub(false);});
- doc.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){var o=menus.filter(function(m){return m.open;})[0];
-   if(o){o.open=false;o.querySelector('summary').focus();return;}
-   if(sheet&&!sheet.hidden){setSheet(false);mb.focus();return;}
-   if(sb&&!sl.hidden){setSub(false);sb.focus();}return;}
-  if(e.key==='Tab'&&sheet&&!sheet.hidden){var f=focusables(),i=f.indexOf(doc.activeElement);
-   e.preventDefault();var n=f.length;f[i<0?0:(i+(e.shiftKey?n-1:1))%n].focus();}});
- var links=nav?[].slice.call(nav.querySelectorAll('a.rs-sec')):[],items=[];
- links.forEach(function(a){var el=doc.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));if(el)items.push({a:a,el:el,id:el.id});});
- var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,active=null;
- function off(){return h.offsetHeight;}
- function fades(){if(!nav)return;var m=nav.scrollWidth-nav.clientWidth;nav.classList.toggle('rs-fl',nav.scrollLeft>2);nav.classList.toggle('rs-fr',m>2&&nav.scrollLeft<m-2);}
- function spy(){if(!items.length)return;var y=off()+24,pick=null;
-  items.forEach(function(it){if(it.el.getBoundingClientRect().top<=y)pick=it;});
-  if(!pick)pick=items[0];if(innerHeight+scrollY>=doc.documentElement.scrollHeight-2)pick=items[items.length-1];
-  if(pick===active)return;active=pick;
-  [].slice.call(h.querySelectorAll('a.rs-sec')).forEach(function(a){var on=a.getAttribute('href')==='#'+pick.id;a.classList.toggle('rs-active',on);if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
-  var now=doc.getElementById('rs-now');if(now)now.textContent=pick.a.textContent;
-  if(nav.scrollWidth>nav.clientWidth){var l=pick.a.offsetLeft-(nav.clientWidth-pick.a.offsetWidth)/2;
-   try{nav.scrollTo({left:l,behavior:reduce?'auto':'smooth'});}catch(e){nav.scrollLeft=l;}}}
- var bar=h.querySelector('.rs-progress'),ticking=false;
- function frame(){ticking=false;var max=doc.documentElement.scrollHeight-innerHeight;
-  if(bar)bar.style.transform='scaleX('+(max>0?Math.min(1,Math.max(0,scrollY/max)):0)+')';spy();}
- function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
- function pad(){root.style.scrollPaddingTop=(off()+12)+'px';fades();}
- if(items.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(onScroll,{rootMargin:'-'+off()+'px 0px -50% 0px'});items.forEach(function(it){io.observe(it.el);});}
- if(nav)nav.addEventListener('scroll',fades,{passive:true});
- addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',function(){pad();onScroll();});
- pad();frame();
-})();
-</script>
+
 <script id="gsap-gsap" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
 <script id="gsap-scrolltrigger" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
 <script id="gsap-splittext" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/SplitText.min.js"></script>
@@ -3596,7 +3547,44 @@ html.st-printing .r8-now{display:none!important}
    - Pinned chapters shorter than the screen are centred in it (no dead strip).
    - ScrollTrigger re-measures after fonts, images (load) and bfcache restore;
      a #hash in the URL, or an in-page link into a pinned chapter, lands on
-     the chapter's pin start.
+     the chapter with its build complete (v2.2: end of the pin, not mid-scrub).
+
+   READING LAYER (v2.2, section 10) - all automatic at boot, all opt-out-able
+   Story.dataTable(figureEl, {caption, columns, rows, source, summary, open, into})
+       Adds <details class="st-data"><summary>Data</summary><table>...</table></details>
+       under a figure (after its .st-scene when the figure sits in a pinned stage),
+       styled in the design system, opened for print. Returns the <details>.
+         columns: ["Year", "TRIR"] | [{label, key, num, digits, fmt}]
+         rows:    [[2019, 3.1], ...] | [{year: 2019, trir: 3.1}, ...]
+         source:  "results/trir_by_year.csv" (printed as "Source: ...")
+       Numbers print exactly as passed (thousands separators added for 5+ digit
+       integers); round with {digits} or format with {fmt} per column.
+       Example:
+         Story.dataTable(document.getElementById("fig-trir"), {
+           caption: "TRIR by year, ITA Form 300A, 2016-2024",
+           columns: ["Year", {label: "TRIR", digits: 2}],
+           rows: [[2016, 3.412], [2017, 3.298]],
+           source: "results/trir_by_year.csv" });
+   Story.anchors()   every .st-chapter, .st-scene (or the section[id] holding it),
+       .finding and [data-st-anchor] gets a stable id (existing ids kept; new ids
+       are slugs of the heading) and a copy-link button placed after its heading
+       (hover/focus to show, always shown on touch, 44px). Copying says "Link
+       copied" through a polite live region. data-st-anchor="off" skips one.
+       Returns the ids. Runs at boot; call again after adding sections.
+   Story.dedupe()    a heading that restates the chapter card right before it
+       (same sentence after normalising case/space, or one contains the other)
+       is hidden from view and from assistive tech (.st-dup, aria-hidden). Links
+       to its id land on the chapter. Opt out: data-st-keep on the heading or its
+       section, or <body data-st-dedupe="off">. Force: data-st-dup-of="#id".
+   Story.landHash()  lands the current #hash (also on hashchange): pinned
+       chapters at their finished state, scenes with the linked step active.
+   Story.fit()       re-fits every scene's pinned figure to the screen band
+       above the dock (runs on resize, fonts, load; call after redrawing a figure).
+       data-st-fit="off" on a .st-stage opts out.
+   Story.toast(msg) / Story.copyLink(id)  the same polite toast and copy action.
+   Scenes (v2.2): step cards hug their text; the page's step min-height becomes
+   scroll room around the card (--st-mt / --st-mb). The active step is the one
+   most fully visible in the band between a stacked phone stage and the dock.
    ============================================================ */
 (function (global) {
   "use strict";
@@ -3612,6 +3600,28 @@ html.st-printing .r8-now{display:none!important}
     });
     ro.observe(el);
     return { disconnect: function () { ro.disconnect(); if (raf) cancelAnimationFrame(raf); } };
+  }
+  // the same for a list of nodes: one observer, one deferred callback per frame
+  function sizeObserverAll(list, fn) {
+    var raf = 0, seen = new Map();
+    var ro = new ResizeObserver(function (es) {
+      var changed = false;
+      es.forEach(function (e) {
+        var k = Math.round(e.contentRect.width) + "x" + Math.round(e.contentRect.height);
+        if (seen.get(e.target) !== k) { seen.set(e.target, k); changed = true; }
+      });
+      if (changed && !raf) raf = requestAnimationFrame(function () { raf = 0; fn(); });
+    });
+    list.forEach(function (n) { ro.observe(n); });
+    return { disconnect: function () { ro.disconnect(); if (raf) cancelAnimationFrame(raf); } };
+  }
+  // room the floating dock (wayfinder) takes at the bottom of the viewport, gap included
+  function dockClear() {
+    var w = document.querySelector(".st-way");
+    if (!w || document.documentElement.classList.contains("st-presenting")) return 0;
+    var r = w.getBoundingClientRect();
+    if (!r.height || r.top >= innerHeight) return 0;
+    return Math.max(0, innerHeight - r.top) + 8;
   }
 
   /* ---------------------------------------------------------
@@ -4593,7 +4603,7 @@ html.st-printing .r8-now{display:none!important}
     var steps = els(".st-step", scene);
     var stage = el(".st-stage", scene);
     var inner = el(".st-stage-inner", scene) || stage;
-    var active = -1, ioStep = null, unScroll = null;
+    var active = -1;
 
     // staggered step-text entrance is opt-in via this class, so pages that
     // never run scenes() still render their step text normally
@@ -4658,18 +4668,155 @@ html.st-printing .r8-now{display:none!important}
     // presenter mode drives steps directly, so it never depends on scroll observers firing
     steps.forEach(function (st, j) { st.__stActivate = function () { if (active === j && st.classList.contains("is-active")) return; active = -1; setActive(j); }; });
 
-    if (global.IntersectionObserver) {
-      // under 800px the stage is stacked on top, so the active band sits in the lower part of the viewport
-      var narrow = global.matchMedia && global.matchMedia("(max-width:800px)").matches, bandMid = narrow ? 0.66 : 0.5;
-      ioStep = new IntersectionObserver(function (es) {
-        // pick the entry closest to the middle band of the viewport
-        var best = null, bestD = Infinity;
-        es.forEach(function (e) { if (e.isIntersecting) { var d = Math.abs(e.boundingClientRect.top + e.boundingClientRect.height / 2 - innerHeight * bandMid); if (d < bestD) { bestD = d; best = e; } } });
-        // presenter mode and the print handout drive steps directly; scroll must not fight them
-        if (best && !presentState && !printing) setActive(steps.indexOf(best.target));
-      }, { rootMargin: narrow ? "-56% 0px -24% 0px" : "-45% 0px -45% 0px", threshold: 0 });
-      steps.forEach(function (s) { ioStep.observe(s); });
-    } else { steps.forEach(function (s) { s.classList.add("is-entered"); }); setActive(0); }
+    /* v2.2 reading fit. The active step is the one a reader can see whole: the step
+       whose card is most visible inside the reading band (below a stacked phone stage,
+       above the floating dock). A card that just came fully into view goes active, so its
+       figure state never runs ahead of text still under the fold. Cards hug their text;
+       the scroll room between them keeps the old pacing (see fitSteps). */
+    function isNarrow() { return !!(global.matchMedia && global.matchMedia("(max-width:800px)").matches); }
+    function pickActive() {
+      if (presentState || printing || !steps.length) return;
+      var sr = scene.getBoundingClientRect();
+      if (sr.bottom < 0 || sr.top > innerHeight) return;
+      var bt = 0, bb = innerHeight - dockClear();
+      if (isNarrow() && stage) { var st = stage.getBoundingClientRect(); if (st.top <= 1 + (parseFloat(getComputedStyle(stage).top) || 0)) bt = Math.max(0, st.bottom); }
+      if (bb - bt < 80) { bt = 0; bb = innerHeight; }
+      var mid = bt + (bb - bt) * 0.45, best = -1, bestF = 0, bestD = Infinity, curF = 0;
+      for (var i = 0; i < steps.length; i++) {
+        var r = steps[i].getBoundingClientRect();
+        if (!r.height) continue;
+        var vis = Math.min(r.bottom, bb) - Math.max(r.top, bt);
+        if (vis <= 0) continue;
+        var f = Math.min(1, vis / Math.max(1, Math.min(r.height, bb - bt)));
+        var d = Math.abs(r.top + r.height / 2 - mid);
+        if (i === active) curF = f;
+        if (f > bestF + 0.02 || (Math.abs(f - bestF) <= 0.02 && d < bestD)) { best = i; bestF = f; bestD = d; }
+      }
+      if (best < 0 || best === active) return;
+      // hysteresis: the current step keeps the lead until the new one is clearly more readable
+      if (active >= 0 && curF >= 0.98 && bestF < 0.995) return;
+      setActive(best);
+    }
+
+    /* Cards hug their content; the page's own step min-height (vh) becomes scroll room
+       around the card, so pacing is unchanged but no empty box runs under the dock. */
+    // the page's own step heights, read once before the fit class lands, kept as a share
+    // of the viewport (vh-based min-heights scale with it). Re-reading later would toggle
+    // the layout and count as a layout shift.
+    var roomFrac = null, roomNarrow = null;
+    function fitSteps() {
+      if (!steps.length) return;
+      var narrow = isNarrow();
+      if (roomFrac === null || roomNarrow !== narrow) {
+        scene.classList.remove("st-fit");
+        roomFrac = steps.map(function (s) { return (parseFloat(getComputedStyle(s).minHeight) || 0) / Math.max(1, innerHeight); });
+        roomNarrow = narrow;
+        scene.classList.add("st-fit");
+      }
+      var vh = innerHeight, band = vh - dockClear();
+      steps.forEach(function (s, i) {
+        var h = s.getBoundingClientRect().height;
+        var room = Math.max(roomFrac[i] * vh, 0);
+        var floor = room > 0 ? Math.round(vh * 0.05) : 0;
+        var m = Math.max(floor, Math.round((room - h) / 2));
+        var mt = m, mb = m;
+        // the last card can sit centred in the reading band before the stage unpins
+        if (i === steps.length - 1 && !narrow && room > 0) mb = Math.max(m, Math.round((band - h) / 2) + (vh - band));
+        // write only real changes: an unchanged value must not re-lay the column out
+        if (s.__stMt !== mt) { s.style.setProperty("--st-mt", mt + "px"); s.__stMt = mt; }
+        if (s.__stMb !== mb) { s.style.setProperty("--st-mb", mb + "px"); s.__stMb = mb; }
+      });
+    }
+
+    /* The pinned figure fits the stage band on short screens (1280x720, 1024x768):
+       the biggest svg/canvas in the stage shrinks, keeping its aspect ratio, until the
+       stage content (figure, caption, controls) ends above the dock. */
+    var fitted = [];
+    function unfitStage() {
+      fitted.forEach(function (g) { g.style.removeProperty("max-height"); g.style.removeProperty("max-width"); g.style.removeProperty("margin-inline"); g.classList.remove("st-fitted"); });
+      fitted = [];
+    }
+    function stageOverflow() {
+      var cs = getComputedStyle(stage), top = parseFloat(cs.top);
+      if (cs.position !== "sticky" || isNaN(top)) return 0;
+      var sh = stage.getBoundingClientRect().height;
+      var bandBottom = Math.min(top + sh, innerHeight - dockClear());
+      var avail = bandBottom - top - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0);
+      var lo = Infinity, hi = -Infinity;
+      Array.prototype.forEach.call(stage.children, function (k) {
+        var kc = getComputedStyle(k);
+        if (kc.position === "absolute" || kc.position === "fixed" || kc.display === "none") return;
+        var r = contentBox(k); if (!r) return;
+        lo = Math.min(lo, r.top); hi = Math.max(hi, r.bottom);
+      });
+      return isFinite(lo) ? (hi - lo) - avail : 0;
+    }
+    // the extent of a stage child: its in-flow children (which may overflow a fixed-height
+    // box), not a min-height box drawn around them
+    function contentBox(k) {
+      var r = k.getBoundingClientRect();
+      if (!r.height && !k.children.length) return null;
+      var kc = getComputedStyle(k);
+      var lo = Infinity, hi = -Infinity;
+      Array.prototype.forEach.call(k.children, function (c) {
+        var cc = getComputedStyle(c);
+        if (cc.position === "absolute" || cc.position === "fixed" || cc.display === "none") return;
+        var cr = c.getBoundingClientRect(); if (!cr.height) return;
+        lo = Math.min(lo, cr.top - (parseFloat(cc.marginTop) || 0)); hi = Math.max(hi, cr.bottom + (parseFloat(cc.marginBottom) || 0));
+      });
+      if (!isFinite(lo)) return r.height ? r : null;
+      lo -= (parseFloat(kc.paddingTop) || 0) + (parseFloat(kc.borderTopWidth) || 0);
+      hi += (parseFloat(kc.paddingBottom) || 0) + (parseFloat(kc.borderBottomWidth) || 0);
+      if (!(parseFloat(kc.minHeight) > 0)) { lo = Math.min(lo, r.top); hi = Math.max(hi, r.bottom); }
+      return { top: lo, bottom: hi };
+    }
+    function fitStage() {
+      if (!stage) return;
+      unfitStage();
+      if (isNarrow() || printing || presentState || stage.getAttribute("data-st-fit") === "off") return;
+      // measure the flat layout: the stage frame's entrance tilt and scale distort rects
+      scene.classList.add("st-measuring");
+      try { fitPasses(); } finally { scene.classList.remove("st-measuring"); }
+    }
+    function fitPasses() {
+      for (var pass = 0; pass < 3; pass++) {
+        var over = stageOverflow();
+        if (over <= 1) return;
+        var g = null, ga = 0;
+        els("svg,canvas", inner).forEach(function (n) {
+          if (n.closest(".st-companion,.st-orb-wrap") || n.classList.contains("st-orb") || n.classList.contains("st-field")) return;
+          if (n.ownerSVGElement) return; // nested svg
+          var r = n.getBoundingClientRect(), a = r.width * r.height;
+          if (a > ga) { ga = a; g = n; }
+        });
+        if (!g) return;
+        var gr = g.getBoundingClientRect();
+        var target = Math.max(160, Math.floor(gr.height - over - 2));
+        if (target >= gr.height - 1) return;
+        g.style.setProperty("max-height", target + "px", "important");
+        g.style.setProperty("max-width", Math.floor(target * gr.width / gr.height) + "px", "important");
+        g.style.setProperty("margin-inline", "auto", "important");
+        g.classList.add("st-fitted");
+        if (fitted.indexOf(g) < 0) fitted.push(g);
+      }
+    }
+    var fitRaf = 0;
+    function refit() {
+      if (fitRaf) return;
+      fitRaf = requestAnimationFrame(function () { fitRaf = 0; fitSteps(); fitStage(); pickActive(); });
+    }
+    fitSteps();
+    fitStage();
+    // pages draw their charts after the engine boots, and webfonts change heights: fit again then
+    [120, 600, 1600].forEach(function (ms) { setTimeout(refit, ms); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit, function () { });
+    addEventListener("load", refit);
+    addEventListener("resize", refit);
+    var roSteps = global.ResizeObserver ? sizeObserverAll(steps, refit) : null;
+
+    var scrollRaf = 0;
+    function onScrollRaf() { if (!scrollRaf) scrollRaf = requestAnimationFrame(function () { scrollRaf = 0; onScroll(); pickActive(); }); }
+    if (!global.requestAnimationFrame) steps.forEach(function (s) { s.classList.add("is-entered"); });
 
     function onScroll() {
       var r = scene.getBoundingClientRect();
@@ -4686,24 +4833,31 @@ html.st-printing .r8-now{display:none!important}
         });
       }
     }
-    addEventListener("scroll", onScroll, { passive: true });
-    addEventListener("resize", onScroll);
+    addEventListener("scroll", onScrollRaf, { passive: true });
+    addEventListener("resize", onScrollRaf);
     onScroll();
     if (reduced()) setActive(steps.length ? steps.length - 1 : -1);
     else if (active < 0) setActive(0);
+    pickActive();
 
-    return {
+    var api = {
       steps: steps, stage: stage, scene: scene, companion: comp,
       get index() { return active; },
+      fit: refit,
       go: function (i) { // instant jump: the figure still animates, and a smooth scroll can stall between steps on some displays
       if (steps[i]) { var r = steps[i].getBoundingClientRect(); global.scrollTo({ top: r.top + global.pageYOffset - (global.innerHeight - r.height) / 2, behavior: "instant" }); }
       if (steps[i] && steps[i].__stActivate) { var cur = steps[i]; cur.__stActivate(); setTimeout(function () { if (steps[i] === cur) cur.__stActivate(); }, 120); } },
       destroy: function () {
-        if (ioStep) ioStep.disconnect();
         if (comp) comp.destroy();
-        removeEventListener("scroll", onScroll); removeEventListener("resize", onScroll);
+        if (roSteps) roSteps.disconnect();
+        unfitStage(); scene.classList.remove("st-fit");
+        removeEventListener("scroll", onScrollRaf); removeEventListener("resize", onScrollRaf);
+        removeEventListener("resize", refit); removeEventListener("load", refit);
+        scene.__stScene = null;
       }
     };
+    scene.__stScene = api;
+    return api;
   }
 
   /* ---------------------------------------------------------
@@ -6184,7 +6338,7 @@ html.st-printing .r8-now{display:none!important}
      --------------------------------------------------------- */
   var glossary = {
     "TRIR": "Recordable injuries per 200,000 hours worked. The standard yearly injury rate, so sites of different sizes can be compared.",
-    "DART": "Rate of injuries that cost days away from work, restricted duty, or a job transfer. A severity-weighted cousin of TRIR.",
+    "DART": "Rate of recordable cases with days away from work, restricted duty, or job transfer, per 200,000 hours worked. Same basis as TRIR, counting only those cases.",
     "LTIR": "Rate of injuries that kept someone away from work at least one full day. Narrower than DART.",
     "NAICS": "The federal industry code. It says what a site makes or does, and decides which peers it is compared against.",
     "OSHA Form 300A": "The yearly summary of injury counts and hours that larger employers post and file. One row per site.",
@@ -6385,6 +6539,7 @@ html.st-printing .r8-now{display:none!important}
     glossHide();
     document.documentElement.classList.add("st-printing");
     printSaved = [];
+    els("details.st-data:not([open])").forEach(function (d) { d.open = true; d.__stPrintOpened = 1; });
     els(".st-scene").forEach(function (sc) {
       var list = els(".st-step", sc);
       if (!list.length) return;
@@ -6427,6 +6582,7 @@ html.st-printing .r8-now{display:none!important}
       if (s.idx >= 0 && s.steps[s.idx] && s.steps[s.idx].__stActivate) s.steps[s.idx].__stActivate();
     });
     printSaved = null; printing = false;
+    els("details.st-data").forEach(function (d) { if (d.__stPrintOpened) { d.open = false; d.__stPrintOpened = 0; } });
     document.documentElement.classList.remove("st-printing");
   }
   function printHandout() {
@@ -6586,7 +6742,9 @@ html.st-printing .r8-now{display:none!important}
   }
 
   function boot() {
-    autoChapters(); autoFindings();
+    autoChapters();
+    autoReading();   // duplicate headings hidden, anchor ids assigned (the findings list links to them)
+    autoFindings();
     try { autoGloss(); } catch (e) { if (global.console) console.error(e); }
     try { autoGsap(); } catch (e) { if (global.console) console.error(e); }
     try { autoWords(); } catch (e) { if (global.console) console.error(e); }
@@ -6594,6 +6752,7 @@ html.st-printing .r8-now{display:none!important}
     autoWayfinder();
     try { spotlight(document); } catch (e) { if (global.console) console.error(e); }
     try { autoMotion(); } catch (e) { if (global.console) console.error(e); }
+    autoReadingLate();  // copy-link buttons, hash landing
     // ?print=1 previews the handout layout on screen; reload or call Story._printRestore() to leave it
     if (/[?&]print=1/.test(location.search)) printPrepare();
   }
@@ -7100,9 +7259,10 @@ html.st-printing .r8-now{display:none!important}
         var hero = n.closest("[data-m-hero]");
         var t = global.gsap.from(parts, {
           yPercent: 110, autoAlpha: type === "chars" ? 1 : 0, rotate: type === "chars" && !phone ? 6 : 0,
-          duration: type === "chars" ? 0.9 : 0.8, ease: M_EASE.out,
-          stagger: type === "chars" ? 0.022 : type === "words" ? 0.045 : 0.1,
-          delay: mNum(n.getAttribute("data-m-delay"), hero ? 0.15 : 0),
+          // v2.2: the whole line is in within ~0.9s however long the headline is
+          duration: type === "chars" ? 0.6 : 0.55, ease: M_EASE.out,
+          stagger: { amount: Math.min(0.35, parts.length * (type === "chars" ? 0.022 : type === "words" ? 0.045 : 0.1)) },
+          delay: Math.min(0.3, mNum(n.getAttribute("data-m-delay"), hero ? 0.05 : 0)),
           scrollTrigger: hero ? null : { trigger: n, start: "top 88%", once: true }
         });
         return t;
@@ -7123,8 +7283,18 @@ html.st-printing .r8-now{display:none!important}
       mSel(sec, "[data-m-count]").forEach(function (c) { mCount(c); });
       return null;
     }
-    steps = mTameAll(mClaim(steps));
+    // v2.2: the floating dock covers the bottom of a pinned screen; a chapter whose content
+    // cannot sit above it is revealed in normal flow instead of pinned with its end hidden
     mCenterPin(sec);
+    if (mPinContentH(sec) > innerHeight + 1) {
+      mUncenterPin(sec);
+      mStepsOnce(steps);
+      mSel(sec, "[data-m-draw]").forEach(function (d) { mDraw(d); });
+      mSel(sec, "[data-m-bars]").forEach(function (b) { mBars(b); });
+      mSel(sec, "[data-m-count]").forEach(function (c) { mCount(c); });
+      return null;
+    }
+    steps = mTameAll(mClaim(steps));
     var len = sec.getAttribute("data-m-pin") || (100 + steps.length * 60) + "%";
     var tl = sec.__mTl = g.timeline({
       defaults: { ease: "none" },
@@ -7155,19 +7325,40 @@ html.st-printing .r8-now{display:none!important}
   // centre its content in a screen-tall box. Uses the section's own layout mode,
   // set inline so page CSS cannot undo it; restored when motion is reverted.
   function mCenterPin(sec) {
-    if (!sec.__mPinOrig) sec.__mPinOrig = { display: sec.style.display, fd: sec.style.flexDirection, jc: sec.style.justifyContent, ac: sec.style.alignContent, mh: sec.style.minHeight };
+    if (!sec.__mPinOrig) sec.__mPinOrig = { display: sec.style.display, fd: sec.style.flexDirection, jc: sec.style.justifyContent, ac: sec.style.alignContent, mh: sec.style.minHeight, pb: sec.style.paddingBottom };
     var o = sec.__mPinOrig;
-    sec.style.minHeight = o.mh; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.display = o.display; sec.style.flexDirection = o.fd;
+    sec.style.minHeight = o.mh; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.display = o.display; sec.style.flexDirection = o.fd; sec.style.paddingBottom = o.pb;
     var cs = getComputedStyle(sec), d = cs.display;
     sec.style.minHeight = innerHeight + "px";
+    // centre in the part of the screen the dock leaves free
+    var dc = dockClear();
+    if (dc > (parseFloat(cs.paddingBottom) || 0)) sec.style.paddingBottom = dc + "px";
     if (/grid/.test(d)) sec.style.alignContent = "center";
     else if (/flex/.test(d)) { if (/column/.test(cs.flexDirection)) sec.style.justifyContent = "center"; else sec.style.alignItems = sec.style.alignItems || "center"; }
     else { sec.style.display = "flex"; sec.style.flexDirection = "column"; sec.style.justifyContent = "center"; }
   }
+  // height the chapter's content needs: its in-flow children plus its own padding
+  function mPinContentH(sec) {
+    var lo = Infinity, hi = -Infinity;
+    Array.prototype.forEach.call(sec.children, function (k) {
+      var c = getComputedStyle(k);
+      if (c.position === "absolute" || c.position === "fixed" || c.display === "none") return;
+      var r = k.getBoundingClientRect(); if (!r.height) return;
+      lo = Math.min(lo, r.top - (parseFloat(c.marginTop) || 0)); hi = Math.max(hi, r.bottom + (parseFloat(c.marginBottom) || 0));
+    });
+    if (!isFinite(lo)) return 0;
+    var cs = getComputedStyle(sec);
+    return hi - lo + (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+  }
+  function mUncenterPin(sec) {
+    var o = sec.__mPinOrig; if (!o) return;
+    sec.style.display = o.display; sec.style.flexDirection = o.fd; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.minHeight = o.mh; sec.style.paddingBottom = o.pb || "";
+    sec.__mPinOrig = null;
+  }
   function mUncenterPins() {
     els("[data-m-pin]").forEach(function (sec) {
       var o = sec.__mPinOrig; if (!o) return;
-      sec.style.display = o.display; sec.style.flexDirection = o.fd; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.minHeight = o.mh;
+      sec.style.display = o.display; sec.style.flexDirection = o.fd; sec.style.justifyContent = o.jc; sec.style.alignContent = o.ac; sec.style.minHeight = o.mh; sec.style.paddingBottom = o.pb || "";
       sec.__mPinOrig = null;
     });
   }
@@ -7310,12 +7501,14 @@ html.st-printing .r8-now{display:none!important}
     var g = global.gsap, tl = g.timeline({ defaults: { ease: M_EASE.out } });
     var parts = mTameAll(mClaim(els("[data-m-hero-part]", h)));
     if (!parts.length) return tl;
-    parts.forEach(function (p, i) {
+    // v2.2: the words a reader is waiting for (headline, answer, primary action) start within
+    // ~0.3s and are fully in by ~0.9s; only the decorative visual takes longer
+    var ti = 0;
+    parts.forEach(function (p) {
       var kind = p.getAttribute("data-m-hero-part");
-      var at = i === 0 ? 0.1 : "-=0.55";
-      if (kind === "visual") tl.from(p, { autoAlpha: 0, scale: phone ? 0.96 : 0.82, rotate: phone ? 0 : -8, duration: 1.4, ease: M_EASE.out }, i === 0 ? 0 : "-=1.0");
-      else if (kind === "rule") tl.from(p, { scaleX: 0, transformOrigin: "0 50%", duration: 1.1, ease: M_EASE.io }, at);
-      else tl.from(p, { autoAlpha: 0, y: 28, duration: 0.9 }, at);
+      if (kind === "visual") tl.from(p, { autoAlpha: 0, scale: phone ? 0.96 : 0.86, rotate: phone ? 0 : -6, duration: 1.2, ease: M_EASE.out }, 0);
+      else if (kind === "rule") tl.from(p, { scaleX: 0, transformOrigin: "0 50%", duration: 0.8, ease: M_EASE.io }, 0.05 + Math.min(ti++, 4) * 0.07);
+      else tl.from(p, { autoAlpha: 0, y: 18, duration: 0.55 }, 0.05 + Math.min(ti++, 4) * 0.07);
     });
     if (!phone) {
       // the hero drifts apart as it leaves: copy rises, visual sinks
@@ -7412,7 +7605,7 @@ html.st-printing .r8-now{display:none!important}
       if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest && e.target.closest("a[href^='#']");
       if (!a || a.getAttribute("href").length < 2) return;
-      var t = mHashTarget(a.getAttribute("href"));
+      var t = hashTargetEl(a.getAttribute("href"));
       if (!t || !mPinOf(t)) return;
       e.preventDefault();
       var smooth = !reduced() && getComputedStyle(document.documentElement).scrollBehavior === "smooth";
@@ -7437,20 +7630,15 @@ html.st-printing .r8-now{display:none!important}
   function mAnchorY(t) {
     var s = mPinOf(t);
     if (s) {
-      var tl = s.pin.__mTl, d = tl && tl.duration();
-      var f = d ? Math.min(1, (s.pin.__mFirstAt || 0) / d) : 0;
-      return Math.ceil(s.start + (s.end - s.start) * f) + 1;
+      // v2.2: land where the chapter's build is complete (every step shown), just before it unpins
+      return Math.max(Math.ceil(s.start) + 1, Math.floor(s.end) - 2);
     }
     var sm = parseFloat(getComputedStyle(t).scrollMarginTop) || 0;
     return Math.max(0, t.getBoundingClientRect().top + scrollY - sm);
   }
   function mLandHash() {
     if (mUserScrolled) return;
-    var t = mHashTarget(location.hash);
-    if (!t) return;
-    var y = mAnchorY(t);
-    if (Math.abs(scrollY - y) > 2) scrollTo(0, y);
-    mSnapPin(t);
+    landHash();
   }
   // after an instant jump, skip the scrub catch-up so the chapter is not replayed from blank
   function mSnapPin(t) {
@@ -7473,8 +7661,348 @@ html.st-printing .r8-now{display:none!important}
   }
   function motionKill() { M.mms.forEach(function (mm) { mm.revert(); }); M.mms = []; M.mm = null; mUntameAll(); mUncenterPins(); }
 
+  /* ---------------------------------------------------------
+     10. v2.2 reading layer: one statement once, shareable anchors,
+         data tables under figures, hash landing
+     --------------------------------------------------------- */
+  function normText(s) {
+    return (s || "").replace(/­/g, "").replace(/\s+/g, " ").replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
+      .trim().toLowerCase().replace(/[.,:;!?…]+$/, "");
+  }
+  /* Story.dedupe(): a chapter card states a finding; when the section right after it
+     opens with a heading that says the same sentence (equal, or one contains the other,
+     after case and whitespace are normalised), that second heading is hidden from view
+     and from assistive tech (class st-dup, aria-hidden). Links to its id land on the
+     chapter. Opt out per heading or section with data-st-keep; per page with
+     <body data-st-dedupe="off">. Force it with data-st-dup-of="#chapterId". */
+  function markDup(h, owner) {
+    if (h.classList.contains("st-dup")) return;
+    h.classList.add("st-dup");
+    h.setAttribute("aria-hidden", "true");
+    h.__stDupOf = owner;
+  }
+  function dedupe() {
+    if (document.body && document.body.getAttribute("data-st-dedupe") === "off") return 0;
+    var n0 = els(".st-dup").length;
+    els(".st-chapter").forEach(function (c) {
+      var t = c.querySelector("h2,.st-chapter-title");
+      if (!t) return;
+      var a = normText(t.textContent);
+      if (a.length < 16) return;
+      for (var n = c.nextElementSibling, hops = 0; n && hops < 2 && !n.classList.contains("st-chapter"); n = n.nextElementSibling, hops++) {
+        if (n.hasAttribute("data-st-keep")) continue;
+        var hs = n.matches("h1,h2,h3") ? [n] : els("h2,h3", n).filter(function (h) { return !h.closest(".st-step,.st-findings,.st-chapter,figure,[data-st-keep]"); }).slice(0, 2);
+        hs.forEach(function (h) {
+          if (h.hasAttribute("data-st-keep")) return;
+          var b = normText(h.textContent);
+          if (b.length < 16) return;
+          if (a === b || (a.length >= 24 && b.indexOf(a) >= 0) || (b.length >= 24 && a.indexOf(b) >= 0)) markDup(h, c);
+        });
+      }
+    });
+    els("[data-st-dup-of]").forEach(function (h) {
+      var o = null; try { o = document.querySelector(h.getAttribute("data-st-dup-of")); } catch (e) { }
+      if (o) markDup(h, o);
+    });
+    return els(".st-dup").length - n0;
+  }
+
+  /* Story.anchors(): every chapter, scene and finding gets a stable id (existing ids are
+     kept; new ones are slugs of the heading text) and a copy-link button after its
+     heading. The button shows on hover and keyboard focus, always on touch screens,
+     and has a 44px hit area; copying announces "Link copied" politely.
+     Targets: .st-chapter, .st-scene (or the section[id] that holds it), .finding,
+     [data-st-anchor]. Skip one with data-st-anchor="off". */
+  var ANCHOR_SEL = ".st-chapter,.st-scene,.finding,[data-st-anchor]";
+  function slugify(s) {
+    s = (s || "").toLowerCase();
+    if (s.normalize) s = s.normalize("NFKD").replace(/[̀-ͯ]/g, "");
+    return s.replace(/&/g, " and ").replace(/%/g, " pct ").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+      .split("-").filter(Boolean).slice(0, 7).join("-");
+  }
+  function anchorHeading(n) {
+    if (n.matches("h1,h2,h3,h4")) return n;
+    var h = els("h2,.st-chapter-title,h3,.f-title,h4", n).filter(function (x) { return !x.closest(".st-step,.st-findings,.st-data,figure"); })[0];
+    if (h) return h;
+    if (n.classList.contains("st-scene")) {
+      // a scene's title usually sits just before it (".scene-head h2")
+      for (var p = n.previousElementSibling, k = 0; p && k < 2; p = p.previousElementSibling, k++) {
+        var q = p.matches("h2,h3") ? p : p.querySelector("h2,h3");
+        if (q) return q;
+      }
+    }
+    return null;
+  }
+  function anchorTarget(n) {
+    // a scene inside a section that already has an id: that section is the anchor
+    if (n.classList.contains("st-scene") && !n.id) {
+      var sec = n.parentElement && n.parentElement.closest("section[id],article[id]");
+      if (sec && els(".st-scene", sec).length === 1 && !sec.classList.contains("st-chapter")) return sec;
+    }
+    return n;
+  }
+  var anchorList = [];
+  function anchorIds() {
+    var used = Object.create(null);
+    els("[id]").forEach(function (x) { used[x.id] = 1; });
+    els(ANCHOR_SEL).forEach(function (n) {
+      if (n.getAttribute("data-st-anchor") === "off" || n.closest(".st-way,.st-way-map,.st-findings,.st-print-terms")) return;
+      var t = anchorTarget(n);
+      if (t.__stAnchor) return;
+      var h = anchorHeading(n);
+      if (!t.id) {
+        var base = slugify(h ? h.textContent : "") || (n.classList.contains("st-scene") ? "scene-" + (n.getAttribute("data-scene") || "") : n.classList.contains("st-chapter") ? "chapter-" + (n.getAttribute("data-num") || "") : "section");
+        base = base.replace(/-$/, "") || "section";
+        var id = base, k = 2;
+        while (used[id]) id = base + "-" + (k++);
+        t.id = id; used[id] = 1;
+      }
+      t.__stAnchor = { heading: h, target: t };
+      anchorList.push(t);
+    });
+  }
+  var LINK_ICON = "M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5 M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5";
+  function anchorButtons() {
+    anchorList.forEach(function (t) {
+      var a = t.__stAnchor, h = a.heading;
+      if (!h || h.classList.contains("st-dup") || h.closest(".st-dup") || !h.getClientRects().length) return;
+      if (a.btn && a.btn.isConnected) return;
+      if (pageHasOwnLink(h, t)) return;
+      var b = a.btn;
+      if (!b) {
+        b = document.createElement("button");
+        b.type = "button"; b.className = "st-anchor st-hide-on-present";
+        b.setAttribute("data-st-link", t.id);
+        var label = (h.getAttribute("aria-label") || h.textContent || "").replace(/\s+/g, " ").trim();
+        if (label.length > 90) label = label.slice(0, 87) + "...";
+        b.setAttribute("aria-label", "Copy link to this section: " + label);
+        b.title = "Copy link";
+        var svg = mk("svg", { viewBox: "0 0 24 24", width: 18, height: 18, "aria-hidden": "true", focusable: "false", fill: "none" }, b);
+        mk("path", { d: LINK_ICON, stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+        a.btn = b;
+      }
+      // a sibling right after the heading (keyboard order: heading, then its link), placed at
+      // the end of the heading's last line by placeAnchors(). Inside the heading it would be
+      // rebuilt away by split-text reveals.
+      h.insertAdjacentElement("afterend", b);
+      h.classList.add("st-anchored");
+    });
+    placeAnchors();
+    if (!anchorWired) {
+      anchorWired = true;
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest && e.target.closest(".st-anchor[data-st-link]");
+        if (!b) return;
+        e.preventDefault(); e.stopPropagation();
+        copyLink(b.getAttribute("data-st-link"));
+      });
+      var q = 0, again = function () { if (!q) q = requestAnimationFrame(function () { q = 0; placeAnchors(); }); };
+      addEventListener("resize", again);
+      addEventListener("load", again);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(again, function () { });
+      // split headlines settle after their entrance; pinned chapters move their content
+      [400, 1400, 3000].forEach(function (ms) { setTimeout(again, ms); });
+      if (global.ResizeObserver) sizeObserverAll(anchorList.map(function (n) { return n.__stAnchor.heading; }).filter(Boolean), again);
+      if (gsapOK() && global.ScrollTrigger) global.ScrollTrigger.addEventListener("refresh", again);
+    }
+  }
+  var anchorWired = false;
+  // a page that already puts its own copy-link control on this heading keeps it
+  function pageHasOwnLink(h, t) {
+    var scopes = [h, h.parentElement].filter(Boolean);
+    return scopes.some(function (s) {
+      return els("button,a", s).some(function (b) {
+        if (b.classList.contains("st-anchor")) return false;
+        var lab = (b.getAttribute("aria-label") || "") + " " + (b.getAttribute("title") || "") + " " + (typeof b.className === "string" ? b.className : "");
+        if (b.tagName === "BUTTON") return /copy[- ]?link|link to|\blink\b|permalink/i.test(lab);
+        return t.id && b.getAttribute("href") === "#" + t.id && /anchor|permalink|copy|\blink\b/i.test(lab);
+      });
+    });
+  }
+  function placeAnchors() {
+    var vw = document.documentElement.clientWidth;
+    anchorList.forEach(function (t) {
+      var a = t.__stAnchor, b = a && a.btn, h = a && a.heading;
+      if (!b || !b.isConnected || !h) return;
+      // the page added its own link control after the engine booted: keep one
+      if (pageHasOwnLink(h, t)) { b.remove(); h.classList.remove("st-anchored"); return; }
+      var op = b.offsetParent;
+      if (!op) return;
+      var or = op.getBoundingClientRect(), hr = h.getBoundingClientRect();
+      if (!hr.height) return;
+      var cs = getComputedStyle(h), fs = parseFloat(cs.fontSize) || 16;
+      var lh = parseFloat(cs.lineHeight); if (!lh) lh = fs * 1.2;
+      var lastTop = hr.bottom - (parseFloat(cs.paddingBottom) || 0) - (parseFloat(cs.borderBottomWidth) || 0) - lh;
+      var rg = document.createRange(); rg.selectNodeContents(h);
+      var right = -Infinity;
+      Array.prototype.forEach.call(rg.getClientRects(), function (r) { if (r.width > 0 && (r.top + r.bottom) / 2 >= lastTop) right = Math.max(right, r.right); });
+      if (!isFinite(right)) right = hr.right;
+      var size = 44;
+      var x = right + Math.min(8, fs * 0.2) - 10;           // the icon, not the hit box, sits next to the last word
+      var maxX = Math.min(or.right, vw - 4) - size;
+      if (x > maxX) x = maxX;
+      var y = lastTop + lh / 2 - size / 2;
+      b.style.left = Math.round(x - or.left - op.clientLeft) + "px";
+      b.style.top = Math.round(y - or.top - op.clientTop) + "px";
+      b.classList.add("is-placed");
+    });
+  }
+  var toastEl = null, toastT = 0;
+  function toast(msg) {
+    if (!toastEl) {
+      toastEl = html("div", "st-toast st-hide-on-present", document.body);
+      toastEl.setAttribute("role", "status");
+      toastEl.setAttribute("aria-live", "polite");
+    }
+    toastEl.textContent = "";
+    // a fresh text node after a tick so a repeated message is announced again
+    setTimeout(function () { toastEl.textContent = msg; toastEl.classList.add("is-on"); }, 30);
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { toastEl.classList.remove("is-on"); }, 2200);
+  }
+  function copyLink(id) {
+    var url = location.href.split("#")[0] + "#" + encodeURIComponent(id);
+    try { if (history.replaceState) history.replaceState(history.state, "", "#" + encodeURIComponent(id)); } catch (e) { }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = url; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0"; ta.style.top = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) { }
+      ta.remove();
+      toast(ok ? "Link copied" : "Link is in the address bar");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText && global.isSecureContext !== false) {
+      navigator.clipboard.writeText(url).then(function () { toast("Link copied"); }, fallback);
+    } else fallback();
+  }
+
+  /* Story.dataTable(figureEl, {caption, columns, rows, source, summary, open, into})
+     Puts a "Data" disclosure holding a real <table> of the plotted numbers under a
+     figure (after the whole scene when the figure sits in a pinned stage).
+       columns: ["Year", "TRIR"] or [{label, key, num, digits, fmt}]
+       rows:    [[2019, 3.1], ...] or [{year: 2019, trir: 3.1}, ...] (keys from columns)
+     Numbers are printed as given (thousands separators added, never rounded unless
+     digits or fmt says so). The first column is a row header. Returns the <details>. */
+  function dataTable(fig, o) {
+    fig = isEl(fig) ? fig : el(fig);
+    o = o || {};
+    if (!fig) return null;
+    var cols = (o.columns || []).map(function (c) { return typeof c === "string" ? { label: c } : c; });
+    var rows = o.rows || [];
+    if (!cols.length && rows.length) cols = (Array.isArray(rows[0]) ? rows[0] : Object.keys(rows[0])).map(function (x, i) { return { label: Array.isArray(rows[0]) ? "Column " + (i + 1) : x, key: Array.isArray(rows[0]) ? null : x }; });
+    function cell(r, c, i) { return Array.isArray(r) ? r[i] : r[c.key != null ? c.key : c.label]; }
+    cols.forEach(function (c, i) {
+      if (c.num == null) c.num = rows.length > 0 && rows.every(function (r) { var v = cell(r, c, i); return v == null || v === "" || typeof v === "number" || /^[-+]?[$]?[\d,]*\.?\d+%?$/.test(String(v).trim()); });
+    });
+    function show(v, c) {
+      if (v == null || v === "") return "";
+      if (c.fmt) return String(c.fmt(v));
+      if (typeof v === "number") {
+        if (c.digits != null) v = Number(v.toFixed(c.digits));
+        var s = String(v), m = /^(-?)(\d+)(\.\d+)?$/.exec(s);
+        if (m && m[2].length > 4) s = m[1] + m[2].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (m[3] || "");
+        if (c.digits != null && m) { var parts = s.split("."); s = parts[0] + (c.digits > 0 ? "." + ((parts[1] || "") + "0000000000").slice(0, c.digits) : ""); }
+        return s;
+      }
+      return String(v);
+    }
+    var d = document.createElement("details");
+    d.className = "st-data";
+    var sm = html("summary", "", d);
+    var lab = html("span", "st-data-lab", sm); lab.textContent = o.summary || "Data";
+    var cnt = html("span", "st-data-n", sm); cnt.textContent = rows.length + (rows.length === 1 ? " row" : " rows");
+    var wrap = html("div", "st-data-scroll", d);
+    wrap.tabIndex = 0;
+    wrap.setAttribute("role", "region");
+    wrap.setAttribute("aria-label", (o.caption || "Data") + ", table");
+    var tb = html("table", "", wrap);
+    if (o.caption) { var cap = tb.createCaption(); cap.textContent = o.caption; }
+    var thead = html("thead", "", tb), tr = html("tr", "", thead);
+    cols.forEach(function (c) { var th = html("th", c.num ? "st-num" : "", tr); th.scope = "col"; th.textContent = c.label; });
+    var tbody = html("tbody", "", tb);
+    rows.forEach(function (r) {
+      var row = html("tr", "", tbody);
+      cols.forEach(function (c, i) {
+        var head = i === 0 && o.rowHeader !== false;
+        var td = html(head ? "th" : "td", c.num ? "st-num" : "", row);
+        if (head) td.scope = "row";
+        td.textContent = show(cell(r, c, i), c);
+      });
+    });
+    if (o.source) { var p = html("p", "st-data-src", d); p.textContent = /^source/i.test(o.source) ? o.source : "Source: " + o.source; }
+    if (o.open) d.open = true;
+    var host = o.into ? (isEl(o.into) ? o.into : el(o.into)) : null;
+    if (host) host.appendChild(d);
+    else {
+      var sc = fig.closest(".st-stage") ? fig.closest(".st-scene") : null;
+      (sc || fig).insertAdjacentElement("afterend", d);
+    }
+    return d;
+  }
+
+  /* hash landing: a link to a chapter, scene or finding arrives with the chapter's
+     pinned build complete (not mid-animation), clear of the header; a link to a
+     duplicate heading lands on the chapter that states it */
+  function hashTargetEl(h) {
+    if (!h || h.length < 2) return null;
+    var t = null;
+    try { t = document.getElementById(decodeURIComponent(h.slice(1))); } catch (e) { }
+    if (!t) return null;
+    if (t.__stDupOf) t = t.__stDupOf;
+    while (t && t !== document.body && !t.getClientRects().length) t = t.parentElement;
+    return t && t !== document.body ? t : null;
+  }
+  function landHash() {
+    var t = hashTargetEl(location.hash);
+    if (!t) return false;
+    if (gsapOK() && M.ready && global.ScrollTrigger && mPinOf(t)) {
+      scrollTo(0, mAnchorY(t)); mSnapPin(t);
+    } else {
+      var sm = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      var y = Math.max(0, t.getBoundingClientRect().top + scrollY - Math.max(sm, parseFloat(getComputedStyle(t).scrollMarginTop) || 0));
+      if (Math.abs(scrollY - y) > 2) scrollTo(0, y);
+    }
+    // a scene lands on the step the link names, or its first step, already active
+    var sc = t.closest(".st-scene") || (t.querySelector && t.querySelector(".st-scene"));
+    var api = sc && sc.__stScene;
+    if (api) {
+      var st = t.closest(".st-step"), i = st ? api.steps.indexOf(st) : -1;
+      if (i >= 0) api.go(i);
+    }
+    return true;
+  }
+  var hashWired = false;
+  function wireHash() {
+    if (hashWired) return; hashWired = true;
+    addEventListener("hashchange", function () { requestAnimationFrame(landHash); });
+    // clicks on in-page links to a duplicate heading go to its chapter
+    document.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest("a[href^='#']");
+      if (!a) return;
+      var raw = null; try { raw = document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1))); } catch (e2) { }
+      if (!raw || !raw.__stDupOf) return;
+      e.preventDefault();
+      if (history.pushState) history.pushState(null, "", a.getAttribute("href"));
+      landHash();
+    });
+  }
+  function autoReading() {
+    try { dedupe(); } catch (e) { if (global.console) console.error(e); }
+    try { anchorIds(); } catch (e) { if (global.console) console.error(e); }
+  }
+  function autoReadingLate() {
+    try { anchorButtons(); } catch (e) { if (global.console) console.error(e); }
+    wireHash();
+    // no motion layer: nothing re-lands the hash later, so do it once the page has settled
+    if (location.hash && !(gsapOK() && M.ready)) {
+      var go = function () { landHash(); };
+      if (document.readyState === "complete") requestAnimationFrame(go); else addEventListener("load", go, { once: true });
+    }
+  }
+
   var Story = {
-    version: "2.1.0",
+    version: "2.2.0",
     orb: orb,
     orbInline: orbInline,
     companion: companion,
@@ -7505,6 +8033,13 @@ html.st-printing .r8-now{display:none!important}
     marks: marks,
     kinetic: kinetic,
     viewTransition: viewTransition,
+    dedupe: dedupe,
+    anchors: function () { anchorIds(); anchorButtons(); wireHash(); return anchorList.map(function (n) { return n.id; }); },
+    copyLink: copyLink,
+    toast: toast,
+    dataTable: dataTable,
+    landHash: landHash,
+    fit: function () { els(".st-scene").forEach(function (sc) { if (sc.__stScene) sc.__stScene.fit(); }); },
     motion: { scan: function (r) { if (r && r !== document && M.mm) { motionScan(r); return; } motionKill(); motionSetup(document); }, kill: motionKill, refresh: function () { if (gsapOK()) global.ScrollTrigger.refresh(); }, get on() { return M.ready; } },
     stagger: stagger,
     trail: trail,
@@ -7537,5 +8072,117 @@ html.st-printing .r8-now{display:none!important}
   if (S.countUp) { try { S.countUp(document.querySelectorAll('[data-st-count]')); } catch (e) {} }
 })();
 </script>
-</body>
+<script id="rs-header-js">
+(()=>{
+var h=document.getElementById('rs-header');if(!h)return;
+var root=document.documentElement,doc=document;h.classList.add('rs-js');
+var mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):{matches:false};
+var tb=doc.getElementById('rs-theme');
+function cur(){var t=root.getAttribute('data-theme');return t==='dark'||t==='light'?t:(mq.matches?'dark':'light');}
+function sync(){var d=cur()==='dark';tb.setAttribute('aria-pressed',d?'true':'false');tb.setAttribute('aria-label','Dark theme');tb.title=d?'Switch to light theme':'Switch to dark theme';}
+if(tb){tb.addEventListener('click',()=>{var n=cur()==='dark'?'light':'dark';root.setAttribute('data-theme',n);
+try{localStorage.setItem('pc-theme',n);localStorage.setItem('ehs-ai-theme',n);}catch(e){}
+sync();try{doc.dispatchEvent(new CustomEvent('rs-themechange',{detail:{theme:n}}));}catch(e){}});
+sync();if(mq.addEventListener)mq.addEventListener('change',sync);
+if(window.MutationObserver)new MutationObserver(sync).observe(root,{attributes:true,attributeFilter:['data-theme']});}
+var menus=[].slice.call(h.querySelectorAll('.rs-menu'));
+function closeMenus(except){menus.forEach((m)=>{if(m!==except&&m.open)m.open=false;});}
+menus.forEach((m)=>{var s=m.querySelector('summary');s.setAttribute('aria-expanded','false');
+s.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();m.open=!m.open;}
+else if(e.key==='ArrowDown'){e.preventDefault();m.open=true;m.querySelector('a').focus();}});
+m.addEventListener('keydown',(e)=>{var a=doc.activeElement,k=e.key,n=k==='ArrowDown'?'nextElementSibling':k==='ArrowUp'?'previousElementSibling':0;
+if(n&&a.parentNode.className==='rs-panel'&&a[n]){e.preventDefault();a[n].focus();}});
+m.addEventListener('focusout',(e)=>{if(!m.contains(e.relatedTarget))m.open=false;});
+m.addEventListener('toggle',()=>{s.setAttribute('aria-expanded',m.open?'true':'false');if(m.open)closeMenus(m);});});
+var sa=h.querySelector('a.rs-story');if(sa&&sa.href.split('#')[0]===location.href.split('#')[0])sa.setAttribute('aria-current','page');
+var mb=doc.getElementById('rs-menu-btn'),sheet=doc.getElementById('rs-sheet');
+function focusables(){return [mb].concat([].slice.call(sheet.querySelectorAll('a[href]')));}
+function setSheet(open){if(!sheet)return;sheet.hidden=!open;mb.setAttribute('aria-expanded',open?'true':'false');
+mb.setAttribute('aria-label',open?'Close menu':'Open menu');root.classList.toggle('rs-lock',open);
+if(open){var f=sheet.querySelector('a[href]');if(f)f.focus();}}
+if(mb&&sheet){mb.addEventListener('click',()=>{setSheet(sheet.hidden);});
+sheet.addEventListener('click',(e)=>{if(e.target.closest('a'))setSheet(false);});
+window.addEventListener('resize',()=>{if(!sheet.hidden&&innerWidth>959)setSheet(false);});}
+var sb=doc.getElementById('rs-subbtn'),sl=doc.getElementById('rs-sublist'),nav=doc.getElementById('rs-sections');
+function setSub(open){if(!sb)return;sl.hidden=!open;sb.setAttribute('aria-expanded',open?'true':'false');}
+if(sb){sb.addEventListener('click',()=>{setSub(sl.hidden);});sl.addEventListener('click',(e)=>{if(e.target.closest('a'))setSub(false);});}
+doc.addEventListener('click',(e)=>{var t=e.target;if(!t.closest)return;
+if(!t.closest('.rs-menu'))closeMenus();if(sb&&!sl.hidden&&!t.closest('.rs-sub'))setSub(false);});
+doc.addEventListener('keydown',(e)=>{
+if(e.key==='Escape'){var o=menus.filter((m)=>{return m.open;})[0];
+if(o){o.open=false;o.querySelector('summary').focus();return;}
+if(sheet&&!sheet.hidden){setSheet(false);mb.focus();return;}
+if(sb&&!sl.hidden){setSub(false);sb.focus();}return;}
+if(e.key==='Tab'&&sheet&&!sheet.hidden){var f=focusables(),i=f.indexOf(doc.activeElement);
+e.preventDefault();var n=f.length;f[i<0?0:(i+(e.shiftKey?n-1:1))%n].focus();}});
+var links=nav?[].slice.call(nav.querySelectorAll('a.rs-sec')):[],items=[];
+links.forEach((a)=>{var el=doc.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));if(el)items.push({a:a,el:el,id:el.id});});
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,active=null;
+function off(){return h.offsetHeight;}
+function fades(){if(!nav)return;var m=nav.scrollWidth-nav.clientWidth;nav.classList.toggle('rs-fl',nav.scrollLeft>2);nav.classList.toggle('rs-fr',m>2&&nav.scrollLeft<m-2);}
+function spy(){if(!items.length)return;var y=off()+24,pick=null;
+items.forEach((it)=>{if(it.el.getBoundingClientRect().top<=y)pick=it;});
+if(!pick)pick=items[0];if(innerHeight+scrollY>=doc.documentElement.scrollHeight-2)pick=items[items.length-1];
+if(pick===active)return;active=pick;
+[].slice.call(h.querySelectorAll('a.rs-sec')).forEach((a)=>{var on=a.getAttribute('href')==='#'+pick.id;a.classList.toggle('rs-active',on);if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
+var now=doc.getElementById('rs-now');if(now)now.textContent=pick.a.textContent;
+if(nav.scrollWidth>nav.clientWidth){var l=pick.a.offsetLeft-(nav.clientWidth-pick.a.offsetWidth)/2;
+try{nav.scrollTo({left:l,behavior:reduce?'auto':'smooth'});}catch(e){nav.scrollLeft=l;}}}
+var bar=h.querySelector('.rs-progress'),ticking=false;
+function frame(){ticking=false;var max=doc.documentElement.scrollHeight-innerHeight;
+if(bar)bar.style.transform='scaleX('+(max>0?Math.min(1,Math.max(0,scrollY/max)):0)+')';spy();}
+function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(frame);}}
+function pad(){root.style.setProperty('--rs-header-h',off()+'px');root.style.scrollPaddingTop=(off()+12)+'px';fades();}
+if(items.length&&'IntersectionObserver' in window){var io=new IntersectionObserver(onScroll,{rootMargin:'-'+off()+'px 0px -50% 0px'});items.forEach((it)=>{io.observe(it.el);});}
+if(nav)nav.addEventListener('scroll',fades,{passive:true});
+addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',()=>{pad();onScroll();});
+pad();frame();
+var fb=doc.getElementById('rs-find');if(!fb)return;
+var L=/^\/[^\/]+\/docs\//.test(location.pathname),G=['Pages','Findings','Papers','Tools','Terms'],RK='rs-search-recent',dl,inp,lst,msg,st,data,all,view=[],sel=0,back,moved,
+U=(r,f,a)=>'/'+r+'/'+(L?'docs/':'')+f+(a?'#'+a:''),
+esc=x=>String(x).replace(/[&<>"]/g,c=>'&#'+c.charCodeAt(0)+';'),
+rec=()=>{try{return JSON.parse(localStorage.getItem(RK))||[]}catch(e){return []}},
+load=()=>{data=data||fetch(U('grounded','search-index.json')).then(r=>{if(!r.ok)throw 0;return r.json()}).then(j=>{
+all=j.p.map(p=>({l:p[2],g:p[3],c:p[4],s:p[5],u:U(p[0],p[1])})).concat(j.i.map(i=>{var p=j.p[i[0]];return{l:i[2],g:i[3],c:p[4],s:i[4],u:U(p[0],p[1],i[1])}}));
+all.forEach(t=>{t.k=t.l.toLowerCase();t.x=(t.c+' '+(t.s||'')).toLowerCase()});dl&&dl.open&&render()},()=>{data=0;dl&&dl.open&&render(1)})},
+hl=(x,ws)=>{var l=x.toLowerCase(),m=[],o='',p=0;ws.forEach(w=>{for(var i=l.indexOf(w);i>-1;i=l.indexOf(w,i+w.length))m.push([i,i+w.length])});
+m.sort((a,b)=>a[0]-b[0]).forEach(r=>{if(r[0]>=p){o+=esc(x.slice(p,r[0]))+'<mark>'+esc(x.slice(r[0],r[1]))+'</mark>';p=r[1]}});return o+esc(x.slice(p))},
+mark=()=>{var os=lst.querySelectorAll('[role=option]'),c=os[sel];os.forEach((o,i)=>o.setAttribute('aria-selected',i==sel));
+c?(inp.setAttribute('aria-activedescendant',c.id),c.scrollIntoView({block:'nearest'})):inp.removeAttribute('aria-activedescendant')},
+render=err=>{var raw=inp.value.trim(),q=raw.toLowerCase(),ws=q.split(/\s+/).filter(Boolean),gs=[],h='',r,b;view=[];
+if(!q){r=rec();r.length&&gs.push(['Recent',r]);all&&gs.push(['All pages',all.filter(t=>t.u.indexOf('#')<0)])}
+else if(all){b=G.map(()=>[]);
+all.forEach(t=>{var s=0;for(var w of ws){var j=t.k.indexOf(w);if(j<0){if(t.x.indexOf(w)<0)return;s++}else s+=j&&/[a-z0-9]/.test(t.k[j-1])?3:6}
+t.sc=s+(t.k.indexOf(q)?0:5)-t.l.length/300;b[t.g].push(t)});
+b.forEach((a,g)=>a.length&&gs.push([G[g],a.sort((x,y)=>y.sc-x.sc).slice(0,g==1?8:5)]));gs.sort((x,y)=>y[1][0].sc-x[1][0].sc)}
+gs.forEach((g,n)=>{h+='<div role="group" aria-labelledby="rs-kg'+n+'"><div class="rs-k-g" id="rs-kg'+n+'">'+g[0]+'</div>';
+g[1].forEach(t=>{h+='<a role="option" tabindex="-1" id="rs-ko'+view.length+'" href="'+esc(t.u)+'"><span class="rs-k-t">'+hl(t.l,ws)+'</span><span class="rs-k-c"><b>'+esc(t.c)+'</b>'+hl(t.s||'',ws)+'</span></a>';view.push(t)});h+='</div>'});
+lst.innerHTML=h;sel=0;mark();inp.setAttribute('aria-expanded',!!view.length);
+msg.innerHTML=err?'Search is unavailable. Use the Projects and Papers menus.':all?q&&!view.length?'No match for “'+esc(raw)+'”. Try TRIR, hours, grounding or payback.':'':'Loading…';
+msg.hidden=!msg.innerHTML;st.textContent=q&&all?view.length+' results':''},
+shut=()=>{moved=0;dl.open&&dl.close()},
+go=(t,tab)=>{if(!t)return;var r=rec().filter(x=>x.u!=t.u),a=doc.createElement('a'),e;r.unshift({l:t.l,c:t.c,s:t.s,u:t.u});
+try{localStorage.setItem(RK,JSON.stringify(r.slice(0,6)))}catch(x){}
+if(tab)return open(t.u,'_blank','noopener');
+a.href=t.u;e=a.hash&&doc.getElementById(decodeURIComponent(a.hash.slice(1)));moved=1;dl.close();
+if(e&&a.pathname.replace(/index\.html$/,'')==location.pathname.replace(/index\.html$/,'')){location.hash==a.hash?e.scrollIntoView():location.hash=a.hash;e.hasAttribute('tabindex')||e.setAttribute('tabindex','-1');e.focus({preventScroll:true})}
+else location.href=t.u},
+build=()=>{dl=doc.createElement('dialog');dl.className='rs-k';dl.setAttribute('aria-label','Search the research');
+dl.innerHTML='<div class="rs-k-top">'+fb.querySelector('svg').outerHTML+'<input type="text" role="combobox" aria-label="Search the research" aria-expanded="false" aria-controls="rs-k-list" aria-autocomplete="list" aria-describedby="rs-k-help" placeholder="Search findings, papers, tools, terms" autocomplete="off" spellcheck="false" enterkeyhint="go"><button type="button" class="rs-k-x">Close</button></div><div id="rs-k-list" role="listbox" aria-label="Results"></div><p class="rs-k-e"></p><p class="rs-k-f" id="rs-k-help"><kbd>↑↓</kbd>move <kbd>Enter</kbd>open <kbd>Esc</kbd>close</p><p class="rs-k-sr" role="status"></p>';
+doc.body.append(dl);[inp,lst,msg,st]=['input','#rs-k-list','.rs-k-e','.rs-k-sr'].map(s=>dl.querySelector(s));
+inp.oninput=()=>render();
+inp.onkeydown=e=>{var k=e.key,n=view.length;
+if(k=='ArrowDown'||k=='ArrowUp'){e.preventDefault();if(n){sel=(sel+(k[5]=='D'?1:n-1))%n;mark()}}
+else if(k=='Enter'){e.preventDefault();go(view[sel],e.metaKey||e.ctrlKey)}
+else if(k=='Escape'){e.preventDefault();inp.value?(inp.value='',render()):shut()}};
+lst.onclick=e=>{var o=e.target.closest('[role=option]');if(o){e.preventDefault();go(view[o.id.slice(5)],e.metaKey||e.ctrlKey||e.shiftKey)}};
+dl.onclick=e=>{if(e.target==dl||e.target.className=='rs-k-x')shut()};
+dl.onclose=()=>{moved||back&&back.focus&&back.focus()}},
+show=()=>{dl||build();if(!dl.open){back=doc.activeElement;moved=0;inp.value='';load();render();dl.showModal();inp.focus()}};
+fb.onclick=show;
+doc.addEventListener('keydown',e=>{var t=e.target||{},k=e.key||'';if(root.classList.contains('st-presenting')||e.altKey)return;
+if(k.toLowerCase()=='k'&&(e.metaKey||e.ctrlKey)){e.preventDefault();dl&&dl.open?shut():show()}
+else if(k=='/'&&!e.metaKey&&!e.ctrlKey&&!/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)&&!t.isContentEditable&&!doc.querySelector('dialog[open]')){e.preventDefault();show()}});
+})();
+</script></body>
 </html>
