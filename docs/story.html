@@ -1471,6 +1471,48 @@ html.rs-lock,html.rs-lock body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){.rs-header *,.rs-header *::before,.rs-header *::after{transition:none!important}}
 @media print{.rs-header{display:none!important}}
 </style>
+<style id="story-r8-css">
+/* round 8: readability floor, contrast, touch targets, first viewport, sharing */
+:where(h1,h2,h3){text-wrap:balance}
+:where(p,li){text-wrap:pretty}
+main section[id]{scroll-margin-top:72px}
+.label,.chart-src,details.why summary,details.data-table summary,.st-k,.rail-num,.f-src,.chip,.p-links a,.stage-src,.verdict-pill,
+.ledger-total,.pbbar-k,.legend,table.dt th,.crumb,.flow-toggle button,.flow-key,.brief-go,.so-k,.tag,.try-key,.assume-table th,.kind,
+.arc-k,.arc-src,.arc-verdict span,.footer-links a{font-size:.75rem}
+.stage-src,.arc-src,.chart-src{letter-spacing:.04em;line-height:1.5}
+.dial-note,.ledger-name{font-size:.9375rem}
+/* verdict pills: white text on the darker green and red in every theme (AA 4.5:1) */
+.verdict-pill.pass{background:#1D6F4A!important;color:#fff}
+.verdict-pill.fail{background:#A3341F!important;color:#fff}
+/* ledger rows not yet counted stay readable: muted text and a faint bar, not a ghosted row */
+.ledger-row{opacity:1!important}
+.ledger-row:not(.on) .ledger-name,.ledger-row:not(.on) .ledger-v{color:var(--muted)}
+.ledger-row:not(.on) .ledger-fill{opacity:.28}
+.ledger-row .ledger-fill{transition:opacity .45s ease}
+/* data tables sit after their figure */
+.r8-data{max-width:640px;margin:22px 0 0}
+@media (max-width:899px){.scene-head{padding-bottom:28px}}
+details.data-table summary{padding-block:13px;line-height:18px}
+/* touch targets */
+@media (max-width:600px),(pointer:coarse){
+  .flow-toggle button,.dial input[type=range],.btn,#try-reset{min-height:44px}
+  .crumb a{display:inline-flex;align-items:center;min-height:44px}
+  .footer-links a{display:inline-flex;align-items:center;min-height:44px}
+  nav.st-way .st-way-btn{min-width:44px!important;min-height:44px!important}
+}
+.dial input[type=range]{height:36px}
+/* first viewport on a phone: claim, both numbers and the primary action above the fold */
+@media (max-width:600px){
+  .hero{padding:24px 0 32px}
+  .hero h1{font-size:clamp(1.85rem,8.2vw,2.3rem);line-height:1.02}
+  .hero-eyebrow{margin-bottom:12px}
+  .hero-role{margin-top:12px;font-size:1rem;line-height:1.5}
+  .hero-nums{margin:14px 0 4px;gap:24px}
+  .hero-nums .st-bignum{font-size:2rem}
+  .hero-lede{display:none}
+  .hero-links{margin-top:16px}
+}
+</style>
 <style id="r7b-css">
 /* R7B: the argument in five beats, pinned and scrubbed on desktop */
 .arc{padding:clamp(40px,7vh,72px) 0;border-top:1px solid var(--rule-soft);border-bottom:1px solid var(--rule-soft)}
@@ -1604,7 +1646,7 @@ html:not(.m-desk) .arc-prog{display:none}
   </div>
 </section>
 
-<section class="st-chapter" data-num="01" data-key="1.59 yr" data-orb="working" aria-label="Finding one">
+<section class="st-chapter" id="finding-1" data-num="01" data-key="1.59 yr" data-orb="working" aria-label="Finding one">
   <h2 class="st-chapter-title display" data-m-split="words">Pricing four unbooked cost lines takes the payback from 3.41 years to 1.59</h2>
   <p>The same control fails a 3-year hurdle on one count and clears it on the other. What your committee votes on is the scope of the count.</p>
 </section>
@@ -1613,8 +1655,8 @@ html:not(.m-desk) .arc-prog{display:none}
 <section class="scene-sec" id="ledger">
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
-      <span class="label">Scene one</span>
-      <h2 class="display">Pricing four unbooked cost lines takes the payback from 3.41 years to 1.59</h2>
+      <span class="label">Evidence for finding 1</span>
+      <h2 class="display">Seven cost lines, three of them invoiced</h2>
       <p>One loading station, one $150,000 control, seven cost lines behind the incidents it removes. Three of those lines are invoiced. The committee usually sees only those three.</p>
     </div>
     <div class="st-scene" data-scene="1">
@@ -1671,7 +1713,7 @@ html:not(.m-desk) .arc-prog{display:none}
   </div>
 </section>
 
-<section class="st-chapter" data-num="02" data-key="1.00 yr" data-orb="solving" aria-label="Finding two">
+<section class="st-chapter" id="finding-2" data-num="02" data-key="1.00 yr" data-orb="solving" aria-label="Finding two">
   <h2 class="st-chapter-title display" data-m-split="words">Risk reduction swings the payback 1.00 year, more than the seven cost-line swings added up</h2>
   <p>The input that decides the case is typed in by the person making the case. Say so out loud, in the same sentence as the payback.</p>
 </section>
@@ -1680,10 +1722,9 @@ html:not(.m-desk) .arc-prog{display:none}
 <section class="scene-sec" id="sensitivity">
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
-      <span class="label">Scene two</span>
-      <h2 class="display">Risk reduction swings the payback 1.00 year, more than the seven cost-line swings added up</h2>
+      <span class="label">Evidence for finding 2</span>
+      <h2 class="display">Which of nine inputs the payback leans on</h2>
       <p>A payback of 1.59 years rests on nine inputs. Move each one by 30% on its own, hold the other eight, and the bars sort themselves by how far the answer travels.</p>
-      <details class="data-table" id="tor-table"></details>
     </div>
     <div class="st-scene" data-scene="2" data-side="left">
       <div class="st-scene-rail" aria-hidden="true"></div>
@@ -1717,6 +1758,7 @@ html:not(.m-desk) .arc-prog{display:none}
         </div>
       </div>
     </div>
+    <div class="r8-data"><details class="data-table" id="tor-table"></details></div>
     <div class="so-what" data-st-reveal>
       <div><span class="so-k">What it means for a leader</span><p>Before anyone spends a week refining cost lines, test the risk reduction. It moves the answer furthest and nobody measured it. At half the assumed effect, 40% instead of 80%, even the human-capital payback slips to <span class="mono" id="sw-half">3.18</span> years, past the hurdle.</p></div>
       <div><span class="so-k">Ask your finance partner</span><p class="ask">&ldquo;Where does the 80% come from: a vendor claim, a pilot, a comparable site? And what payback do we get at half of it?&rdquo;</p><p class="ask-why">A case that only works at the optimistic end of its evidence should be presented that way.</p></div>
@@ -1724,7 +1766,7 @@ html:not(.m-desk) .arc-prog{display:none}
   </div>
 </section>
 
-<section class="st-chapter" data-num="03" data-key="99.9%" data-orb="searching" aria-label="Finding three">
+<section class="st-chapter" id="finding-3" data-num="03" data-key="99.9%" data-orb="searching" aria-label="Finding three">
   <h2 class="st-chapter-title display" data-m-split="words">99.9% of draws clear the hurdle on one count, 31.3% on the other</h2>
   <p>Two thousand seeded draws, every input jittered 30%. Uncertainty is not what separates the two verdicts, so do not let a sensitivity run stand in for the argument.</p>
 </section>
@@ -1733,10 +1775,9 @@ html:not(.m-desk) .arc-prog{display:none}
 <section class="scene-sec" id="uncertainty">
   <div class="wrap">
     <div class="scene-head" data-st-reveal>
-      <span class="label">Scene three</span>
-      <h2 class="display">99.9% of draws clear the hurdle on one count, 31.3% on the other</h2>
+      <span class="label">Evidence for finding 3</span>
+      <h2 class="display">How far the answer wobbles when every input can be wrong</h2>
       <p>Draw every input independently across the same &plusmn;30% window, 2,000 times, seeded so the run reproduces. Each draw goes through the same four-line model and returns one payback.</p>
-      <details class="data-table" id="mc-table"></details>
     </div>
     <div class="st-scene" data-scene="3">
       <div class="st-scene-rail" aria-hidden="true"></div>
@@ -1777,6 +1818,7 @@ html:not(.m-desk) .arc-prog{display:none}
         </div>
       </div>
     </div>
+    <div class="r8-data"><details class="data-table" id="mc-table"></details></div>
     <div class="so-what" data-st-reveal>
       <div><span class="so-k">What it means for a leader</span><p>More simulation will not settle this. Under the same &plusmn;30% jitter, one count clears the hurdle almost every time and the other misses more often than it clears. The decision in front of the committee is what belongs in the count, and that is a policy call you can make once for every request.</p></div>
       <div><span class="so-k">Ask your finance partner</span><p class="ask">&ldquo;Would we accept a standing rule that safety requests show both paybacks, with each human-capital estimate labelled and signed off by the person who made it?&rdquo;</p><p class="ask-why">That turns a one-off argument into a repeatable review standard.</p></div>
@@ -1786,7 +1828,7 @@ html:not(.m-desk) .arc-prog{display:none}
 
 
 <!-- ======================= your turn ======================= -->
-<section class="section try" id="your-numbers" aria-labelledby="try-h">
+<section class="section try" id="your-numbers" data-st-anchor aria-labelledby="try-h">
   <div class="wrap">
     <div class="try-head" data-st-reveal>
       <span class="label brief-k">Your turn</span>
@@ -1837,7 +1879,7 @@ html:not(.m-desk) .arc-prog{display:none}
 </section>
 
 <!-- ======================= which inputs are assumptions ======================= -->
-<section class="section assume" id="assumptions" aria-labelledby="assume-h">
+<section class="section assume" id="assumptions" data-st-anchor aria-labelledby="assume-h">
   <div class="wrap">
     <div class="assume-head" data-st-reveal>
       <span class="label brief-k">Label your inputs</span>
@@ -1862,7 +1904,7 @@ html:not(.m-desk) .arc-prog{display:none}
 </section>
 
 <!-- ======================= honesty ======================= -->
-<section class="section" id="limits">
+<section class="section" id="limits" data-st-anchor>
   <div class="wrap">
     <div class="honesty" data-st-reveal>
       <h2>What this does not establish</h2>
@@ -1881,7 +1923,7 @@ html:not(.m-desk) .arc-prog{display:none}
 </section>
 
 <!-- ======================= monday ======================= -->
-<section class="section" id="monday">
+<section class="section" id="monday" data-st-anchor>
   <div class="wrap">
     <div class="monday" data-st-reveal>
       <div>
@@ -6217,7 +6259,7 @@ function tornadoState(step) {
     take.innerHTML = 'The two widest bars are the risk reduction you assume and the capital quote, not any invoiced line.';
   }
 }
-dataTable($("tor-table"), "Tornado values (payback in years)",
+dataTable($("tor-table"), "Data: tornado values (payback in years)",
   ["Input", "Low", "High", "Swing"],
   TOR_SORTED.map(r => [r.label, r.min.toFixed(2), r.max.toFixed(2), r.swing.toFixed(2)]));
 
@@ -6394,7 +6436,7 @@ function mcState(step) {
 }
 $("mc-p-h").textContent = P_H.toFixed(1) + "%";
 $("mc-p-t").textContent = P_T.toFixed(1) + "%";
-dataTable($("mc-table"), "Simulated payback distribution (2,000 draws each)",
+dataTable($("mc-table"), "Data: simulated payback distribution (2,000 draws each)",
   ["Percentile", "Human-capital, yr", "Booked, yr"],
   [["5th", quant(DRAWS_H, .05).toFixed(2), quant(DRAWS_T, .05).toFixed(2)],
    ["50th", quant(DRAWS_H, .5).toFixed(2), quant(DRAWS_T, .5).toFixed(2)],
