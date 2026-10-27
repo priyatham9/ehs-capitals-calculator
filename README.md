@@ -15,12 +15,12 @@ and this README states plainly what it assumes and where it breaks.
 - Python library, CLI, tornado sensitivity, and Monte Carlo modules
 - A single-file browser calculator at `docs/index.html` (no build step, no
   network, no dependencies)
-- 174 tests, including a fixture pinning the JavaScript and Python
+- 191 tests, including a fixture pinning the JavaScript and Python
   implementations to the same numbers
 
 ## At a glance
 
-- Tests: 174, including a JS/Python parity fixture ([![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml))
+- Tests: 191, including a JS/Python parity fixture ([![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml))
 - Quickstart: `python3 -m unittest discover -s tests -v` (after cloning; Python 3.9+, numpy only needed for the Monte Carlo module)
 - Licence: MIT (see [LICENSE](LICENSE))
 
@@ -196,6 +196,30 @@ upward; that is a consequence of a placeholder someone chose, not a property of
 the arithmetic, and it must not be reported as a finding. A test asserts the
 distinction so the two cannot be conflated.
 
+## Heat-illness exposure check
+
+Separate from the cost model, `src/heat.py` (standard library only) computes the
+National Weather Service heat index from air temperature (deg F) and relative
+humidity and reports where it falls against the triggers in OSHA's proposed
+heat rule:
+
+```
+python3 src/cli.py heat --temp-f 96 --rh 65
+```
+
+- Heat index: NWS procedure (Steadman simple formula, then the Rothfusz
+  regression with the NWS low- and high-humidity adjustments), per
+  <https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml>. The NWS
+  publishes 96 F at 65% RH as a heat index of 121 F; a test pins that.
+- Triggers: proposed 29 CFR 1910.148(b) in *Heat Injury and Illness Prevention
+  in Outdoor and Indoor Work Settings*, 89 FR 70698 (30 Aug 2024), Docket
+  OSHA-2021-0009 ([regulatory text](https://www.osha.gov/sites/default/files/Heat-NPRM-Final-Reg-Text.pdf)):
+  initial heat trigger at a heat index of 80 F, high heat trigger at 90 F.
+- Limits: this is a proposed rule, not in force. Only the heat-index trigger is
+  implemented; the alternative WBGT triggers (NIOSH alert and exposure limits)
+  are not, because no numeric WBGT value was verified. NWS values assume shade;
+  full sun can add up to 15 F. Not legal or medical advice.
+
 ## Limitations
 
 Read this section before using any number this produces in a funding request.
@@ -285,9 +309,10 @@ transcribed values; the totals, and therefore every test, were unaffected.
 src/capitals.py       the model, the worked example, input validation
 src/sensitivity.py    tornado, breakeven search, two-way grids
 src/montecarlo.py     distributions, seeded simulation, probabilities
+src/heat.py           NWS heat index and OSHA proposed heat triggers
 src/cli.py            argparse front end for all of the above
 docs/index.html       self-contained browser calculator
-tests/                166 tests
+tests/                191 tests
 tests/parity_cases.json  pins the JavaScript and Python implementations together
 ```
 
@@ -308,7 +333,7 @@ fixture and re-run the tests.
 python3 -m unittest discover -s tests -v
 ```
 
-166 tests. The suite pins the published figures, asserts the closed-form
+191 tests. The suite pins the published figures, asserts the closed-form
 breakevens rather than recorded outputs, checks Monte Carlo reproducibility
 under a fixed seed, and confirms that the vectorised simulation agrees exactly
 with the scalar model when all distributions are degenerate.

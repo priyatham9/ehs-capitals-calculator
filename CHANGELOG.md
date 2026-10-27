@@ -6,6 +6,7 @@ Keep a Changelog and this project uses semantic versioning.
 ## [Unreleased]
 
 ### Added
+- `heat` subcommand and `src/heat.py`: NWS heat index (Rothfusz regression with adjustments) and status against the initial (80 F) and high (90 F) heat-index triggers in OSHA's proposed heat rule (89 FR 70698), with tests
 - Calculator: pin a scenario and compare paybacks and ROI against the current inputs
 - Calculator: copy a plain-text decision memo for a capital request (inputs, both accountings, verdict, scenario link)
 - Calculator: copy-link and reset controls next to the outputs; the page now follows hash edits and back/forward

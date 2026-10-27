@@ -5,6 +5,7 @@ Command-line interface to the capitals cost-benefit model.
     python3 src/cli.py compare --capex 200000 --risk-reduction 0.6
     python3 src/cli.py tornado --hurdle 2 --spread 0.4
     python3 src/cli.py montecarlo --samples 100000 --hurdle 3
+    python3 src/cli.py heat --temp-f 96 --rh 65
 
 Every subcommand accepts ``--json`` for machine-readable output, and every
 subcommand that involves randomness accepts ``--seed``.
@@ -31,6 +32,7 @@ from capitals import (
     Result,
     evaluate,
 )
+import heat
 from sensitivity import (
     METRICS,
     Scenario,
@@ -181,6 +183,27 @@ def cmd_example(args: argparse.Namespace) -> int:
     for name, value in HUMAN_CAPITAL.components.items():
         mark = "both" if name in TRADITIONAL.components else "human-capital only"
         print(f"    {name:<28} ${value:>9,.0f}   ({mark})")
+    return 0
+
+
+def cmd_heat(args: argparse.Namespace) -> int:
+    """NWS heat index and OSHA proposed-rule trigger status for one condition."""
+    result = heat.assess(args.temp_f, args.rh)
+    if args.json:
+        print(json.dumps(result, indent=2))
+        return 0
+    labels = {
+        heat.NONE: "below the initial heat trigger",
+        heat.INITIAL: "at or above the initial heat trigger",
+        heat.HIGH: "at or above the high heat trigger",
+    }
+    print(f"  {args.temp_f:g} F at {args.rh:g}% RH -> heat index {result['heat_index_f']} F")
+    print(
+        f"  {labels[result['trigger']]} "
+        f"(initial {heat.INITIAL_HEAT_TRIGGER_F:g} F, high {heat.HIGH_HEAT_TRIGGER_F:g} F)"
+    )
+    print(f"  {result['note']}")
+    print(f"  Source: {heat.OSHA_SOURCE}")
     return 0
 
 
@@ -528,6 +551,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="Beta concentration on risk reduction; higher is a tighter belief",
     )
     mc.set_defaults(func=cmd_montecarlo)
+
+    ht = subparsers.add_parser(
+        "heat",
+        help="NWS heat index and OSHA proposed heat-trigger status",
+        description=(
+            "Compute the NWS heat index from air temperature and relative humidity "
+            "and compare it with the initial (80 F) and high (90 F) heat triggers "
+            "in OSHA's proposed heat rule (89 FR 70698). The rule is a proposal."
+        ),
+    )
+    ht.add_argument("--temp-f", type=float, required=True, help="air temperature, deg F")
+    ht.add_argument("--rh", type=float, required=True, help="relative humidity, percent")
+    ht.add_argument("--json", action="store_true", help="machine-readable output")
+    ht.set_defaults(func=cmd_heat)
 
     return parser
 
