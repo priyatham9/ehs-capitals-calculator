@@ -1,0 +1,31 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "ehs-capitals-calculator: a cost-benefit calculator for EHS capital investment",
+  "description": "A cost-benefit calculator for EHS capital investment. It computes the same investment two ways, with traditional accounting and with human-capital accounting. This is an accounting-scope argument, not a discovery; the calculator cannot tell whether the human-capital numbers entered are right.",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Priyatham",
+      "familyName": "Chimmani"
+    }
+  ],
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/priyatham9/ehs-capitals-calculator",
+  "url": "https://priyatham9.github.io/ehs-capitals-calculator/",
+  "version": "0.1.0",
+  "programmingLanguage": [
+    "Python",
+    "JavaScript"
+  ],
+  "keywords": [
+    "cost-benefit analysis",
+    "capital investment",
+    "return on investment",
+    "human capital",
+    "occupational safety",
+    "EHS",
+    "calculator"
+  ],
+  "isPartOf": "https://priyatham9.github.io/grounded/"
+}
