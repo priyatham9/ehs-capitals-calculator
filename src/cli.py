@@ -5,6 +5,7 @@ Command-line interface to the capitals cost-benefit model.
     python3 src/cli.py compare --capex 200000 --risk-reduction 0.6
     python3 src/cli.py tornado --hurdle 2 --spread 0.4
     python3 src/cli.py montecarlo --samples 100000 --hurdle 3
+    python3 src/cli.py uncertainty --spread 0.3 --hurdle 3
     python3 src/cli.py heat --temp-f 96 --rh 65
 
 Every subcommand accepts ``--json`` for machine-readable output, and every
@@ -33,6 +34,7 @@ from capitals import (
     evaluate,
 )
 import heat
+import uncertainty
 from sensitivity import (
     METRICS,
     Scenario,
@@ -307,6 +309,111 @@ def cmd_tornado(args: argparse.Namespace) -> int:
     return 0
 
 
+def _parse_ranges(pairs: Optional[Sequence[str]]) -> Dict[str, tuple]:
+    """Parse repeated ``NAME=LOW:HIGH`` arguments into range overrides."""
+    out: Dict[str, tuple] = {}
+    for pair in pairs or []:
+        name, sep, raw = pair.partition("=")
+        low, colon, high = raw.partition(":")
+        if not (sep and colon and name.strip()):
+            raise ValueError(f"expected NAME=LOW:HIGH, got {pair!r}")
+        try:
+            out[name.strip()] = (float(low), float(high))
+        except ValueError:
+            raise ValueError(f"LOW and HIGH must be numbers (in {pair!r})")
+    return out
+
+
+def cmd_uncertainty(args: argparse.Namespace) -> int:
+    """Exact interval bounds plus seeded uniform sampling over assumed ranges."""
+    if args.spread < 0:
+        fail("--spread must be non-negative")
+    overrides = _parse_ranges(args.range)
+    models = build_models(args)
+    known = {n for m in models for n in Scenario(m, 1.0, 0.5).parameter_names()}
+    unknown = sorted(set(overrides) - known)
+    if unknown:
+        fail(f"unknown --range parameter(s) {unknown}; expected one of {sorted(known)}")
+
+    outputs = []
+    for model in models:
+        scenario = Scenario(model, args.capex, args.risk_reduction, args.horizon)
+        own = {k: v for k, v in overrides.items() if k in scenario.parameter_names()}
+        ranges = uncertainty.build_ranges(scenario, args.spread, own)
+        bounds = uncertainty.interval_bounds(scenario, ranges)
+        sim = uncertainty.simulate(scenario, ranges, args.hurdle, args.samples, args.seed)
+        outputs.append((model, scenario.evaluate(), bounds, sim))
+
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "ranges_are_assumptions": True,
+                    "spread": args.spread,
+                    "range_overrides": {k: list(v) for k, v in overrides.items()},
+                    "hurdle_years": args.hurdle,
+                    "results": [
+                        {
+                            "label": m.label,
+                            "baseline": result_to_dict(base),
+                            "bounds": {
+                                k: {"low": _jsonable(v.low), "high": _jsonable(v.high)}
+                                for k, v in vars(b).items()
+                            },
+                            "hurdle_verdict": uncertainty.hurdle_verdict(b, args.hurdle),
+                            "simulation": {
+                                k: _jsonable(v) if isinstance(v, float) else v
+                                for k, v in vars(sim).items()
+                            },
+                        }
+                        for m, base, b, sim in outputs
+                    ],
+                },
+                indent=2,
+            )
+        )
+        return 0
+
+    print(
+        f"Uncertainty propagation: inputs within +/-{args.spread:.0%} of baseline "
+        "(ASSUMED ranges)"
+    )
+    for name, (low, high) in overrides.items():
+        print(f"  override: {name} in [{low:g}, {high:g}]")
+    for model, base, b, sim in outputs:
+        print()
+        print(f"{model.label}")
+        print(f"  baseline          {base}")
+        print(
+            f"  payback bounds    {_bound(b.payback_years, '{:.2f}')} yr   "
+            f"(exact, any joint behaviour inside the ranges)"
+        )
+        print(f"  net ROI bounds    {_bound(b.net_roi, '{:.0%}')}")
+        print(f"  {str(args.hurdle) + "-yr hurdle":<17} {uncertainty.hurdle_verdict(b, args.hurdle)}")
+        print(
+            f"  uniform sampling  {sim.samples:,} draws, seed {sim.seed}: "
+            f"P(payback <= {args.hurdle:g} yr) = {sim.p_within_hurdle:.1%} "
+            f"(+/-{sim.standard_error:.1%} s.e.); payback p5/p50/p95 = "
+            f"{sim.payback_p05:.2f}/{sim.payback_p50:.2f}/{sim.payback_p95:.2f} yr"
+        )
+    print()
+    print(
+        "  ASSUMPTION: the ranges are not measured. They are a uniform relative\n"
+        "  band (or your --range overrides); this repository holds no data on how\n"
+        "  uncertain any input is. Bounds are exact for those ranges only. Sampling\n"
+        "  is uniform and independent, so its probability is a statement about\n"
+        "  those assumptions and understates spread when cost lines move together."
+    )
+    return 0
+
+
+def _bound(interval, fmt: str) -> str:
+    def one(x: float) -> str:
+        return "never" if math.isinf(x) else fmt.format(x)
+
+    return f"[{one(interval.low)}, {one(interval.high)}]"
+
+
 def cmd_montecarlo(args: argparse.Namespace) -> int:
     """Propagate input uncertainty and report payback probabilities.
 
@@ -551,6 +658,43 @@ def build_parser() -> argparse.ArgumentParser:
         help="Beta concentration on risk reduction; higher is a tighter belief",
     )
     mc.set_defaults(func=cmd_montecarlo)
+
+    un = subparsers.add_parser(
+        "uncertainty",
+        help="exact interval bounds and seeded sampling over assumed input ranges",
+        description=(
+            "Propagate assumed input ranges through the model. Reports exact "
+            "payback and ROI bounds (distribution-free) and a seeded uniform "
+            "sample. Standard library only. The ranges are assumptions."
+        ),
+    )
+    add_common_inputs(un)
+    un.add_argument(
+        "--spread",
+        type=float,
+        default=0.30,
+        help="ASSUMED relative half-width applied to every cost line, capex and "
+        "risk reduction",
+    )
+    un.add_argument(
+        "--range",
+        action="append",
+        metavar="NAME=LOW:HIGH",
+        help="ASSUMED absolute range overriding --spread for one input, e.g. "
+        "risk_reduction=0.6:0.9 or cost:lost_work_time=10000:30000; repeatable",
+    )
+    un.add_argument(
+        "--samples", type=_positive_int, default=uncertainty.DEFAULT_SAMPLES, help="draws"
+    )
+    un.add_argument("--seed", type=int, default=DEFAULT_SEED, help="RNG seed")
+    un.add_argument(
+        "--hurdle",
+        type=_positive_float,
+        default=3.0,
+        metavar="YEARS",
+        help="payback hurdle whose verdict and probability are reported",
+    )
+    un.set_defaults(func=cmd_uncertainty)
 
     ht = subparsers.add_parser(
         "heat",

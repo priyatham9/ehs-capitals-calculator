@@ -15,12 +15,12 @@ and this README states plainly what it assumes and where it breaks.
 - Python library, CLI, tornado sensitivity, and Monte Carlo modules
 - A single-file browser calculator at `docs/index.html` (no build step, no
   network, no dependencies)
-- 191 tests, including a fixture pinning the JavaScript and Python
+- 211 tests, including a fixture pinning the JavaScript and Python
   implementations to the same numbers
 
 ## At a glance
 
-- Tests: 191, including a JS/Python parity fixture ([![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml))
+- Tests: 211, including a JS/Python parity fixture ([![tests](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml/badge.svg)](https://github.com/priyatham9/ehs-capitals-calculator/actions/workflows/tests.yml))
 - Quickstart: `python3 -m unittest discover -s tests -v` (after cloning; Python 3.9+, numpy only needed for the Monte Carlo module)
 - Licence: MIT (see [LICENSE](LICENSE))
 
@@ -110,6 +110,7 @@ python3 src/cli.py example                     # the published comparison
 python3 src/cli.py compare --capex 250000 --risk-reduction 0.6 --hurdle 3
 python3 src/cli.py tornado --hurdle 2          # what moves the answer
 python3 src/cli.py montecarlo --samples 100000 # payback probability
+python3 src/cli.py uncertainty --spread 0.3    # exact bounds, no numpy
 ```
 
 Supply your own cost lines with repeated `name=value` flags. `--cost` adds a
@@ -195,6 +196,36 @@ not above it. The median does come out above the point estimate when you run
 upward; that is a consequence of a placeholder someone chose, not a property of
 the arithmetic, and it must not be reported as a finding. A test asserts the
 distinction so the two cannot be conflated.
+
+## Interval uncertainty propagation
+
+`src/uncertainty.py` (standard library only) and `python3 src/cli.py uncertainty`
+propagate a box of input ranges through the same model, two ways:
+
+- **Exact interval bounds** on payback, ROI and net ROI. Each input appears once
+  in the formulas (payback = capex / (annual cost x risk reduction)) and every
+  output is monotone in each input, so the box endpoints give the tight bounds.
+  They hold for any joint behaviour of the inputs inside the box, including
+  correlated movement that independent sampling misses. The tests check the
+  bounds against all corners of the box evaluated through `evaluate()`.
+- **Seeded uniform sampling** (`random.Random(seed)`, default seed 1904) giving
+  nearest-rank percentiles and the probability that payback is within a hurdle.
+  The same seed and sample count reproduce identical output.
+
+```bash
+python3 src/cli.py uncertainty --spread 0.3 --hurdle 3
+python3 src/cli.py uncertainty --range risk_reduction=0.6:0.9 \
+  --range cost:lost_work_time=10000:30000 --seed 7 --json
+```
+
+**The ranges are assumptions.** The only parameters used are the ones already in
+the model (cost lines, capex, risk reduction, horizon). The repository holds no
+data on how uncertain any of them is, so the default is a single relative
+half-width (`--spread`, 30%) applied to every cost line, capex and risk
+reduction, with the horizon fixed; `--range NAME=LOW:HIGH` overrides one input.
+Output and JSON are labelled `ASSUMED` / `ranges_are_assumptions`. The 30% is a
+placeholder, not a finding. Uniform sampling treats all values in a range as
+equally plausible and independent; the bounds do not depend on that.
 
 ## Heat-illness exposure check
 
@@ -309,10 +340,11 @@ transcribed values; the totals, and therefore every test, were unaffected.
 src/capitals.py       the model, the worked example, input validation
 src/sensitivity.py    tornado, breakeven search, two-way grids
 src/montecarlo.py     distributions, seeded simulation, probabilities
+src/uncertainty.py    exact interval bounds and seeded uniform sampling (stdlib)
 src/heat.py           NWS heat index and OSHA proposed heat triggers
 src/cli.py            argparse front end for all of the above
 docs/index.html       self-contained browser calculator
-tests/                191 tests
+tests/                211 tests
 tests/parity_cases.json  pins the JavaScript and Python implementations together
 ```
 
@@ -333,7 +365,7 @@ fixture and re-run the tests.
 python3 -m unittest discover -s tests -v
 ```
 
-191 tests. The suite pins the published figures, asserts the closed-form
+211 tests. The suite pins the published figures, asserts the closed-form
 breakevens rather than recorded outputs, checks Monte Carlo reproducibility
 under a fixed seed, and confirms that the vectorised simulation agrees exactly
 with the scalar model when all distributions are degenerate.
